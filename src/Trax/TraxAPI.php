@@ -482,50 +482,38 @@ class TraxAPI
     public function printShippingLabel($trackingNumber, $type)
     {
         $this->validatePrintShippingLabelData($trackingNumber, $type);
+        if($type == 0 || $type == 2){
+            $return_type = 0;
+        } else if ($type == 1 || $type == 3){
+            $return_type = 1;
+        }
         $endpoint = '/api/shipment/air_waybill';
         $method = 'GET';
         $queryParams = [
             'tracking_number' => $trackingNumber,
-            'type' => $type,
+            'type' => $return_type,
         ];
 
-        // Make the request and get the binary image data
-        $imageData = $this->traxClient->makeRequest($endpoint, $method, [], $queryParams);
-        print_r($imageData);
-        exit;
-
-        // Save the image locally
-        $filename = 'shipping_label_' . $trackingNumber . '.' . ($type == 0 ? 'jpeg' : 'pdf');
-        $filePath = './' . $filename; // Replace with your actual path
-
-        file_put_contents($filePath, $imageData);
-        $imageUrl = './' . $filename;
-
-        return $imageUrl;
-    }
-
-
-    /**
-     * Print Shipping Label of a Shipment.
-     *
-     * @param int $trackingNumber
-     *   The number generated upon booking of the shipment.
-     * @param int $type
-     *   Type of print, whether pdf or jpeg (for jpeg, enter type=0, for pdf enter type=1).
-     *
-     * @return array
-     *   Decoded response data.
-     */
-    public function printShippingLabe1l($trackingNumber, $type)
-    {
-        $this->validatePrintShippingLabelData($trackingNumber, $type);
-        $endpoint = '/api/shipment/air_waybill';
-        $method = 'GET';
-        $queryParams = [
-            'tracking_number' => $trackingNumber,
-            'type' => $type,
-        ];
-        return $this->traxClient->makeRequest($endpoint, $method, [], $queryParams);
+        $responseContent = $this->traxClient->makeRequestFile($endpoint, $queryParams, $savePath = "");
+        if($type == 0){
+            header('Content-Type: image/jpeg');
+            return $responseContent;
+        } else if($type == 1){
+            header('Content-Type: application/pdf');
+            return $responseContent;
+        } else if($type == 2){
+            $file_url = $savePath . uniqid(mt_rand(), true) . ".jpeg";
+        } else if($type == 3){
+            $file_url = $savePath . uniqid(mt_rand(), true) . ".pdf";
+        } 
+        if(file_put_contents($file_url, $responseContent)){
+            return array(
+                "status" => 1,
+                "filename" => $file_url
+            );
+        } else {
+            throw new TraxException('Unable to save file: ' . error_get_last());
+        }
     }
 
     /**
@@ -541,7 +529,7 @@ class TraxAPI
      */
     private function validatePrintShippingLabelData($trackingNumber, $type)
     {
-        if (!is_numeric($trackingNumber) || !is_numeric($type) || !in_array($type, [0, 1])) {
+        if (!is_numeric($trackingNumber) || !is_numeric($type) || !in_array($type, [0, 1,2,3])) {
             throw new TraxException('Invalid tracking_number or type for printing shipping label.');
         }
     }
@@ -696,13 +684,39 @@ class TraxAPI
     public function viewReceivingSheet($receivingSheetId, $type)
     {
         $this->validateViewReceivingSheetData($receivingSheetId, $type);
+
+        if($type == 0 || $type == 2){
+            $return_type = 0;
+        } else if ($type == 1 || $type == 3){
+            $return_type = 1;
+        }
         $endpoint = '/api/receiving_sheet/view';
         $method = 'POST';
-        $postData = [
+        $queryParams = [
             'receiving_sheet_id' => $receivingSheetId,
-            'type' => $type,
+            'type' => $return_type,
         ];
-        return $this->traxClient->makeRequest($endpoint, $method, [], $postData);
+
+        $responseContent = $this->traxClient->makeRequestFile($endpoint, $queryParams, $savePath = "");
+        if($type == 0){
+            header('Content-Type: image/jpeg');
+            return $responseContent;
+        } else if($type == 1){
+            header('Content-Type: application/pdf');
+            return $responseContent;
+        } else if($type == 2){
+            $file_url = $savePath . uniqid(mt_rand(), true) . ".jpeg";
+        } else if($type == 3){
+            $file_url = $savePath . uniqid(mt_rand(), true) . ".pdf";
+        } 
+        if(file_put_contents($file_url, $responseContent)){
+            return array(
+                "status" => 1,
+                "filename" => $file_url
+            );
+        } else {
+            throw new TraxException('Unable to save file: ' . error_get_last());
+        }
     }
 
     /**

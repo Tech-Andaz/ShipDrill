@@ -214,8 +214,11 @@ function getPaymentDetails($traxAPI){
 //Shipping Label of a Shipment
 function printShippingLabel($traxAPI){
     try {
+        //0 = Image
+        //1 = PDF
+        //2 = Image file name - Locally Saved
+        //3 = PDF file name - Locally Saved
         $response = $traxAPI->printShippingLabel(202223372182, 0);
-        var_dump($response);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -252,7 +255,7 @@ function calculateRates($traxAPI){
 //Create a receiving sheet
 function createReceivingSheet($traxAPI){
     try { 
-        $trackingNumbers = [202202366396, 202202366397];
+        $trackingNumbers = [202223372184, 202223372185];
         $response = $traxAPI->createReceivingSheet($trackingNumbers);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
@@ -263,7 +266,11 @@ function createReceivingSheet($traxAPI){
 //View a receiving sheet
 function viewReceivingSheet($traxAPI){
     try { 
-        $response = $traxAPI->viewReceivingSheet(105, 0);
+        //0 = Image
+        //1 = PDF
+        //2 = Image file name - Locally Saved
+        //3 = PDF file name - Locally Saved
+        $response = $traxAPI->viewReceivingSheet(6504, 3);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
@@ -280,12 +287,12 @@ function viewReceivingSheet($traxAPI){
 // echo json_encode(trackShipment($traxAPI));
 // echo json_encode(getShipmentCharges($traxAPI));
 // echo json_encode(getPaymentStatus($traxAPI));
-// echo json_encode(getInvoice($traxAPI));
+// echo (getInvoice($traxAPI));
 // echo json_encode(getPaymentDetails($traxAPI));
-echo print_r(printShippingLabel($traxAPI));
+// echo (printShippingLabel($traxAPI));
 // echo json_encode(cancelShipment($traxAPI));
 // echo json_encode(calculateRates($traxAPI));
 // echo json_encode(createReceivingSheet($traxAPI));
-// echo json_encode(viewReceivingSheet($traxAPI));
+// echo (viewReceivingSheet($traxAPI));
 
 ?>

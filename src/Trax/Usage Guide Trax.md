@@ -17,7 +17,7 @@
 - [Cancel Shipment](#cancel-shipment)
 - [Calculate Rates for a Delivery](#calculate-rates)
 - [Create a Receiving Sheet](#create-receiving-sheet)
-- [View a Receiving Sheet](#view-receiving-sheet)
+- [Print/View a Receiving Sheet](#view-receiving-sheet)
 
 
 ## Initialize
@@ -286,12 +286,132 @@ try {
 
 ## Print/View Shipping Label
 
+### Direct Image/PDF view
 ```php
 <?php
 
 try {
-    $response = $traxAPI->getInvoice(930, 1);
+    //0 = Image
+    //1 = PDF
+    //2 = Image file name - Locally Saved
+    //3 = PDF file name - Locally Saved
+    $response = $traxAPI->printShippingLabel(202223372182, 0);
+    echo $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+### Save Image/PDF and return file name
+```php
+<?php
+
+try {
+    //0 = Image
+    //1 = PDF
+    //2 = Image file name - Locally Saved
+    //3 = PDF file name - Locally Saved
+    $response = $traxAPI->printShippingLabel(202223372182, 2, "path/to/save/");
+    echo json_encode($response);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+
+## Cancel Shipment
+
+```php
+<?php
+
+try {
+    $response = $traxAPI->cancelShipment(202223372182);
     return $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+
+## Calculate Rates for a Delivery
+
+```php
+<?php
+
+try { 
+    $serviceTypeId = 1;
+    $originCityId = 202;
+    $destinationCityId = 203;
+    $estimatedWeight = 1.05;
+    $shippingModeId = 1;
+    $amount = 1000;
+    $response = $traxAPI->calculateRates($serviceTypeId, $originCityId, $destinationCityId, $estimatedWeight, $shippingModeId, $amount);
+    return $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+
+## Create a Receiving Sheet
+
+```php
+<?php
+
+try { 
+    $trackingNumbers = [202223372184, 202223372185];
+    $response = $traxAPI->createReceivingSheet($trackingNumbers);
+    return $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+
+## Print/View a Receiving Sheet
+
+### Direct Image/PDF view
+```php
+<?php
+
+try {
+    //0 = Image
+    //1 = PDF
+    //2 = Image file name - Locally Saved
+    //3 = PDF file name - Locally Saved
+    $response = $traxAPI->viewReceivingSheet(6504, 0);
+    echo $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+### Save Image/PDF and return file name
+```php
+<?php
+
+try {
+    //0 = Image
+    //1 = PDF
+    //2 = Image file name - Locally Saved
+    //3 = PDF file name - Locally Saved
+    $response = $traxAPI->viewReceivingSheet(6504, 2, "path/to/save/");
+    echo json_encode($response);
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
     echo "Error: " . $e->getMessage() . "\n";

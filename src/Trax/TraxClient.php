@@ -31,11 +31,33 @@ class TraxClient
     public function makeRequest($endpoint, $method = 'GET', $data = [], $queryParams = [])
     {
         $url = $this->apiUrl . '/' . ltrim($endpoint, '/');
-        $headers = ['Authorization: ' . $this->apiKey, "Content-Type: application/json", "Accept: */*"];
-        $headers = ['Authorization: ' . $this->apiKey, "Accept: */*"];
+        $headers = ['Authorization: ' . $this->apiKey, "Content-Type: application/json"];
         $response = $this->sendRequest($url, $method, $headers, $data, $queryParams);
         $responseData = json_decode($response, true);
         return $responseData;
+    }
+    public function makeRequestFile($endpoint, $queryParams = []){
+        $url = $this->apiUrl . '/' . ltrim($endpoint, '/');
+        if (!empty($queryParams)) {
+            $url .= '?' . http_build_query($queryParams);
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ' . $this->apiKey
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return $response;
     }
 
     private function sendRequest($url, $method, $headers, $data, $queryParams = [])
