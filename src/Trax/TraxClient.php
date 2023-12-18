@@ -31,7 +31,8 @@ class TraxClient
     public function makeRequest($endpoint, $method = 'GET', $data = [], $queryParams = [])
     {
         $url = $this->apiUrl . '/' . ltrim($endpoint, '/');
-        $headers = ['Authorization: ' . $this->apiKey];
+        $headers = ['Authorization: ' . $this->apiKey, "Content-Type: application/json", "Accept: */*"];
+        $headers = ['Authorization: ' . $this->apiKey, "Accept: */*"];
         $response = $this->sendRequest($url, $method, $headers, $data, $queryParams);
         $responseData = json_decode($response, true);
         return $responseData;
@@ -39,7 +40,6 @@ class TraxClient
 
     private function sendRequest($url, $method, $headers, $data, $queryParams = [])
     {
-        
         if (!empty($queryParams)) {
             $url .= '?' . http_build_query($queryParams);
         }

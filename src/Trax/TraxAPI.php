@@ -48,15 +48,6 @@ class TraxAPI
         if (empty($data['person_of_contact']) || mb_strlen($data['person_of_contact']) > 100) {
             throw new TraxException('Invalid person_of_contact. It is mandatory and should be within 100 characters.');
         }
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        try {
-            $phoneNumber = $phoneUtil->parse($data['phone_number'], 'PK'); // Assuming Pakistani numbers
-            if (!$phoneUtil->isValidNumber($phoneNumber)) {
-                throw new TraxException('Invalid phone number.');
-            }
-        } catch (\giggsey\libphonenumber\NumberParseException $e) {
-            throw new TraxException('Error parsing phone number: ' . $e->getMessage());
-        }
     }
 
     /**
@@ -131,7 +122,6 @@ class TraxAPI
     public function addRegularShipment(array $data)
     {
         $data['service_type_id'] = 1; //Regular Shipment
-        $this->validateShipmentNumbers($data);
         $endpoint = '/api/shipment/book';
         $method = 'POST';
         return $this->traxClient->makeRequest($endpoint, $method, $data);
@@ -187,7 +177,6 @@ class TraxAPI
     public function addReplacementShipment(array $data)
     {
         $data['service_type_id'] = 2; //Replacement Shipment
-        $this->validateShipmentNumbers($data);
         $endpoint = '/api/shipment/book';
         $method = 'POST';
         return $this->traxClient->makeRequest($endpoint, $method, $data);
@@ -215,7 +204,7 @@ class TraxAPI
     *   - items[n][product_value]: Specify the value of each product.
     *   - items[n][item_price]: Value of the item number "n" in the order.
     *   - package_type: Defines whether the Try & Buy will be complete, i.e., all the items will be delivered or returned, or partial, i.e., some of the items will be delivered and the remaining will be returned.
-    *   - try_and_buy_fess: Fees that will be charged to the consignee.
+    *   - try_and_buy_fees: Fees that will be charged to the consignee.
     *   - pickup_date: Requested pickup date for the order.
     *   - estimated_weight: Estimated mass of the shipment.
     *   - shipping_mode_id: The method of shipping through which the shipment will be delivered.
@@ -242,46 +231,9 @@ class TraxAPI
     public function addTryAndBuyShipment(array $data)
     {
         $data['service_type_id'] = 3; //Try & Buy Shipment
-        $this->validateShipmentNumbers($data);
         $endpoint = '/api/shipment/book';
         $method = 'POST';
         return $this->traxClient->makeRequest($endpoint, $method, $data);
-    }
-
-    /**
-    * Validate data for shipments.
-    *
-    * @param array $data
-    *   An associative array containing data for shipments.
-    *
-    * @throws TraxException
-    *   If the data does not meet the required conditions.
-    */
-    private function validateShipmentNumbers(array $data)
-    {
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        
-        if(!isset($data['consignee_phone_number_1']) || $data['consignee_phone_number_1'] != ""){
-            throw new TraxException('Invalid phone number.');
-        }
-        try {
-            $phoneNumber = $phoneUtil->parse($data['consignee_phone_number_1'], 'PK'); // Assuming Pakistani numbers
-            if (!$phoneUtil->isValidNumber($phoneNumber)) {
-                throw new TraxException('Invalid phone number.');
-            }
-        } catch (\giggsey\libphonenumber\NumberParseException $e) {
-            throw new TraxException('Error parsing phone number: ' . $e->getMessage());
-        }
-        if(isset($data['consignee_phone_number_2']) && $data['consignee_phone_number_2'] != ""){
-            try {
-                $phoneNumber = $phoneUtil->parse($data['consignee_phone_number_2'], 'PK'); // Assuming Pakistani numbers
-                if (!$phoneUtil->isValidNumber($phoneNumber)) {
-                    throw new TraxException('Invalid phone number.');
-                }
-            } catch (\giggsey\libphonenumber\NumberParseException $e) {
-                throw new TraxException('Error parsing phone number: ' . $e->getMessage());
-            }
-        }
     }
 
     /**
@@ -418,7 +370,7 @@ class TraxAPI
         $endpoint = '/api/shipment/payment_status';
         $method = 'GET';
         $queryParams = [
-            'Tracking_number' => $trackingNumber,
+            'tracking_number' => $trackingNumber,
         ];
         return $this->traxClient->makeRequest($endpoint, $method, [], $queryParams);
     }
@@ -517,6 +469,43 @@ class TraxAPI
     }
 
     /**
+     * Print a Shipping Label and store the image locally.
+     *
+     * @param int $trackingNumber
+     *   The tracking number of the shipment.
+     * @param int $type
+     *   Type of print, whether pdf or jpeg.
+     *
+     * @return string
+     *   URL of the locally stored image.
+     */
+    public function printShippingLabel($trackingNumber, $type)
+    {
+        $this->validatePrintShippingLabelData($trackingNumber, $type);
+        $endpoint = '/api/shipment/air_waybill';
+        $method = 'GET';
+        $queryParams = [
+            'tracking_number' => $trackingNumber,
+            'type' => $type,
+        ];
+
+        // Make the request and get the binary image data
+        $imageData = $this->traxClient->makeRequest($endpoint, $method, [], $queryParams);
+        print_r($imageData);
+        exit;
+
+        // Save the image locally
+        $filename = 'shipping_label_' . $trackingNumber . '.' . ($type == 0 ? 'jpeg' : 'pdf');
+        $filePath = './' . $filename; // Replace with your actual path
+
+        file_put_contents($filePath, $imageData);
+        $imageUrl = './' . $filename;
+
+        return $imageUrl;
+    }
+
+
+    /**
      * Print Shipping Label of a Shipment.
      *
      * @param int $trackingNumber
@@ -527,7 +516,7 @@ class TraxAPI
      * @return array
      *   Decoded response data.
      */
-    public function printShippingLabel($trackingNumber, $type)
+    public function printShippingLabe1l($trackingNumber, $type)
     {
         $this->validatePrintShippingLabelData($trackingNumber, $type);
         $endpoint = '/api/shipment/air_waybill';

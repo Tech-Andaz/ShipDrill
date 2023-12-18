@@ -48,6 +48,23 @@ function cityList($traxAPI){
 //Add Regular Shipment
 function addRegularShipment($traxAPI){
     $shipmentDetails = [
+        "pickup_address_id" => 4184,
+        "information_display" => 1,
+        "consignee_city_id" => 223,
+        "consignee_name" => "John Doe",
+        "consignee_address" => "John Doe House, DHA Phase 1",
+        "consignee_phone_number_1" => "03234896599",
+        "consignee_email_address" => "contact@techandaz.com",
+        "order_id" => "TA-123",
+        "item_product_type_id" => 1, //Appendix B
+        "item_description" => "Shirt and Jeans",
+        "item_quantity" => 10,
+        "item_insurance" => 0,
+        "pickup_date" => date("Y-m-d"),
+        "estimated_weight" => 1.05,
+        "shipping_mode_id" => 1, //Appendix C
+        "amount" => 10650,
+        "payment_mode_id" => 1, //Appendix D
     ];
     try {
         $response = $traxAPI->addRegularShipment($shipmentDetails);
@@ -60,6 +77,27 @@ function addRegularShipment($traxAPI){
 //Add Replacement Shipment
 function addReplacementShipment($traxAPI){
     $shipmentDetails = [
+        "pickup_address_id" => 4184,
+        "information_display" => 1,
+        "consignee_city_id" => 223,
+        "consignee_name" => "John Doe",
+        "consignee_address" => "John Doe House, DHA Phase 1",
+        "consignee_phone_number_1" => "03234896599",
+        "consignee_email_address" => "contact@techandaz.com",
+        "order_id" => "TA-123",
+        "item_product_type_id" => 1, //Appendix B
+        "item_description" => "Shirt and Jeans",
+        "item_quantity" => 10,
+        "item_insurance" => 0,
+        "item_price" => 10650,
+        "replacement_item_product_type_id" => 1, //Appendix B
+        "replacement_item_description" => "Shirt and Jeans",
+        "replacement_item_quantity" => 10,
+        "estimated_weight" => 1.05,
+        "shipping_mode_id" => 1, //Appendix C
+        "amount" => 10650,
+        "charges_mode_id" => 4, //Appendix F
+        "payment_mode_id" => 1, //Appendix D        
     ];
     try {
         $response = $traxAPI->addReplacementShipment($shipmentDetails);
@@ -72,6 +110,32 @@ function addReplacementShipment($traxAPI){
 //Add Try & Buy Shipment
 function addTryAndBuyShipment($traxAPI){
     $shipmentDetails = [
+        "pickup_address_id" => 4184,
+        "information_display" => 1,
+        "consignee_city_id" => 223,
+        "consignee_name" => "John Doe",
+        "consignee_address" => "John Doe House, DHA Phase 1",
+        "consignee_phone_number_1" => "03234896599",
+        "consignee_email_address" => "contact@techandaz.com",
+        "order_id" => "TA-123",
+        "items" => array(
+            array(
+                "item_product_type_id" => 1, //Appendix B
+                "item_description" => "Shirt and Jeans",
+                "item_quantity" => 10,
+                "item_insurance" => 0,
+                "product_value" => 500,
+                "item_price" => 1000,
+            )
+        ),
+        "package_type" => 1, //1=Complete, 2=Partial
+        "pickup_date" => date("Y-m-d"),
+        "try_and_buy_fees" => 500,
+        "estimated_weight" => 1.05,
+        "shipping_mode_id" => 1, //Appendix C
+        "amount" => 10650,
+        "charges_mode_id" => 4, //Appendix F
+        "payment_mode_id" => 1, //Appendix D        
     ];
     try {
         $response = $traxAPI->addTryAndBuyShipment($shipmentDetails);
@@ -84,7 +148,7 @@ function addTryAndBuyShipment($traxAPI){
 //Get Shipment Status
 function getShipmentStatus($traxAPI){
     try {
-        $response = $traxAPI->getShipmentStatus(101101000405, 0);
+        $response = $traxAPI->getShipmentStatus(202223372182, 0);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -95,7 +159,7 @@ function getShipmentStatus($traxAPI){
 //Track Shipment
 function trackShipment($traxAPI){
     try {
-        $response = $traxAPI->trackShipment(101101000405, 0);
+        $response = $traxAPI->trackShipment(202223372182, 0);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -106,7 +170,7 @@ function trackShipment($traxAPI){
 //Shipment Charges
 function getShipmentCharges($traxAPI){
     try {
-        $response = $traxAPI->getShipmentCharges(101101000405);
+        $response = $traxAPI->getShipmentCharges(202223372182);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -117,7 +181,7 @@ function getShipmentCharges($traxAPI){
 //Payment Status of a Shipment
 function getPaymentStatus($traxAPI){
     try {
-        $response = $traxAPI->getPaymentStatus(101101000405, 0);
+        $response = $traxAPI->getPaymentStatus(202223372182);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -139,7 +203,7 @@ function getInvoice($traxAPI){
 //Payments of a Shipment
 function getPaymentDetails($traxAPI){
     try {
-        $response = $traxAPI->getPaymentDetails(101101000405);
+        $response = $traxAPI->getPaymentDetails(202223372182);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -150,7 +214,8 @@ function getPaymentDetails($traxAPI){
 //Shipping Label of a Shipment
 function printShippingLabel($traxAPI){
     try {
-        $response = $traxAPI->printShippingLabel(101101000405, 0);
+        $response = $traxAPI->printShippingLabel(202223372182, 0);
+        var_dump($response);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         // Handle any exceptions that may occur
@@ -161,7 +226,7 @@ function printShippingLabel($traxAPI){
 //Cancel a shipment
 function cancelShipment($traxAPI){
     try {
-        $response = $traxAPI->cancelShipment(101101000405);
+        $response = $traxAPI->cancelShipment(202223372182);
         return $response;
     } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
@@ -217,7 +282,7 @@ function viewReceivingSheet($traxAPI){
 // echo json_encode(getPaymentStatus($traxAPI));
 // echo json_encode(getInvoice($traxAPI));
 // echo json_encode(getPaymentDetails($traxAPI));
-// echo json_encode(printShippingLabel($traxAPI));
+echo print_r(printShippingLabel($traxAPI));
 // echo json_encode(cancelShipment($traxAPI));
 // echo json_encode(calculateRates($traxAPI));
 // echo json_encode(createReceivingSheet($traxAPI));
