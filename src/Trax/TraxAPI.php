@@ -1,8 +1,6 @@
 <?php
 
 namespace TechAndaz\Trax;
-use libphonenumber\PhoneNumberUtil;
-use libphonenumber\PhoneNumberFormat;
 
 class TraxAPI
 {
