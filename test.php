@@ -221,7 +221,6 @@ function viewReceivingSheet($traxAPI){
 // echo json_encode(cancelShipment($traxAPI));
 // echo json_encode(calculateRates($traxAPI));
 // echo json_encode(createReceivingSheet($traxAPI));
-echo json_encode(viewReceivingSheet($traxAPI));
-// echo json_encode(printShippingLabel($traxAPI));
+// echo json_encode(viewReceivingSheet($traxAPI));
 
 ?>

@@ -5,42 +5,24 @@ ShipDrill is a PHP library for handling shipment-related operations, with a focu
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
-  - [Initialize ShipDrill](#initialize-shipdrill)
-  - [Book a Shipment](#book-a-shipment)
-  - [Track a Shipment](#track-a-shipment)
-  - [Try & Buy](#try--buy)
-- [Contributing](#contributing)
+- [Integrations](#integrations)
 - [License](#license)
 
 ## Installation
 
-To install ShipDrill, you can use [Composer](https://getcomposer.org/). Run the following command:
+To install Ship Drill, you can use [Composer](https://getcomposer.org/). Run the following command:
 
 ```bash
-composer require your-username/shipdrill
+composer require tech-andaz/ship-drill
+```
 
-## Usage
+## Integrations
 
-### Initialize ShipDrill
+| Provider | Usage Guide | API Doc |
+| -------- | ------- | ------- |
+|Trax Logistics|[Trax Usage Guide](src/Trax/Usage%20Guide%20Trax.md)| [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)|
 
-```php
-<?php
+## License
 
-use YourNamespace\ShipDrill\ShipDrill;
+[MIT](https://choosealicense.com/licenses/mit/)
 
-require_once 'vendor/autoload.php';
-
-// Initialize ShipDrill
-$shipDrill = new ShipDrill('your-api-key', 'your-api-secret');
-
-## Book a Shipment
-```php
-<?php
-
-// Book a shipment
-$shipmentDetails = [
-    // Add necessary shipment details
-];
-
-$shipmentId = $shipDrill->bookShipment($shipmentDetails);
