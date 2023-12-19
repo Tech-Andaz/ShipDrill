@@ -284,10 +284,9 @@ function getFormFields($traxAPI){
     try { 
         $config = array(
             "type" => "regular",
-            "cities" => array(array("value" => "1", "label" => "Lahore")),
-            "type" => "regular",
             "response" => "form",
             "label_class" => "form-label",
+            "input_class" => "form-control",
             "wrappers" => array(
                 "delivery_type_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',

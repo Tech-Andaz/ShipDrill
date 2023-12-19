@@ -987,7 +987,7 @@ class TraxAPI
                     "wrapper" => isset($config['delivery_type_id-wrapper']) ? $config['delivery_type_id-wrapper'] : "",
                     "label" => isset($config['delivery_type_id-label']) ? $config['delivery_type_id-label'] : "Delivery Type",
                     "type" => "select",
-                    "default" => isset($config['delivery_type_id']) && in_array($config['delivery_type_id'], array_column($appendixG, "label")) ? $config['delivery_type_id'] : 1,
+                    "default" => isset($config['delivery_type_id']) && in_array($config['delivery_type_id'], array_column($appendixG, "label")) ? $config['delivery_type_id'] : "Door Step",
                     "options" => $appendixG
                 ),
                 array(
@@ -998,7 +998,7 @@ class TraxAPI
                     "wrapper" => isset($config['pickup_address_id-wrapper']) ? $config['pickup_address_id-wrapper'] : "",
                     "label" => isset($config['pickup_address_id-label']) ? $config['pickup_address_id-label'] : "Pickup Location",
                     "type" => "select",
-                    "default" => isset($config['pickup_address_id']) && in_array($config['pickup_address_id'], array_column($pickupAddressess, "label")) ? $config['pickup_address_id'] : $pickupAddressess[0]['value'],
+                    "default" => isset($config['pickup_address_id']) && in_array($config['pickup_address_id'], array_column($pickupAddressess, "label")) ? $config['pickup_address_id'] : $pickupAddressess[0]['label'],
                     "options" => $pickupAddressess
                 ),
                 array(
@@ -1009,7 +1009,7 @@ class TraxAPI
                     "wrapper" => isset($config['information_display-wrapper']) ? $config['information_display-wrapper'] : "",
                     "label" => isset($config['information_display-label']) ? $config['information_display-label'] : "Airway Bill Contact Details",
                     "type" => "select",
-                    "default" => isset($config['information_display']) && in_array($config['information_display'], [1,0]) ? $config['information_display'] : 1,
+                    "default" => isset($config['information_display']) && in_array($config['information_display'], [1,0]) ? $config['information_display'] : "Displayed",
                     "options" => array(
                         array(
                             "label" => "Displayed",
@@ -1029,7 +1029,7 @@ class TraxAPI
                     "wrapper" => isset($config['consignee_city_id-wrapper']) ? $config['consignee_city_id-wrapper'] : "",
                     "label" => isset($config['consignee_city_id-label']) ? $config['consignee_city_id-label'] : "Consignee City",
                     "type" => "select",
-                    "default" => isset($config['consignee_city_id']) && in_array($config['consignee_city_id'], array_column($cities, "id")) ? $config['consignee_city_id'] : 223,
+                    "default" => isset($config['consignee_city_id']) && in_array($config['consignee_city_id'], array_column($cities, "id")) ? $config['consignee_city_id'] : "Lahore",
                     "options" => $cities
                 ),
                 array(
@@ -1080,7 +1080,7 @@ class TraxAPI
                     "wrapper" => isset($config['item_product_type_id-wrapper']) ? $config['item_product_type_id-wrapper'] : "",
                     "label" => isset($config['item_product_type_id-label']) ? $config['item_product_type_id-label'] : "Product Type",
                     "type" => "select",
-                    "default" => isset($config['item_product_type_id']) && in_array($config['item_product_type_id'], array_column($appendixB, "label")) ? $config['item_product_type_id'] : 22,
+                    "default" => isset($config['item_product_type_id']) && in_array($config['item_product_type_id'], array_column($appendixB, "label")) ? $config['item_product_type_id'] : "Marketplace",
                     "options" => $appendixB
                 ),
                 array(
@@ -1111,7 +1111,7 @@ class TraxAPI
                     "wrapper" => isset($config['item_insurance-wrapper']) ? $config['item_insurance-wrapper'] : "",
                     "label" => isset($config['item_insurance-label']) ? $config['item_insurance-label'] : "Insurance Type",
                     "type" => "select",
-                    "default" => isset($config['item_insurance']) && in_array($config['item_insurance'], [1,0]) ? $config['item_insurance'] : 0,
+                    "default" => isset($config['item_insurance']) && in_array($config['item_insurance'], [1,0]) ? $config['item_insurance'] : "No Insurance",
                     "options" => array(
                         array(
                             "label" => "Insured",
@@ -1151,7 +1151,7 @@ class TraxAPI
                     "wrapper" => isset($config['shipping_mode_id-wrapper']) ? $config['shipping_mode_id-wrapper'] : "",
                     "label" => isset($config['shipping_mode_id-label']) ? $config['shipping_mode_id-label'] : "Shipping Mode",
                     "type" => "select",
-                    "default" => isset($config['shipping_mode_id']) && in_array($config['shipping_mode_id'], array_column($appendixC, "label")) ? $config['shipping_mode_id'] : 1,
+                    "default" => isset($config['shipping_mode_id']) && in_array($config['shipping_mode_id'], array_column($appendixC, "label")) ? $config['shipping_mode_id'] : "Rush",
                     "options" => $appendixC
                 ),
                 array(
@@ -1172,7 +1172,7 @@ class TraxAPI
                     "wrapper" => isset($config['payment_mode_id-wrapper']) ? $config['payment_mode_id-wrapper'] : "",
                     "label" => isset($config['payment_mode_id-label']) ? $config['payment_mode_id-label'] : "Payment Mode",
                     "type" => "select",
-                    "default" => isset($config['payment_mode_id']) && in_array($config['payment_mode_id'], array_column($appendixD, "label")) ? $config['payment_mode_id'] : 1,
+                    "default" => isset($config['payment_mode_id']) && in_array($config['payment_mode_id'], array_column($appendixD, "label")) ? $config['payment_mode_id'] : "Cash on Delivery",
                     "options" => $appendixD
                 ),
                 array(
@@ -1183,7 +1183,7 @@ class TraxAPI
                     "wrapper" => isset($config['charges_mode_id-wrapper']) ? $config['charges_mode_id-wrapper'] : "",
                     "label" => isset($config['charges_mode_id-label']) ? $config['charges_mode_id-label'] : "Charges Mode",
                     "type" => "select",
-                    "default" => isset($config['charges_mode_id']) && in_array($config['charges_mode_id'], array_column($appendixF, "label")) ? $config['charges_mode_id'] : 3,
+                    "default" => isset($config['charges_mode_id']) && in_array($config['charges_mode_id'], array_column($appendixF, "label")) ? $config['charges_mode_id'] : "Invoicing",
                     "options" => $appendixF
                 ),
             );
@@ -1197,12 +1197,13 @@ class TraxAPI
     public function getForm($form_fields, $config){
         $form_html = "";
         $label_class = isset($config['label_class']) ? $config['label_class'] : "";
+        $input_class = isset($config['input_class']) ? $config['input_class'] : "";
         foreach($form_fields as $field){
             if(isset($config['wrappers'][$field['name']]['input_wrapper_start'])){
                 $form_html .= $config['wrappers'][$field['name']]['input_wrapper_start'];
             }
             $form_html .= '<label class="' . $label_class . '" for="' . $field['name'] . '">' . $field['label'] . '</label>';
-            $wrapper_data = "name='" . $field['name'] . "' " . " class='" . $field['classes'] . "' " . $field['attr'] . " " . $field['field_type'] . " placeholder='" . $field['label'] . "'";
+            $wrapper_data = "name='" . $field['name'] . "' " . " class='" . $input_class . " " . $field['classes'] . "' " . $field['attr'] . " " . $field['field_type'] . " placeholder='" . $field['label'] . "'";
             if($field['type'] == "select"){
                 $wrapper = "select";
                 if($field['wrapper'] != ""){
