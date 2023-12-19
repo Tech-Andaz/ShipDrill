@@ -18,6 +18,7 @@
 - [Calculate Rates for a Delivery](#calculate-rates)
 - [Create a Receiving Sheet](#create-receiving-sheet)
 - [Print/View a Receiving Sheet](#view-receiving-sheet)
+- [Get Form Fields](#get-form-fields)
 
 
 ## Initialize
@@ -126,7 +127,7 @@ try {
 
 ?>
 ```
-Appendix and information on additional fields can be found at: [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)
+Appendix and information on additional fields can be found at: [Trax API Docs](API%20Document%20-%20Trax.pdf)
 ## Book a Replacement Shipment
 
 ```php
@@ -164,7 +165,7 @@ try {
 
 ?>
 ```
-Appendix and information on additional fields can be found at: [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)
+Appendix and information on additional fields can be found at: [Trax API Docs](API%20Document%20-%20Trax.pdf)
 ## Book a Try & Buy Shipment
 
 ```php
@@ -207,7 +208,7 @@ try {
 
 ?>
 ```
-Appendix and information on additional fields can be found at: [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)
+Appendix and information on additional fields can be found at: [Trax API Docs](API%20Document%20-%20Trax.pdf)
 ## Current Status of a Shipment
 
 ```php
@@ -420,3 +421,305 @@ try {
 ?>
 ```
 
+
+## Get Form Fields
+
+Get Form Fields allows you to easily get and customize form fields setup based on the shipment type provided.
+
+
+| Field Name | Type | Default Value | Field Type | Options/Info |
+| -------- | ------- | ------- | ------- | ------- |
+|delivery_type_id | Select | Regular | Required | Appendix G |
+|pickup_address_id | Select | First Location | Required | List of pick up locations added in Trax. |
+|information_display | Select | Show | Required | Show or Hide contact details on Shipping Label/Airway Bill |
+|consignee_city_id | Select | Lahore | Required | List of cities from Trax. Can be overridden by providing "cities" in config. |
+|consignee_name | Text | - | Required | Name of Consignee |
+|consignee_address | Text | - | Required | Address of Consignee |
+|consignee_phone_number_1 | Phone Number / Text| - | Required | Phone Number of Consignee |
+|consignee_email_address | Email | - | Required | Email of Consignee |
+|item_product_type_id | Select | Marketplace | Required | Appendix B |
+|item_description | Text | - | Required | Description of Goods |
+|item_quantity | Number | 1 | Required | Number of Items |
+|item_insurance | Select | No Insurance | Required | Insured, No Insurance |
+|pickup_date | Date | - | Required | Date of Shipment |
+|estimated_weight | Number | 1 | Required | Estimated weight of shipment |
+|shipping_mode_id | Select | Rush | Required | Appendix C |
+|amount | Number | 500 | Required | Amount of shipment |
+|payment_mode_id | Select | Cash on Delivery | Required | Appendix D |
+|charges_mode_id | Select | Invoicing | Required | Appendix F |
+
+### Customize Form Fields
+
+All fields of the form can be customized using the following syntax. Pass these keys along with the value in the Config.
+
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|Classess | {field_name}-class | item_description-class | Add classess to the input field |
+|Attributes | {field_name}-attr | item_quantity-attr | Add custom attributes to the input field |
+|Wrappers | {field_name}-wrapper | item_description-wrapper | Add custom html element types to the input field. For example '<div>' or '<custom>' |
+|Labels | {field_name}-label | consignee_address-label | Add custom labels to the input field |
+|Cities | cities | - | Provide a custom list of cities to replace the trax list. May cause issue if value does not match Trax system. |
+|Default Value | {field_name} | consignee_name | Add a default value to the input field |
+|Input Wrappers | wrappers | - | Add a custom wrappers to the entire input and label field element. For example, wrap everything within a <div> |
+|Label Class | label_class | - | Add classess to the label field |
+
+#### Customize Form Fields - Classess
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "consignee_address-class" => "custom_class",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+#### Customize Form Fields - Attributes
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "item_quantity-attr" => "min='0' max='10'",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Wrappers
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "item_description-wrapper" => "textarea",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Labels
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "consignee_city_id" => "Karachi",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Cities
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "cities" => array(array("value" => "223", "label" => "Lahore")),
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Default Value
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "item_insurance" => "0",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Input Wrappers
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "wrappers" => array(
+            "delivery_type_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "pickup_address_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+        )
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+
+#### Customize Form Fields - Label Class
+
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "label_class" => "form-label",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Example Configuration
+
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "cities" => array(array("value" => "1", "label" => "Lahore")),
+        "type" => "regular",
+        "response" => "form",
+        "label_class" => "form-label",
+        "wrappers" => array(
+            "delivery_type_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "pickup_address_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "information_display" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "consignee_city_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "consignee_name" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "consignee_address" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "consignee_phone_number_1" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "consignee_email_address" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "item_product_type_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "item_description" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "item_quantity" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "item_insurance" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "pickup_date" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "estimated_weight" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "shipping_mode_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "amount" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "payment_mode_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "charges_mode_id" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+        )
+    );
+    $response = $traxAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```

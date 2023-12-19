@@ -277,6 +277,98 @@ function viewReceivingSheet($traxAPI){
     }
 }
 
+
+
+//Get Form Fields
+function getFormFields($traxAPI){
+    try { 
+        $config = array(
+            "type" => "regular",
+            "cities" => array(array("value" => "1", "label" => "Lahore")),
+            "type" => "regular",
+            "response" => "form",
+            "label_class" => "form-label",
+            "wrappers" => array(
+                "delivery_type_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "pickup_address_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "information_display" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "consignee_city_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "consignee_name" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "consignee_address" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "consignee_phone_number_1" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "consignee_email_address" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "item_product_type_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "item_description" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "item_quantity" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "item_insurance" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "pickup_date" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "estimated_weight" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "shipping_mode_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "amount" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "payment_mode_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "charges_mode_id" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+            )
+        );
+        $response = $traxAPI->getFormFields($config);
+        return $response;
+    } catch (TechAndaz\Trax\TraxException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
 // echo json_encode(addPickUpAddress($traxAPI));
 // echo json_encode(listPickupAddresses($traxAPI));
 // echo json_encode(cityList($traxAPI));
@@ -294,5 +386,6 @@ function viewReceivingSheet($traxAPI){
 // echo json_encode(calculateRates($traxAPI));
 // echo json_encode(createReceivingSheet($traxAPI));
 // echo (viewReceivingSheet($traxAPI));
+echo (getFormFields($traxAPI));
 
 ?>
