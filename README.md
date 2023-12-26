@@ -1,6 +1,6 @@
 # ShipDrill
 
-ShipDrill is a PHP library for handling shipment-related operations, with a focus on Trax integration.
+ShipDrill is a PHP library for handling shipment-related operations.
 
 ## Table of Contents
 
@@ -21,6 +21,7 @@ composer require tech-andaz/ship-drill
 | Provider | Usage Guide | API Doc |
 | -------- | ------- | ------- |
 |Trax Logistics|[Trax Usage Guide](src/Trax/Usage%20Guide%20Trax.md)| [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)|
+|PandaGo|[PandaGo Usage Guide](src/PandaGo/Usage%20Guide%20PandaGo.md)| [PandaGo API Docs](https://pandago.docs.apiary.io/)|
 
 ## License
 

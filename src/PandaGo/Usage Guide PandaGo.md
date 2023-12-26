@@ -1,0 +1,325 @@
+
+## Usage Guide - PandaGo## Table of Contents - PandaGo Usage Guide
+- [Initialize PandaGo Client](#initialize)
+- [Submit a New Order](#submit-a-new-order)
+- [Get Specific Order](#get-specific-order)
+- [Cancel Specific Order](#cancel-specific-order)
+- [Update Specific Order](#update-specific-order)
+- [Proof of Pickup](#proof-of-pickup)
+- [Proof of Delivery](#proof-of-delivery)
+- [Proof of Return](#proof-of-return)
+- [Get Rider Coordinates](#get-rider-coordinates)
+- [Estimate Fee For an Order](#estimate-fee-for-an-order)
+- [Estimate Time For an Order](#estimate-time-for-an-order)
+- [Create Or Update an Outlet](#create-or-update-an-outlet)
+- [Get an Outlet](#get-an-outlet)
+- [Get all Outlets](#get-all-outlets)
+## Initialize
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use TechAndaz\PandaGo\PandaGoClient;
+use TechAndaz\PandaGo\PandaGoAPI;
+
+// Initiliaze Client API credentials and Token & API URL. If you don't provide URL it will use production URL automatically.
+//TEST TOKEN URL - https://sts-st.deliveryhero.io/
+//LIVE TOKEN URL - https://sts.deliveryhero.io/
+//TEST API URL - https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/
+//LIVE TOKEN URL - https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/
+
+$PandaGoClient = new PandaGoClient(array(
+    "credentials" => array(
+        "grant_type"=>"client_credentials",
+        "client_id"=>"pandago:sg:bf2029da-89f5-48d1-8f44-f34c03542b2b",
+        "client_assertion_type"=>"urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+        "client_assertion"=>"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNhYjdhNTZmLWFiNTctNGJjOS04MTViLTg3MmVlMGQwODkxYyJ9.eyJleHAiOjIwMTk2ODYzOTksImlzcyI6InBhbmRhZ286c2c6YmYyMDI5ZGEtODlmNS00OGQxLThmNDQtZjM0YzAzNTQyYjJiIiwic3ViIjoicGFuZGFnbzpzZzpiZjIwMjlkYS04OWY1LTQ4ZDEtOGY0NC1mMzRjMDM1NDJiMmIiLCJqdGkiOiJhZGI4ZTRkMS0yZjIzLTRlNzQtODQ1MS04MmJhNWUwYjhiM2QiLCJhdWQiOiJodHRwczovL3N0cy5kZWxpdmVyeWhlcm8uaW8ifQ.pZqBn5U6MdQuloGRzWK6hnFLcU1qfzraX7RLJ5CEONwbFat2HbrEtPHvJhnESL4aTfZOKrr35wICFdPkU9bin8f77Lgno0dFdWxMp3jg9be-7B56hgfOJF4ScyQjS2nBqF4-tauFo9j9qWm99FOYEfTRqQ4aXGWkEg6Huh0G8qXVP19Jdt8mDXUk4UDTwNhcqU4gojGkczixra1OheJVSPGFAUyq0P1UZH3atxSuAp_2Jm-U6eGY4UQGWUjkG_RDpWEJRbD1NasaYYrsqeULA9d8TqHxdX1csKgUgs2WoIJst9Lp2Y-P4b6agAZ3LiFqoXoal0d9ImPkrHHTO__rig",
+        "scope"=>"pandago.api.sg.*",
+    ),
+    "token_url" => "https://sts-st.deliveryhero.io/",
+    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/"
+    
+));
+
+$PandaGoAPI = new PandaGoAPI($PandaGoClient);
+?>
+```
+## Submit a New Order
+
+```php
+<?php
+try {
+    $orderData = [
+        'sender' => array(
+            "name" => "Tech Andaz",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the left door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        'recipient' => array(
+            "name" => "Customer",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the front door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        "amount" => 500.00,
+        "payment_method" => "PAID",
+        "description" => "Order Description",
+        "delivery_tasks" => array(
+            "age_validation_required" => false
+        )
+    ];
+    $response = $PandaGoAPI->submitOrder($orderData);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Get Specific Order
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-a06d04";
+    $response = $PandaGoAPI->fetchOrder($order_id);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Cancel Specific Order
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-c0ad86";
+    $reason = "REASON_UNKNOWN";
+    $response = $PandaGoAPI->cancelOrder($order_id, $reason);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Update Specific Order
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-c0ad86";
+    $orderData = [
+        'location' => array(
+            "notes" => "Use the left door",
+            "address" => "Test address",
+            "latitude" => 1.2923742,
+            "longitude" => 103.8486029,
+        ),
+        "amount" => 500.00,
+        "payment_method" => "PAID",
+        "description" => "Order Description",
+    ];
+    $response = $PandaGoAPI->updateOrder($order_id, $orderData);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Proof of Pickup
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-147164";
+    $response = $PandaGoAPI->proofOfPickup($order_id);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Proof of Delivery
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-147164";
+    $response = $PandaGoAPI->proofOfDelivery($order_id);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Proof of Return
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-147164";
+    $response = $PandaGoAPI->proofOfReturn($order_id);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Get Rider Coordinates
+
+```php
+<?php
+try {
+    $order_id = "a-xfen-147164";
+    $response = $PandaGoAPI->getRiderCoordinates($order_id);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Estimate Fee For an Order
+
+```php
+<?php
+try {
+    $orderData = [
+        'sender' => array(
+            "name" => "Tech Andaz",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the left door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        'recipient' => array(
+            "name" => "Customer",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the front door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        "amount" => 500.00,
+        "payment_method" => "PAID",
+        "description" => "Order Description",
+    ];
+    $response = $PandaGoAPI->estimateDeliveryFees($orderData);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Estimate Time For an Order
+
+```php
+<?php
+try {
+    $orderData = [
+        'sender' => array(
+            "name" => "Tech Andaz",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the left door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        'recipient' => array(
+            "name" => "Customer",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the front door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        "amount" => 500.00,
+        "payment_method" => "PAID",
+        "description" => "Order Description",
+    ];
+    $response = $PandaGoAPI->estimateDeliveryTime($orderData);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Create Or Update an Outlet
+
+```php
+<?php
+try {
+    $outlet_id = uniqid();
+    $orderData = [
+        "name" => "Tech Andaz",
+        "address" => "Test address",
+        "street" => "Test Street",
+        "street_number" => "Street 2",
+        "building" => "Building 1",
+        "district" => "Township",
+        "postal_code" => "12345",
+        "rider_instructions" => "Use Left door",
+        "latitude" => 1.2923742,
+        "longitude" => 103.8486029,
+        "city" => "Lahore",
+        "phone_number" => "+924235113700",
+        "currency" => "PKR",
+        "locale" => "en-US",
+        "description" => "Head Office",
+        "halal" => true,
+        "add_user" => array(
+            "test@test.com",
+            "test2@test.com"
+        ),
+    ];
+    $response = $PandaGoAPI->createUpdateOutlet($outlet_id, $orderData);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Get an Outlet
+
+```php
+<?php
+try {
+    $outlet_id = "658aedab00869";
+    $response = $PandaGoAPI->getOutlet($outlet_id);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Get all Outlets
+
+```php
+<?php
+try {
+    $response = $PandaGoAPI->getAllOutlets();
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
