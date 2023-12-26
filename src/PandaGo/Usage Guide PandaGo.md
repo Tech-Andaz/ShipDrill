@@ -14,6 +14,7 @@
 - [Create Or Update an Outlet](#create-or-update-an-outlet)
 - [Get an Outlet](#get-an-outlet)
 - [Get all Outlets](#get-all-outlets)
+- [Get Form Fields](#get-form-fields)
 ## Initialize
 
 ```php
@@ -321,5 +322,502 @@ try {
 } catch (TechAndaz\PandaGo\PandaGoException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
+?>
+```
+## Get Form Fields - Sender Outlet
+
+Get Form Fields allows you to easily get and customize form fields.
+
+
+| Field Name | Type | Default Value | Field Type | Options/Info |
+| -------- | ------- | ------- | ------- | ------- |
+|sender[client_vendor_id] | Select | - | Required | The outlet from where the order is to be picked up from |
+|sender[notes] | Text | - | Optional | Notes by the Sender |
+|recipient[name] | Text | - | Optional | Name of the Recipient |
+|recipient[phone_number] | Phone Number / Text | - | Optional | Phone number of the Recipient |
+|recipient[location][address] | Text | - | Required | Phone Number of the Recipient |
+|recipient[location][latitude] | Number | - | Required | Latitude of the Recipient |
+|recipient[location][longitude] | Number | - | Required | Longitude of the Recipient |
+|recipient[location][postalcode] | Text | - | Optional | Postal Code of the Recipient |
+|recipient[location][notes] | Text | - | Optional | Notes by the Recipient |
+|payment_method | Select | Cash on Delivery | Required | The payment method of the order|
+|coldbag_needed | Select | Not Required | Optional | If a coldbag is needed|
+|amount | Number | - | Required | Amount of the order|
+|description | Text | - | Required | Description of the order |
+|preordered_for | Date/Time | - | Optional | Date Time picker for scheduled delivery time|
+|delivery_tasks[age_validation_required] | Select | Not Required | Optional | If age validation by rider is required|
+
+```php
+<?php
+
+try { 
+    $config = array(
+        "sender_type" => "sender_outlet",
+        "response" => "form",
+        "label_class" => "form-label",
+        "input_class" => "form-control",
+        "wrappers" => array(
+            "sender[client_vendor_id]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[name]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[phone_number]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][address]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][latitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][longitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "payment_method" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "amount" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "description" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+        ),
+        "optional" => false,
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+## Get Form Fields - Sender Details
+
+Get Form Fields allows you to easily get and customize form fields.
+
+
+| Field Name | Type | Default Value | Field Type | Options/Info |
+| -------- | ------- | ------- | ------- | ------- |
+|sender[name] | Text | - | Optional | Name of the Sender |
+|sender[phone_number] | Phone Number / Text | - | Optional | Phone number of the sender |
+|sender[location][address] | Text | - | Optional | Phone Number of the sender |
+|sender[location][latitude] | Number | - | Required | Latitude of the Sender |
+|sender[location][longitude] | Number | - | Required | Longitude of the Sender |
+|sender[location][postalcode] | Text | - | Optional | Postal Code of the Sender |
+|sender[notes] | Text | - | Optional | Notes by the Sender |
+|recipient[name] | Text | - | Optional | Name of the Recipient |
+|recipient[phone_number] | Phone Number / Text | - | Optional | Phone number of the Recipient |
+|recipient[location][address] | Text | - | Required | Phone Number of the Recipient |
+|recipient[location][latitude] | Number | - | Required | Latitude of the Recipient |
+|recipient[location][longitude] | Number | - | Required | Longitude of the Recipient |
+|recipient[location][postalcode] | Text | - | Optional | Postal Code of the Recipient |
+|recipient[location][notes] | Text | - | Optional | Notes by the Recipient |
+|payment_method | Select | Cash on Delivery | Required | The payment method of the order|
+|coldbag_needed | Select | Not Required | Optional | If a coldbag is needed|
+|amount | Number | - | Required | Amount of the order|
+|description | Text | - | Required | Description of the order |
+|preordered_for | Date/Time | - | Optional | Date Time picker for scheduled delivery time|
+|delivery_tasks[age_validation_required] | Select | Not Required | Optional | If age validation by rider is required|
+
+```php
+<?php
+
+try { 
+    $config = array(
+        "sender_type" => "sender_details",
+        "response" => "form",
+        "label_class" => "form-label",
+        "input_class" => "form-control",
+        "wrappers" => array(
+            "sender[name]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "sender[phone_number]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "sender[location][address]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "sender[location][latitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "sender[location][longitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[name]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[phone_number]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][address]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][latitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][longitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "payment_method" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "amount" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "description" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+        ),
+        "optional" => false,
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+### Customize Form Fields
+
+All fields of the form can be customized using the following syntax. Pass these keys along with the value in the Config.
+
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|Classess | {field_name}-class | sender[location][address]-class | Add classess to the input field |
+|Attributes | {field_name}-attr | sender[location][latitude]-attr | Add custom attributes to the input field |
+|Wrappers | {field_name}-wrapper | sender[location][longitude]-wrapper | Add custom html element types to the input field. For example '<div>' or '<custom>' |
+|Labels | {field_name}-label | payment_method-label | Add custom labels to the input field |
+|Default Value | {field_name} | amount | Add a default value to the input field |
+|Input Wrappers | wrappers | - | Add a custom wrappers to the entire input and label field element. For example, wrap everything within a <div> |
+|Label Class | label_class | - | Add classess to the label field |
+|Sort Order | sort_order | sort_order[] | An array with field names, any missing items will use default order after the defined order |
+|Custom Options | custom_options | custom_options[] | An array with label and value keys. Only applicable to select fields |
+|Optional Fields | optional | optional | Enable/Disable optional fields. true/false |
+|Selective Optional Fields | optional_selective[] | optional_selective[] | Enable/Disable only certain optional fields. An array of optional field names to enable |
+
+#### Customize Form Fields - Classess
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "payment_method-class" => "custom_class",
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+#### Customize Form Fields - Attributes
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "amount-attr" => "step='0.00' min='0'",
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Wrappers
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "description-wrapper" => "textarea",
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Labels
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "payment_method" => "Mode of Payment",
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Default Value
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "recipient[name]" => "Tech Andaz",
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Input Wrappers
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "wrappers" => array(
+            "sender[client_vendor_id]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[name]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+        )
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+
+#### Customize Form Fields - Label Class
+
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "label_class" => "form-label",
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Example Configuration
+
+
+```php
+<?php
+
+try { 
+    $config = array(
+        "sender_type" => "sender_outlet",
+        "response" => "form",
+        "label_class" => "form-label",
+        "input_class" => "form-control",
+        "wrappers" => array(
+            "sender[client_vendor_id]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[name]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[phone_number]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][address]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][latitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "recipient[location][longitude]" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "payment_method" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "amount" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "description" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+        ),
+        "optional" => false,
+        "optional_selective" => array(
+        ),
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+
+#### Customize Form Fields - Sort Order
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "sort_order" => array(
+            "amount",
+            "payment_method",
+            "sender[client_vendor_id]",
+        )
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Custom Options
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "custom_options" => array(
+            "sender[client_vendor_id]" => array(
+                array(
+                    "label" => "Tech Andaz",
+                    "value" => "23456"
+                )
+            )
+        )
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Optional Fields
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "optional" => false
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Selective Optional Fields
+
+```php
+<?php
+
+try {
+    $config = array(
+        "sender_type" => "sender_details",
+        "optional" => false,
+        "optional_selective" => array(
+            "coldbag_needed",
+            "preordered_for"
+        ),
+    );
+    $response = $PandaGoAPI->getFormFields($config);
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
 ?>
 ```

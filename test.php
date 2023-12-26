@@ -271,7 +271,62 @@ function getAllOutlets($PandaGoAPI){
 }
 
 
-
+//Get Form Fields
+function getFormFields($PandaGoAPI){
+    try { 
+        $config = array(
+            "sender_type" => "sender_outlet",
+            "response" => "form",
+            "label_class" => "form-label",
+            "input_class" => "form-control",
+            "wrappers" => array(
+                "sender[client_vendor_id]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "recipient[name]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "recipient[phone_number]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "recipient[location][address]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "recipient[location][latitude]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "recipient[location][longitude]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "payment_method" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "amount" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "description" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+            ),
+            "optional" => false,
+            "optional_selective" => array(
+            ),
+        );
+        $response = $PandaGoAPI->getFormFields($config);
+        return $response;
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
 // echo json_encode(submitOrder($PandaGoAPI));
 // echo json_encode(fetchOrder($PandaGoAPI));
 // echo json_encode(cancelOrder($PandaGoAPI));
@@ -285,7 +340,7 @@ function getAllOutlets($PandaGoAPI){
 // echo json_encode(createOutlet($PandaGoAPI));
 // echo json_encode(getOutlet($PandaGoAPI));
 // echo json_encode(getAllOutlets($PandaGoAPI));
-echo (getFormFields($traxAPI));
+echo (getFormFields($PandaGoAPI));
 
 
 ?>
