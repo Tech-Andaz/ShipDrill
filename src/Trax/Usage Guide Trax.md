@@ -127,7 +127,7 @@ try {
 
 ?>
 ```
-Appendix and information on additional fields can be found at: [Trax API Docs](API%20Document%20-%20Trax.pdf)
+Appendix and information on additional fields can be found at: [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)
 ## Book a Replacement Shipment
 
 ```php
@@ -165,7 +165,7 @@ try {
 
 ?>
 ```
-Appendix and information on additional fields can be found at: [Trax API Docs](API%20Document%20-%20Trax.pdf)
+Appendix and information on additional fields can be found at: [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)
 ## Book a Try & Buy Shipment
 
 ```php
@@ -208,14 +208,22 @@ try {
 
 ?>
 ```
-Appendix and information on additional fields can be found at: [Trax API Docs](API%20Document%20-%20Trax.pdf)
+Appendix and information on additional fields can be found at: [Trax API Docs](src/Trax/API%20Document%20-%20Trax.pdf)
 ## Current Status of a Shipment
+
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+|type | type | 1 | 0 = Shipper-related tracking. 1 = General Tracking. Appendix E|
 
 ```php
 <?php
 
 try {
-    $response = $traxAPI->getShipmentStatus(202223372182, 0);
+    $tracking_number = "202223372182";
+    $type = 0;
+    $response = $traxAPI->getShipmentStatus($tracking_number, $type);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -226,11 +234,19 @@ try {
 ```
 ## Track Shipment
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+|type | type | 1 | 0 = Shipper-related tracking. 1 = General Tracking. Appendix E|
+
 ```php
 <?php
 
 try {
-    $response = $traxAPI->trackShipment(202223372182, 0);
+    $tracking_number = "202223372182";
+    $type = 0;
+    $response = $traxAPI->trackShipment($tracking_number, $type);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -241,11 +257,17 @@ try {
 ```
 ## Charges of a Shipment
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+
 ```php
 <?php
 
 try {
-    $response = $traxAPI->trackShipment(202223372182, 0);
+    $tracking_number = "202223372182";
+    $response = $traxAPI->getShipmentCharges($tracking_number);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -256,11 +278,17 @@ try {
 ```
 ## Payment Details of a Shipment
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+
 ```php
 <?php
 
 try {
-    $response = $traxAPI->getPaymentStatus(202223372182, 0);
+    $tracking_number = "202223372182";
+    $response = $traxAPI->getPaymentStatus($tracking_number);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -270,11 +298,19 @@ try {
 ```
 ## Get Invoice
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|id | id | 930 | Invoice or Payment ID |
+|type | type | 1 | 1 = Invoice. 2 = Payment|
+
 ```php
 <?php
 
 try {
-    $response = $traxAPI->getInvoice(930, 1);
+    $id = "930";
+    $type = 0;
+    $response = $traxAPI->getInvoice($id, $type);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -287,16 +323,20 @@ try {
 
 ## Print/View Shipping Label
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+|type | type | 0 | 0 = Image. 1 = PDF|
+
 ### Direct Image/PDF view
 ```php
 <?php
 
 try {
-    //0 = Image
-    //1 = PDF
-    //2 = Image file name - Locally Saved
-    //3 = PDF file name - Locally Saved
-    $response = $traxAPI->printShippingLabel(202223372182, 0);
+    $tracking_number = "202223372182";
+    $type = 0;
+    $response = $traxAPI->printShippingLabel($tracking_number, $type);
     echo $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -307,15 +347,21 @@ try {
 ```
 
 ### Save Image/PDF and return file name
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+|type | type | 2 | 2 = Image Locally Saved. 3 = PDF locally saved|
+|save_path | "/path/to/save/" | "assets/" | Save path of the downloaded file |
+
 ```php
 <?php
 
 try {
-    //0 = Image
-    //1 = PDF
-    //2 = Image file name - Locally Saved
-    //3 = PDF file name - Locally Saved
-    $response = $traxAPI->printShippingLabel(202223372182, 2, "path/to/save/");
+    $tracking_number = "202223372182";
+    $save_path = "assets/";
+    $type = 3;
+    $response = $traxAPI->printShippingLabel($tracking_number, $type, $save_path);
     echo json_encode($response);
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -328,11 +374,16 @@ try {
 
 ## Cancel Shipment
 
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_number | tracking_number | 202223372182 | Tracking ID of the shipment |
+
 ```php
 <?php
 
 try {
-    $response = $traxAPI->cancelShipment(202223372182);
+    $tracking_number = "202223372182";
+    $response = $traxAPI->cancelShipment($tracking_number);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     echo "Error: " . $e->getMessage() . "\n";
@@ -344,17 +395,28 @@ try {
 
 ## Calculate Rates for a Delivery
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|service_type_id | service_type_id | 1 | Appendix A |
+|origin_city_id | origin_city_id | 202 | City IDs can be viewed from City List API|
+|destination_city_id | destination_city_id | 202 | City IDs can be viewed from City List API|
+|estimated_weight | estimated_weight | 1.05| Please note that this will not be the final weight of the shipment and no charges will be calculated based on this value |
+|shipping_mode_id | shipping_mode_id | 1 | Appendix C |
+|amount | amount | 1000 | Do not use commas or dots for this parameter. |
+
+
 ```php
 <?php
 
 try { 
-    $serviceTypeId = 1;
-    $originCityId = 202;
-    $destinationCityId = 203;
-    $estimatedWeight = 1.05;
-    $shippingModeId = 1;
+    $service_type_id = 1;
+    $origin_city_id = 202;
+    $destination_city_id = 203;
+    $estimated_weight = 1.05;
+    $shipping_mode_id = 1;
     $amount = 1000;
-    $response = $traxAPI->calculateRates($serviceTypeId, $originCityId, $destinationCityId, $estimatedWeight, $shippingModeId, $amount);
+    $response = $traxAPI->calculateRates($service_type_id, $origin_city_id, $destination_city_id, $estimated_weight, $shipping_mode_id, $amount);
     return $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     echo "Error: " . $e->getMessage() . "\n";
@@ -365,6 +427,11 @@ try {
 
 
 ## Create a Receiving Sheet
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|tracking_numbers | tracking_numbers[] | 202223372184 | Array of tracking numbers|
+|tracking_numbers | tracking_numbers[] | 202223372185 | Array of tracking numbers|
 
 ```php
 <?php
@@ -383,16 +450,20 @@ try {
 
 ## Print/View a Receiving Sheet
 
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|receiving_sheet_id | receiving_sheet_id | 6504 | Receiving Sheet ID|
+|type | type | 0 | 0 = Image. 1 = PDF|
+
 ### Direct Image/PDF view
 ```php
 <?php
 
 try {
-    //0 = Image
-    //1 = PDF
-    //2 = Image file name - Locally Saved
-    //3 = PDF file name - Locally Saved
-    $response = $traxAPI->viewReceivingSheet(6504, 0);
+    $receiving_sheet_id = 6504;
+    $type = 0;
+    $response = $traxAPI->viewReceivingSheet($receiving_sheet_id, $type);
     echo $response;
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -403,15 +474,21 @@ try {
 ```
 
 ### Save Image/PDF and return file name
+
+| Field Name | Format | Example | Options/Info |
+| -------- | ------- | ------- | ------- |
+|receiving_sheet_id | receiving_sheet_id | 6504 | Receiving Sheet ID|
+|type | type | 2 | 2 = Image Locally Saved. 3 = PDF locally saved|
+|save_path | "/path/to/save/" | "assets/" | Save path of the downloaded file |
+
 ```php
 <?php
 
 try {
-    //0 = Image
-    //1 = PDF
-    //2 = Image file name - Locally Saved
-    //3 = PDF file name - Locally Saved
-    $response = $traxAPI->viewReceivingSheet(6504, 2, "path/to/save/");
+    $receiving_sheet_id = 6504;
+    $save_path = "assets/";
+    $type = 3;
+    $response = $traxAPI->viewReceivingSheet($receiving_sheet_id, $type, $save_path);
     echo json_encode($response);
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
@@ -447,6 +524,18 @@ Get Form Fields allows you to easily get and customize form fields setup based o
 |amount | Number | 500 | Required | Amount of shipment |
 |payment_mode_id | Select | Cash on Delivery | Required | Appendix D |
 |charges_mode_id | Select | Invoicing | Required | Appendix F |
+|consignee_phone_number_2 | Phone Number / Text | - | Optional | Additional phone number of Consignee |
+|order_id | Text | - | Optional | Unique Shipper's Order ID |
+|item_price | Number | - | Optional | Subjected to selecting item_insurance. Value of items |
+|special_instructions | Textarea | - | Optional | Special Instructions for Delivery |
+|same_day_timing_id | Textarea | - | Optional | For same-day shipping mode, define the timeline in  which the shipment will be delivered|
+|open_shipment | Select | - | Optional | Allow opening of shipment |
+|pieces_quantity | Number | - | Optional | To book multiple parcels per shipment. Number of parcels. |
+|shipper_reference_number_1 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_2 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_3 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_4 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_5 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
 
 ### Customize Form Fields
 
@@ -463,6 +552,10 @@ All fields of the form can be customized using the following syntax. Pass these 
 |Default Value | {field_name} | consignee_name | Add a default value to the input field |
 |Input Wrappers | wrappers | - | Add a custom wrappers to the entire input and label field element. For example, wrap everything within a <div> |
 |Label Class | label_class | - | Add classess to the label field |
+|Sort Order | sort_order | sort_order[] | An array with field names, any missing items will use default order after the defined order |
+|Custom Options | custom_options | custom_options[] | An array with label and value keys. Only applicable to select fields |
+|Optional Fields | optional | optional | Enable/Disable optional fields. true/false |
+|Selective Optional Fields | optional_selective[] | optional_selective[] | Enable/Disable only certain optional fields. An array of optional field names to enable |
 
 #### Customize Form Fields - Classess
 
@@ -566,7 +659,7 @@ try {
 try {
     $config = array(
         "type" => "regular",
-        "item_insurance" => "0",
+        "item_insurance" => "Insured",
     );
     $response = $traxAPI->getFormFields($config);
 } catch (TechAndaz\Trax\TraxException $e) {
@@ -635,10 +728,9 @@ try {
 try {
     $config = array(
         "type" => "regular",
-        "cities" => array(array("value" => "1", "label" => "Lahore")),
-        "type" => "regular",
         "response" => "form",
         "label_class" => "form-label",
+        "input_class" => "form-control",
         "wrappers" => array(
             "delivery_type_id" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
@@ -716,6 +808,97 @@ try {
     );
     $response = $traxAPI->getFormFields($config);
     return $response;
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Sort Order
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "sort_order" => array(
+            "consignee_name",
+            "information_display",
+            "consignee_city_id",
+        )
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Custom Options
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "custom_options" => array(
+            "same_day_timing_id" => array(
+                array(
+                    "label" => "6 Hours",
+                    "value" => 1
+                )
+            )
+        )
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Optional Fields
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "optional" => false
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Selective Optional Fields
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+        "optional" => false,
+        "optional_selective" => array(
+            "shipper_reference_number_1",
+            "order_id"
+        ),
+    );
+    $response = $traxAPI->getFormFields($config);
 } catch (TechAndaz\Trax\TraxException $e) {
     // Handle any exceptions that may occur
     echo "Error: " . $e->getMessage() . "\n";

@@ -360,7 +360,25 @@ function getFormFields($traxAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-            )
+            ),
+            "sort_order" => array(
+                "consignee_name",
+                "information_display",
+                "consignee_city_id",
+            ),
+            "custom_options" => array(
+                "same_day_timing_id" => array(
+                    array(
+                        "label" => "6 Hours",
+                        "value" => 1
+                    )
+                )
+            ),
+            "optional" => false,
+            "optional_selective" => array(
+                "shipper_reference_number_1",
+                "order_id"
+            ),
         );
         $response = $traxAPI->getFormFields($config);
         return $response;
