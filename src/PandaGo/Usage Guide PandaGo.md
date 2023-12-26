@@ -1,5 +1,7 @@
 
-## Usage Guide - PandaGo## Table of Contents - PandaGo Usage Guide
+## Usage Guide - PandaGo
+
+## Table of Contents - PandaGo Usage Guide
 - [Initialize PandaGo Client](#initialize)
 - [Submit a New Order](#submit-a-new-order)
 - [Get Specific Order](#get-specific-order)
@@ -14,7 +16,8 @@
 - [Create Or Update an Outlet](#create-or-update-an-outlet)
 - [Get an Outlet](#get-an-outlet)
 - [Get all Outlets](#get-all-outlets)
-- [Get Form Fields](#get-form-fields)
+- [Get Form Fields - Sender Outlet](#get-form-fields-sender-outlet)
+- [Get Form Fields - Sender Details](#get-form-fields-sender-details)
 ## Initialize
 
 ```php
