@@ -85,8 +85,6 @@ class PandaGoClient
     }
     private function sendRequest($url, $method, $headers, $data, $queryParams = [])
     {
-        // print_r($this->access_token);
-        // exit;
         if (!empty($queryParams)) {
             $url .= '?' . http_build_query($queryParams);
         }
