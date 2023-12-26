@@ -834,6 +834,9 @@ class TraxAPI
                 "label" => $item['address'],
             ));
         }
+        if(!isset($config['optional'])){
+            $config['optional'] = false;
+        }
         $appendixB = array(
             array(
                 "label" => "Apparel",
@@ -1337,24 +1340,782 @@ class TraxAPI
                     "default" => isset($config['shipper_reference_number_5']) ? $config['shipper_reference_number_5'] : "",
                 ),
             );
-            if(isset($config["sort_order"])){
-                $sorted_fields = $config["sort_order"];
-                $sortedArray = array();
-                foreach ($sorted_fields as $key) {
-                    foreach ($form_fields as $item) {
-                        if ($item['name'] === $key) {
-                            $sortedArray[] = $item;
-                            break;
-                        }
-                    }
-                }
+        } else if($config['type'] == "replacement"){
+            $form_fields = array(
+                array(
+                    "name" => "delivery_type_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['delivery_type_id-class']) ? $config['delivery_type_id-class'] : "",
+                    "attr" => isset($config['delivery_type_id-attr']) ? $config['delivery_type_id-attr'] : "",
+                    "wrapper" => isset($config['delivery_type_id-wrapper']) ? $config['delivery_type_id-wrapper'] : "",
+                    "label" => isset($config['delivery_type_id-label']) ? $config['delivery_type_id-label'] : "Delivery Type",
+                    "type" => "select",
+                    "default" => isset($config['delivery_type_id']) && in_array($config['delivery_type_id'], array_column($appendixG, "label")) ? $config['delivery_type_id'] : "Door Step",
+                    "options" => $appendixG,
+                    "custom_options" => isset($config['delivery_type_id-custom_options']) ? $config['delivery_type_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "pickup_address_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['pickup_address_id-class']) ? $config['pickup_address_id-class'] : "",
+                    "attr" => isset($config['pickup_address_id-attr']) ? $config['pickup_address_id-attr'] : "",
+                    "wrapper" => isset($config['pickup_address_id-wrapper']) ? $config['pickup_address_id-wrapper'] : "",
+                    "label" => isset($config['pickup_address_id-label']) ? $config['pickup_address_id-label'] : "Pickup Location",
+                    "type" => "select",
+                    "default" => isset($config['pickup_address_id']) && in_array($config['pickup_address_id'], array_column($pickupAddressess, "label")) ? $config['pickup_address_id'] : $pickupAddressess[0]['label'],
+                    "options" => $pickupAddressess,
+                    "custom_options" => isset($config['pickup_address_id-custom_options']) ? $config['pickup_address_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "information_display",
+                    "field_type" => "required",
+                    "classes" => isset($config['information_display-class']) ? $config['information_display-class'] : "",
+                    "attr" => isset($config['information_display-attr']) ? $config['information_display-attr'] : "",
+                    "wrapper" => isset($config['information_display-wrapper']) ? $config['information_display-wrapper'] : "",
+                    "label" => isset($config['information_display-label']) ? $config['information_display-label'] : "Airway Bill Contact Details",
+                    "type" => "select",
+                    "default" => isset($config['information_display']) && in_array($config['information_display'], [1,0]) ? $config['information_display'] : "Displayed",
+                    "options" => array(
+                        array(
+                            "label" => "Displayed",
+                            "value" => 1
+                        ),
+                        array(
+                            "label" => "Hidden",
+                            "value" => 0
+                        ),
+                    ),
+                    "custom_options" => isset($config['information_display-custom_options']) ? $config['information_display-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "consignee_city_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_city_id-class']) ? $config['consignee_city_id-class'] : "",
+                    "attr" => isset($config['consignee_city_id-attr']) ? $config['consignee_city_id-attr'] : "",
+                    "wrapper" => isset($config['consignee_city_id-wrapper']) ? $config['consignee_city_id-wrapper'] : "",
+                    "label" => isset($config['consignee_city_id-label']) ? $config['consignee_city_id-label'] : "Consignee City",
+                    "type" => "select",
+                    "default" => isset($config['consignee_city_id']) && in_array($config['consignee_city_id'], array_column($cities, "id")) ? $config['consignee_city_id'] : "Lahore",
+                    "options" => $cities,
+                    "custom_options" => isset($config['consignee_city_id-custom_options']) ? $config['consignee_city_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "consignee_name",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_name-class']) ? $config['consignee_name-class'] : "",
+                    "attr" => isset($config['consignee_name-attr']) ? $config['consignee_name-attr'] : "",
+                    "wrapper" => isset($config['consignee_name-wrapper']) ? $config['consignee_name-wrapper'] : "",
+                    "label" => isset($config['consignee_name-label']) ? $config['consignee_name-label'] : "Consignee Name",
+                    "type" => "text",
+                    "default" => isset($config['consignee_name']) ? $config['consignee_name'] : "",
+                ),
+                array(
+                    "name" => "consignee_address",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_address-class']) ? $config['consignee_address-class'] : "",
+                    "attr" => isset($config['consignee_address-attr']) ? $config['consignee_address-attr'] : "",
+                    "wrapper" => isset($config['consignee_address-wrapper']) ? $config['consignee_address-wrapper'] : "",
+                    "label" => isset($config['consignee_address-label']) ? $config['consignee_address-label'] : "Consignee Address",
+                    "type" => "text",
+                    "default" => isset($config['consignee_address']) ? $config['consignee_address'] : "",
+                ),
+                array(
+                    "name" => "consignee_phone_number_1",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_phone_number_1-class']) ? $config['consignee_phone_number_1-class'] : "",
+                    "attr" => isset($config['consignee_phone_number_1-attr']) ? $config['consignee_phone_number_1-attr'] : "",
+                    "wrapper" => isset($config['consignee_phone_number_1-wrapper']) ? $config['consignee_phone_number_1-wrapper'] : "",
+                    "label" => isset($config['consignee_phone_number_1-label']) ? $config['consignee_phone_number_1-label'] : "Consignee Phone",
+                    "type" => "phone",
+                    "default" => isset($config['consignee_phone_number_1']) ? $config['consignee_phone_number_1'] : "",
+                ),
+                array(
+                    "name" => "consignee_phone_number_2",
+                    "field_type" => "optional",
+                    "classes" => isset($config['consignee_phone_number_2-class']) ? $config['consignee_phone_number_2-class'] : "",
+                    "attr" => isset($config['consignee_phone_number_2-attr']) ? $config['consignee_phone_number_2-attr'] : "",
+                    "wrapper" => isset($config['consignee_phone_number_2-wrapper']) ? $config['consignee_phone_number_2-wrapper'] : "",
+                    "label" => isset($config['consignee_phone_number_2-label']) ? $config['consignee_phone_number_2-label'] : "Consignee Phone 2",
+                    "type" => "phone",
+                    "default" => isset($config['consignee_phone_number_2']) ? $config['consignee_phone_number_2'] : "",
+                ),
+                array(
+                    "name" => "consignee_email_address",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_email_address-class']) ? $config['consignee_email_address-class'] : "",
+                    "attr" => isset($config['consignee_email_address-attr']) ? $config['consignee_email_address-attr'] : "",
+                    "wrapper" => isset($config['consignee_email_address-wrapper']) ? $config['consignee_email_address-wrapper'] : "",
+                    "label" => isset($config['consignee_email_address-label']) ? $config['consignee_email_address-label'] : "Consignee Email",
+                    "type" => "email",
+                    "default" => isset($config['consignee_email_address']) ? $config['consignee_email_address'] : "",
+                ),
+                array(
+                    "name" => "order_id",
+                    "field_type" => "optional",
+                    "classes" => isset($config['order_id-class']) ? $config['order_id-class'] : "",
+                    "attr" => isset($config['order_id-attr']) ? $config['order_id-attr'] : "",
+                    "wrapper" => isset($config['order_id-wrapper']) ? $config['order_id-wrapper'] : "",
+                    "label" => isset($config['order_id-label']) ? $config['order_id-label'] : "Order ID",
+                    "type" => "text",
+                    "default" => isset($config['order_id']) ? $config['order_id'] : "",
+                ),
+                array(
+                    "name" => "item_product_type_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['item_product_type_id-class']) ? $config['item_product_type_id-class'] : "",
+                    "attr" => isset($config['item_product_type_id-attr']) ? $config['item_product_type_id-attr'] : "",
+                    "wrapper" => isset($config['item_product_type_id-wrapper']) ? $config['item_product_type_id-wrapper'] : "",
+                    "label" => isset($config['item_product_type_id-label']) ? $config['item_product_type_id-label'] : "Product Type",
+                    "type" => "select",
+                    "default" => isset($config['item_product_type_id']) && in_array($config['item_product_type_id'], array_column($appendixB, "label")) ? $config['item_product_type_id'] : "Marketplace",
+                    "options" => $appendixB,
+                    "custom_options" => isset($config['item_product_type_id-custom_options']) ? $config['item_product_type_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "item_description",
+                    "field_type" => "required",
+                    "classes" => isset($config['item_description-class']) ? $config['item_description-class'] : "",
+                    "attr" => isset($config['item_description-attr']) ? $config['item_description-attr'] : "",
+                    "wrapper" => isset($config['item_description-wrapper']) ? $config['item_description-wrapper'] : "",
+                    "label" => isset($config['item_description-label']) ? $config['item_description-label'] : "Item Description",
+                    "type" => "text",
+                    "default" => isset($config['item_description']) ? $config['item_description'] : "",
+                ),
+                array(
+                    "name" => "item_quantity",
+                    "field_type" => "required",
+                    "classes" => isset($config['item_quantity-class']) ? $config['item_quantity-class'] : "",
+                    "attr" => isset($config['item_quantity-attr']) ? $config['item_quantity-attr'] : "",
+                    "wrapper" => isset($config['item_quantity-wrapper']) ? $config['item_quantity-wrapper'] : "",
+                    "label" => isset($config['item_quantity-label']) ? $config['item_quantity-label'] : "Number of Items",
+                    "type" => "number",
+                    "default" => isset($config['item_quantity']) ? $config['item_quantity'] : "",
+                ),
+                array(
+                    "name" => "item_insurance",
+                    "field_type" => "required",
+                    "classes" => isset($config['item_insurance-class']) ? $config['item_insurance-class'] : "",
+                    "attr" => isset($config['item_insurance-attr']) ? $config['item_insurance-attr'] : "",
+                    "wrapper" => isset($config['item_insurance-wrapper']) ? $config['item_insurance-wrapper'] : "",
+                    "label" => isset($config['item_insurance-label']) ? $config['item_insurance-label'] : "Insurance Type",
+                    "type" => "select",
+                    "default" => isset($config['item_insurance']) && in_array($config['item_insurance'], [1,0]) ? $config['item_insurance'] : "No Insurance",
+                    "options" => array(
+                        array(
+                            "label" => "Insured",
+                            "value" => 1
+                        ),
+                        array(
+                            "label" => "No Insurance",
+                            "value" => 0
+                        ),
+                    ),
+                    "custom_options" => isset($config['item_insurance-custom_options']) ? $config['item_insurance-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "item_price",
+                    "field_type" => "required",
+                    "classes" => isset($config['item_price-class']) ? $config['item_price-class'] : "",
+                    "attr" => isset($config['item_price-attr']) ? $config['item_price-attr'] : "",
+                    "wrapper" => isset($config['item_price-wrapper']) ? $config['item_price-wrapper'] : "",
+                    "label" => isset($config['item_price-label']) ? $config['item_price-label'] : "Item Price",
+                    "type" => "number",
+                    "default" => isset($config['item_price']) ? $config['item_price'] : "",
+                ),
+                array(
+                    "name" => "replacement_item_product_type_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['replacement_item_product_type_id-class']) ? $config['replacement_item_product_type_id-class'] : "",
+                    "attr" => isset($config['replacement_item_product_type_id-attr']) ? $config['replacement_item_product_type_id-attr'] : "",
+                    "wrapper" => isset($config['item_product_type_id-wrapper']) ? $config['replacement_item_product_type_id-wrapper'] : "",
+                    "label" => isset($config['replacement_item_product_type_id-label']) ? $config['replacement_item_product_type_id-label'] : "Replacement Product Type",
+                    "type" => "select",
+                    "default" => isset($config['replacement_item_product_type_id']) && in_array($config['replacement_item_product_type_id'], array_column($appendixB, "label")) ? $config['replacement_item_product_type_id'] : "Marketplace",
+                    "options" => $appendixB,
+                    "custom_options" => isset($config['replacement_item_product_type_id-custom_options']) ? $config['replacement_item_product_type_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "replacement_item_description",
+                    "field_type" => "required",
+                    "classes" => isset($config['replacement_item_description-class']) ? $config['replacement_item_description-class'] : "",
+                    "attr" => isset($config['replacement_item_description-attr']) ? $config['replacement_item_description-attr'] : "",
+                    "wrapper" => isset($config['item_description-wrapper']) ? $config['replacement_item_description-wrapper'] : "",
+                    "label" => isset($config['replacement_item_description-label']) ? $config['replacement_item_description-label'] : "Replacement Item Description",
+                    "type" => "text",
+                    "default" => isset($config['replacement_item_description']) ? $config['replacement_item_description'] : "",
+                ),
+                array(
+                    "name" => "replacement_item_quantity",
+                    "field_type" => "required",
+                    "classes" => isset($config['replacement_item_quantity-class']) ? $config['replacement_item_quantity-class'] : "",
+                    "attr" => isset($config['replacement_item_quantity-attr']) ? $config['replacement_item_quantity-attr'] : "",
+                    "wrapper" => isset($config['replacement_item_quantity-wrapper']) ? $config['replacement_item_quantity-wrapper'] : "",
+                    "label" => isset($config['replacement_item_quantity-label']) ? $config['replacement_item_quantity-label'] : "Replacement Number of Items",
+                    "type" => "number",
+                    "default" => isset($config['replacement_item_quantity']) ? $config['replacement_item_quantity'] : "",
+                ),
+                array(
+                    "name" => "replacement_item_image",
+                    "field_type" => "optional",
+                    "classes" => isset($config['replacement_item_image-class']) ? $config['replacement_item_image-class'] : "",
+                    "attr" => isset($config['replacement_item_image-attr']) ? $config['replacement_item_image-attr'] : "",
+                    "wrapper" => isset($config['replacement_item_image-wrapper']) ? $config['replacement_item_image-wrapper'] : "",
+                    "label" => isset($config['replacement_item_image-label']) ? $config['replacement_item_image-label'] : "Replacement Item Image",
+                    "type" => "file",
+                    "default" => isset($config['replacement_item_image']) ? $config['replacement_item_image'] : "",
+                ),
+                array(
+                    "name" => "pickup_date",
+                    "field_type" => "required",
+                    "classes" => isset($config['pickup_date-class']) ? $config['pickup_date-class'] : "",
+                    "attr" => isset($config['pickup_date-attr']) ? $config['pickup_date-attr'] : "",
+                    "wrapper" => isset($config['pickup_date-wrapper']) ? $config['pickup_date-wrapper'] : "",
+                    "label" => isset($config['pickup_date-label']) ? $config['pickup_date-label'] : "Pickup Date",
+                    "type" => "date",
+                    "default" => isset($config['pickup_date']) ? $config['pickup_date'] : "",
+                ),
+                array(
+                    "name" => "special_instructions",
+                    "field_type" => "optional",
+                    "classes" => isset($config['special_instructions-class']) ? $config['special_instructions-class'] : "",
+                    "attr" => isset($config['special_instructions-attr']) ? $config['special_instructions-attr'] : "",
+                    "wrapper" => isset($config['special_instructions-wrapper']) ? $config['special_instructions-wrapper'] : "",
+                    "label" => isset($config['special_instructions-label']) ? $config['special_instructions-label'] : "Special Instructions",
+                    "type" => "textarea",
+                    "default" => isset($config['special_instructions']) ? $config['special_instructions'] : "",
+                ),
+                array(
+                    "name" => "estimated_weight",
+                    "field_type" => "required",
+                    "classes" => isset($config['estimated_weight-class']) ? $config['estimated_weight-class'] : "",
+                    "attr" => isset($config['estimated_weight-attr']) ? $config['estimated_weight-attr'] : "",
+                    "wrapper" => isset($config['estimated_weight-wrapper']) ? $config['estimated_weight-wrapper'] : "",
+                    "label" => isset($config['estimated_weight-label']) ? $config['estimated_weight-label'] : "Estimated Weight",
+                    "type" => "number",
+                    "default" => isset($config['estimated_weight']) ? $config['estimated_weight'] : "",
+                ),
+                array(
+                    "name" => "shipping_mode_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['shipping_mode_id-class']) ? $config['shipping_mode_id-class'] : "",
+                    "attr" => isset($config['shipping_mode_id-attr']) ? $config['shipping_mode_id-attr'] : "",
+                    "wrapper" => isset($config['shipping_mode_id-wrapper']) ? $config['shipping_mode_id-wrapper'] : "",
+                    "label" => isset($config['shipping_mode_id-label']) ? $config['shipping_mode_id-label'] : "Shipping Mode",
+                    "type" => "select",
+                    "default" => isset($config['shipping_mode_id']) && in_array($config['shipping_mode_id'], array_column($appendixC, "label")) ? $config['shipping_mode_id'] : "Rush",
+                    "options" => $appendixC,
+                    "custom_options" => isset($config['shipping_mode_id-custom_options']) ? $config['shipping_mode_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "same_day_timing_id",
+                    "field_type" => "optional",
+                    "classes" => isset($config['same_day_timing_id-class']) ? $config['same_day_timing_id-class'] : "",
+                    "attr" => isset($config['same_day_timing_id-attr']) ? $config['same_day_timing_id-attr'] : "",
+                    "wrapper" => isset($config['same_day_timing_id-wrapper']) ? $config['same_day_timing_id-wrapper'] : "",
+                    "label" => isset($config['same_day_timing_id-label']) ? $config['same_day_timing_id-label'] : "Same Day Timings",
+                    "type" => "select",
+                    "default" => isset($config['same_day_timing_id']) ? $config['same_day_timing_id'] : "",
+                    "options" => array(),
+                    "custom_options" => isset($config['same_day_timing_id-custom_options']) ? $config['same_day_timing_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "amount",
+                    "field_type" => "required",
+                    "classes" => isset($config['amount-class']) ? $config['amount-class'] : "",
+                    "attr" => isset($config['amount-attr']) ? $config['amount-attr'] : "",
+                    "wrapper" => isset($config['amount-wrapper']) ? $config['amount-wrapper'] : "",
+                    "label" => isset($config['amount-label']) ? $config['amount-label'] : "Amount",
+                    "type" => "number",
+                    "default" => isset($config['amount']) ? $config['amount'] : 500,
+                ),
+                array(
+                    "name" => "payment_mode_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['payment_mode_id-class']) ? $config['payment_mode_id-class'] : "",
+                    "attr" => isset($config['payment_mode_id-attr']) ? $config['payment_mode_id-attr'] : "",
+                    "wrapper" => isset($config['payment_mode_id-wrapper']) ? $config['payment_mode_id-wrapper'] : "",
+                    "label" => isset($config['payment_mode_id-label']) ? $config['payment_mode_id-label'] : "Payment Mode",
+                    "type" => "select",
+                    "default" => isset($config['payment_mode_id']) && in_array($config['payment_mode_id'], array_column($appendixD, "label")) ? $config['payment_mode_id'] : "Cash on Delivery",
+                    "options" => $appendixD,
+                    "custom_options" => isset($config['payment_mode_id-custom_options']) ? $config['payment_mode_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "charges_mode_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['charges_mode_id-class']) ? $config['charges_mode_id-class'] : "",
+                    "attr" => isset($config['charges_mode_id-attr']) ? $config['charges_mode_id-attr'] : "",
+                    "wrapper" => isset($config['charges_mode_id-wrapper']) ? $config['charges_mode_id-wrapper'] : "",
+                    "label" => isset($config['charges_mode_id-label']) ? $config['charges_mode_id-label'] : "Charges Mode",
+                    "type" => "select",
+                    "default" => isset($config['charges_mode_id']) && in_array($config['charges_mode_id'], array_column($appendixF, "label")) ? $config['charges_mode_id'] : "Invoicing",
+                    "options" => $appendixF,
+                    "custom_options" => isset($config['charges_mode_id-custom_options']) ? $config['charges_mode_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "open_shipment",
+                    "field_type" => "optional",
+                    "classes" => isset($config['open_shipment-class']) ? $config['open_shipment-class'] : "",
+                    "attr" => isset($config['open_shipment-attr']) ? $config['open_shipment-attr'] : "",
+                    "wrapper" => isset($config['open_shipment-wrapper']) ? $config['open_shipment-wrapper'] : "",
+                    "label" => isset($config['open_shipment-label']) ? $config['open_shipment-label'] : "Open Shipment",
+                    "type" => "select",
+                    "default" => isset($config['open_shipment']) && in_array($config['open_shipment'], [1,0]) ? $config['open_shipment'] : "0",
+                    "options" => array(
+                        array(
+                            "label" => "Allowed",
+                            "value" => 1
+                        ),
+                        array(
+                            "label" => "Not Allowed",
+                            "value" => 0
+                        ),
+                    ),
+                    "custom_options" => isset($config['open_shipment-custom_options']) ? $config['open_shipment-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "pieces_quantity",
+                    "field_type" => "optional",
+                    "classes" => isset($config['pieces_quantity-class']) ? $config['pieces_quantity-class'] : "",
+                    "attr" => isset($config['pieces_quantity-attr']) ? $config['pieces_quantity-attr'] : "",
+                    "wrapper" => isset($config['pieces_quantity-wrapper']) ? $config['pieces_quantity-wrapper'] : "",
+                    "label" => isset($config['pieces_quantity-label']) ? $config['pieces_quantity-label'] : "Number of Pieces",
+                    "type" => "number",
+                    "default" => isset($config['pieces_quantity']) ? $config['pieces_quantity'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_1",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_1-class']) ? $config['shipper_reference_number_1-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_1-attr']) ? $config['shipper_reference_number_1-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_1-wrapper']) ? $config['shipper_reference_number_1-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_1-label']) ? $config['shipper_reference_number_1-label'] : "Shipper Reference Number 1",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_1']) ? $config['shipper_reference_number_1'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_2",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_2-class']) ? $config['shipper_reference_number_2-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_2-attr']) ? $config['shipper_reference_number_2-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_2-wrapper']) ? $config['shipper_reference_number_2-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_2-label']) ? $config['shipper_reference_number_2-label'] : "Shipper Reference Number 2",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_2']) ? $config['shipper_reference_number_2'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_3",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_3-class']) ? $config['shipper_reference_number_3-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_3-attr']) ? $config['shipper_reference_number_3-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_3-wrapper']) ? $config['shipper_reference_number_3-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_3-label']) ? $config['shipper_reference_number_3-label'] : "Shipper Reference Number 3",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_3']) ? $config['shipper_reference_number_3'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_4",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_4-class']) ? $config['shipper_reference_number_4-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_4-attr']) ? $config['shipper_reference_number_4-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_4-wrapper']) ? $config['shipper_reference_number_4-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_4-label']) ? $config['shipper_reference_number_4-label'] : "Shipper Reference Number 4",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_4']) ? $config['shipper_reference_number_4'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_5",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_5-class']) ? $config['shipper_reference_number_5-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_5-attr']) ? $config['shipper_reference_number_5-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_5-wrapper']) ? $config['shipper_reference_number_5-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_5-label']) ? $config['shipper_reference_number_5-label'] : "Shipper Reference Number 5",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_5']) ? $config['shipper_reference_number_5'] : "",
+                ),
+            );
+        } else if($config['type'] == "tryandbuy"){
+            $form_fields = array(
+                array(
+                    "name" => "delivery_type_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['delivery_type_id-class']) ? $config['delivery_type_id-class'] : "",
+                    "attr" => isset($config['delivery_type_id-attr']) ? $config['delivery_type_id-attr'] : "",
+                    "wrapper" => isset($config['delivery_type_id-wrapper']) ? $config['delivery_type_id-wrapper'] : "",
+                    "label" => isset($config['delivery_type_id-label']) ? $config['delivery_type_id-label'] : "Delivery Type",
+                    "type" => "select",
+                    "default" => isset($config['delivery_type_id']) && in_array($config['delivery_type_id'], array_column($appendixG, "label")) ? $config['delivery_type_id'] : "Door Step",
+                    "options" => $appendixG,
+                    "custom_options" => isset($config['delivery_type_id-custom_options']) ? $config['delivery_type_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "pickup_address_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['pickup_address_id-class']) ? $config['pickup_address_id-class'] : "",
+                    "attr" => isset($config['pickup_address_id-attr']) ? $config['pickup_address_id-attr'] : "",
+                    "wrapper" => isset($config['pickup_address_id-wrapper']) ? $config['pickup_address_id-wrapper'] : "",
+                    "label" => isset($config['pickup_address_id-label']) ? $config['pickup_address_id-label'] : "Pickup Location",
+                    "type" => "select",
+                    "default" => isset($config['pickup_address_id']) && in_array($config['pickup_address_id'], array_column($pickupAddressess, "label")) ? $config['pickup_address_id'] : $pickupAddressess[0]['label'],
+                    "options" => $pickupAddressess,
+                    "custom_options" => isset($config['pickup_address_id-custom_options']) ? $config['pickup_address_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "information_display",
+                    "field_type" => "required",
+                    "classes" => isset($config['information_display-class']) ? $config['information_display-class'] : "",
+                    "attr" => isset($config['information_display-attr']) ? $config['information_display-attr'] : "",
+                    "wrapper" => isset($config['information_display-wrapper']) ? $config['information_display-wrapper'] : "",
+                    "label" => isset($config['information_display-label']) ? $config['information_display-label'] : "Airway Bill Contact Details",
+                    "type" => "select",
+                    "default" => isset($config['information_display']) && in_array($config['information_display'], [1,0]) ? $config['information_display'] : "Displayed",
+                    "options" => array(
+                        array(
+                            "label" => "Displayed",
+                            "value" => 1
+                        ),
+                        array(
+                            "label" => "Hidden",
+                            "value" => 0
+                        ),
+                    ),
+                    "custom_options" => isset($config['information_display-custom_options']) ? $config['information_display-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "consignee_city_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_city_id-class']) ? $config['consignee_city_id-class'] : "",
+                    "attr" => isset($config['consignee_city_id-attr']) ? $config['consignee_city_id-attr'] : "",
+                    "wrapper" => isset($config['consignee_city_id-wrapper']) ? $config['consignee_city_id-wrapper'] : "",
+                    "label" => isset($config['consignee_city_id-label']) ? $config['consignee_city_id-label'] : "Consignee City",
+                    "type" => "select",
+                    "default" => isset($config['consignee_city_id']) && in_array($config['consignee_city_id'], array_column($cities, "id")) ? $config['consignee_city_id'] : "Lahore",
+                    "options" => $cities,
+                    "custom_options" => isset($config['consignee_city_id-custom_options']) ? $config['consignee_city_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "consignee_name",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_name-class']) ? $config['consignee_name-class'] : "",
+                    "attr" => isset($config['consignee_name-attr']) ? $config['consignee_name-attr'] : "",
+                    "wrapper" => isset($config['consignee_name-wrapper']) ? $config['consignee_name-wrapper'] : "",
+                    "label" => isset($config['consignee_name-label']) ? $config['consignee_name-label'] : "Consignee Name",
+                    "type" => "text",
+                    "default" => isset($config['consignee_name']) ? $config['consignee_name'] : "",
+                ),
+                array(
+                    "name" => "consignee_address",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_address-class']) ? $config['consignee_address-class'] : "",
+                    "attr" => isset($config['consignee_address-attr']) ? $config['consignee_address-attr'] : "",
+                    "wrapper" => isset($config['consignee_address-wrapper']) ? $config['consignee_address-wrapper'] : "",
+                    "label" => isset($config['consignee_address-label']) ? $config['consignee_address-label'] : "Consignee Address",
+                    "type" => "text",
+                    "default" => isset($config['consignee_address']) ? $config['consignee_address'] : "",
+                ),
+                array(
+                    "name" => "consignee_phone_number_1",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_phone_number_1-class']) ? $config['consignee_phone_number_1-class'] : "",
+                    "attr" => isset($config['consignee_phone_number_1-attr']) ? $config['consignee_phone_number_1-attr'] : "",
+                    "wrapper" => isset($config['consignee_phone_number_1-wrapper']) ? $config['consignee_phone_number_1-wrapper'] : "",
+                    "label" => isset($config['consignee_phone_number_1-label']) ? $config['consignee_phone_number_1-label'] : "Consignee Phone",
+                    "type" => "phone",
+                    "default" => isset($config['consignee_phone_number_1']) ? $config['consignee_phone_number_1'] : "",
+                ),
+                array(
+                    "name" => "consignee_phone_number_2",
+                    "field_type" => "optional",
+                    "classes" => isset($config['consignee_phone_number_2-class']) ? $config['consignee_phone_number_2-class'] : "",
+                    "attr" => isset($config['consignee_phone_number_2-attr']) ? $config['consignee_phone_number_2-attr'] : "",
+                    "wrapper" => isset($config['consignee_phone_number_2-wrapper']) ? $config['consignee_phone_number_2-wrapper'] : "",
+                    "label" => isset($config['consignee_phone_number_2-label']) ? $config['consignee_phone_number_2-label'] : "Consignee Phone 2",
+                    "type" => "phone",
+                    "default" => isset($config['consignee_phone_number_2']) ? $config['consignee_phone_number_2'] : "",
+                ),
+                array(
+                    "name" => "consignee_email_address",
+                    "field_type" => "required",
+                    "classes" => isset($config['consignee_email_address-class']) ? $config['consignee_email_address-class'] : "",
+                    "attr" => isset($config['consignee_email_address-attr']) ? $config['consignee_email_address-attr'] : "",
+                    "wrapper" => isset($config['consignee_email_address-wrapper']) ? $config['consignee_email_address-wrapper'] : "",
+                    "label" => isset($config['consignee_email_address-label']) ? $config['consignee_email_address-label'] : "Consignee Email",
+                    "type" => "email",
+                    "default" => isset($config['consignee_email_address']) ? $config['consignee_email_address'] : "",
+                ),
+                array(
+                    "name" => "order_id",
+                    "field_type" => "optional",
+                    "classes" => isset($config['order_id-class']) ? $config['order_id-class'] : "",
+                    "attr" => isset($config['order_id-attr']) ? $config['order_id-attr'] : "",
+                    "wrapper" => isset($config['order_id-wrapper']) ? $config['order_id-wrapper'] : "",
+                    "label" => isset($config['order_id-label']) ? $config['order_id-label'] : "Order ID",
+                    "type" => "text",
+                    "default" => isset($config['order_id']) ? $config['order_id'] : "",
+                ),
+                array(
+                    "name" => "try_buy_fees_row",
+                    "field_type" => "required",
+                    "classes" => isset($config['try_buy_fees_row-class']) ? $config['try_buy_fees_row-class'] : "",
+                    "attr" => isset($config['try_buy_fees_row-attr']) ? $config['try_buy_fees_row-attr'] : "",
+                    "wrapper" => isset($config['item_price-wrapper']) ? $config['try_buy_fees_row-wrapper'] : "",
+                    "label" => isset($config['try_buy_fees_row-label']) ? $config['try_buy_fees_row-label'] : "Items",
+                    "type" => "row",
+                    "default" => isset($config['try_buy_fees_row']) ? $config['try_buy_fees_row'] : "",
+                    "row_fields" => array(
+                        array(
+                            "name" => "item_product_type_id",
+                            "field_type" => "required",
+                            "classes" => isset($config['item_product_type_id-class']) ? $config['item_product_type_id-class'] : "",
+                            "attr" => isset($config['item_product_type_id-attr']) ? $config['item_product_type_id-attr'] : "",
+                            "wrapper" => isset($config['item_product_type_id-wrapper']) ? $config['item_product_type_id-wrapper'] : "",
+                            "label" => isset($config['item_product_type_id-label']) ? $config['item_product_type_id-label'] : "Product Type",
+                            "type" => "select",
+                            "default" => isset($config['item_product_type_id']) && in_array($config['item_product_type_id'], array_column($appendixB, "label")) ? $config['item_product_type_id'] : "Marketplace",
+                            "options" => $appendixB,
+                            "custom_options" => isset($config['item_product_type_id-custom_options']) ? $config['item_product_type_id-custom_options'] : array(),
+                        ),
+                        array(
+                            "name" => "item_description",
+                            "field_type" => "required",
+                            "classes" => isset($config['item_description-class']) ? $config['item_description-class'] : "",
+                            "attr" => isset($config['item_description-attr']) ? $config['item_description-attr'] : "",
+                            "wrapper" => isset($config['item_description-wrapper']) ? $config['item_description-wrapper'] : "",
+                            "label" => isset($config['item_description-label']) ? $config['item_description-label'] : "Item Description",
+                            "type" => "text",
+                            "default" => isset($config['item_description']) ? $config['item_description'] : "",
+                        ),
+                        array(
+                            "name" => "item_quantity",
+                            "field_type" => "required",
+                            "classes" => isset($config['item_quantity-class']) ? $config['item_quantity-class'] : "",
+                            "attr" => isset($config['item_quantity-attr']) ? $config['item_quantity-attr'] : "",
+                            "wrapper" => isset($config['item_quantity-wrapper']) ? $config['item_quantity-wrapper'] : "",
+                            "label" => isset($config['item_quantity-label']) ? $config['item_quantity-label'] : "Number of Items",
+                            "type" => "number",
+                            "default" => isset($config['item_quantity']) ? $config['item_quantity'] : "",
+                        ),
+                        array(
+                            "name" => "item_insurance",
+                            "field_type" => "required",
+                            "classes" => isset($config['item_insurance-class']) ? $config['item_insurance-class'] : "",
+                            "attr" => isset($config['item_insurance-attr']) ? $config['item_insurance-attr'] : "",
+                            "wrapper" => isset($config['item_insurance-wrapper']) ? $config['item_insurance-wrapper'] : "",
+                            "label" => isset($config['item_insurance-label']) ? $config['item_insurance-label'] : "Insurance Type",
+                            "type" => "select",
+                            "default" => isset($config['item_insurance']) && in_array($config['item_insurance'], [1,0]) ? $config['item_insurance'] : "No Insurance",
+                            "options" => array(
+                                array(
+                                    "label" => "Insured",
+                                    "value" => 1
+                                ),
+                                array(
+                                    "label" => "No Insurance",
+                                    "value" => 0
+                                ),
+                            ),
+                            "custom_options" => isset($config['item_insurance-custom_options']) ? $config['item_insurance-custom_options'] : array(),
+                        ),
+                        array(
+                            "name" => "item_price",
+                            "field_type" => "required",
+                            "classes" => isset($config['item_price-class']) ? $config['item_price-class'] : "",
+                            "attr" => isset($config['item_price-attr']) ? $config['item_price-attr'] : "",
+                            "wrapper" => isset($config['item_price-wrapper']) ? $config['item_price-wrapper'] : "",
+                            "label" => isset($config['item_price-label']) ? $config['item_price-label'] : "Item Price",
+                            "type" => "number",
+                            "default" => isset($config['item_price']) ? $config['item_price'] : "",
+                        ),
+                    )
+                ),
+                array(
+                    "name" => "pickup_date",
+                    "field_type" => "required",
+                    "classes" => isset($config['pickup_date-class']) ? $config['pickup_date-class'] : "",
+                    "attr" => isset($config['pickup_date-attr']) ? $config['pickup_date-attr'] : "",
+                    "wrapper" => isset($config['pickup_date-wrapper']) ? $config['pickup_date-wrapper'] : "",
+                    "label" => isset($config['pickup_date-label']) ? $config['pickup_date-label'] : "Pickup Date",
+                    "type" => "date",
+                    "default" => isset($config['pickup_date']) ? $config['pickup_date'] : "",
+                ),
+                array(
+                    "name" => "special_instructions",
+                    "field_type" => "optional",
+                    "classes" => isset($config['special_instructions-class']) ? $config['special_instructions-class'] : "",
+                    "attr" => isset($config['special_instructions-attr']) ? $config['special_instructions-attr'] : "",
+                    "wrapper" => isset($config['special_instructions-wrapper']) ? $config['special_instructions-wrapper'] : "",
+                    "label" => isset($config['special_instructions-label']) ? $config['special_instructions-label'] : "Special Instructions",
+                    "type" => "textarea",
+                    "default" => isset($config['special_instructions']) ? $config['special_instructions'] : "",
+                ),
+                array(
+                    "name" => "estimated_weight",
+                    "field_type" => "required",
+                    "classes" => isset($config['estimated_weight-class']) ? $config['estimated_weight-class'] : "",
+                    "attr" => isset($config['estimated_weight-attr']) ? $config['estimated_weight-attr'] : "",
+                    "wrapper" => isset($config['estimated_weight-wrapper']) ? $config['estimated_weight-wrapper'] : "",
+                    "label" => isset($config['estimated_weight-label']) ? $config['estimated_weight-label'] : "Estimated Weight",
+                    "type" => "number",
+                    "default" => isset($config['estimated_weight']) ? $config['estimated_weight'] : "",
+                ),
+                array(
+                    "name" => "shipping_mode_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['shipping_mode_id-class']) ? $config['shipping_mode_id-class'] : "",
+                    "attr" => isset($config['shipping_mode_id-attr']) ? $config['shipping_mode_id-attr'] : "",
+                    "wrapper" => isset($config['shipping_mode_id-wrapper']) ? $config['shipping_mode_id-wrapper'] : "",
+                    "label" => isset($config['shipping_mode_id-label']) ? $config['shipping_mode_id-label'] : "Shipping Mode",
+                    "type" => "select",
+                    "default" => isset($config['shipping_mode_id']) && in_array($config['shipping_mode_id'], array_column($appendixC, "label")) ? $config['shipping_mode_id'] : "Rush",
+                    "options" => $appendixC,
+                    "custom_options" => isset($config['shipping_mode_id-custom_options']) ? $config['shipping_mode_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "same_day_timing_id",
+                    "field_type" => "optional",
+                    "classes" => isset($config['same_day_timing_id-class']) ? $config['same_day_timing_id-class'] : "",
+                    "attr" => isset($config['same_day_timing_id-attr']) ? $config['same_day_timing_id-attr'] : "",
+                    "wrapper" => isset($config['same_day_timing_id-wrapper']) ? $config['same_day_timing_id-wrapper'] : "",
+                    "label" => isset($config['same_day_timing_id-label']) ? $config['same_day_timing_id-label'] : "Same Day Timings",
+                    "type" => "select",
+                    "default" => isset($config['same_day_timing_id']) ? $config['same_day_timing_id'] : "",
+                    "options" => array(),
+                    "custom_options" => isset($config['same_day_timing_id-custom_options']) ? $config['same_day_timing_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "amount",
+                    "field_type" => "required",
+                    "classes" => isset($config['amount-class']) ? $config['amount-class'] : "",
+                    "attr" => isset($config['amount-attr']) ? $config['amount-attr'] : "",
+                    "wrapper" => isset($config['amount-wrapper']) ? $config['amount-wrapper'] : "",
+                    "label" => isset($config['amount-label']) ? $config['amount-label'] : "Amount",
+                    "type" => "number",
+                    "default" => isset($config['amount']) ? $config['amount'] : 500,
+                ),
+                array(
+                    "name" => "payment_mode_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['payment_mode_id-class']) ? $config['payment_mode_id-class'] : "",
+                    "attr" => isset($config['payment_mode_id-attr']) ? $config['payment_mode_id-attr'] : "",
+                    "wrapper" => isset($config['payment_mode_id-wrapper']) ? $config['payment_mode_id-wrapper'] : "",
+                    "label" => isset($config['payment_mode_id-label']) ? $config['payment_mode_id-label'] : "Payment Mode",
+                    "type" => "select",
+                    "default" => isset($config['payment_mode_id']) && in_array($config['payment_mode_id'], array_column($appendixD, "label")) ? $config['payment_mode_id'] : "Cash on Delivery",
+                    "options" => $appendixD,
+                    "custom_options" => isset($config['payment_mode_id-custom_options']) ? $config['payment_mode_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "charges_mode_id",
+                    "field_type" => "required",
+                    "classes" => isset($config['charges_mode_id-class']) ? $config['charges_mode_id-class'] : "",
+                    "attr" => isset($config['charges_mode_id-attr']) ? $config['charges_mode_id-attr'] : "",
+                    "wrapper" => isset($config['charges_mode_id-wrapper']) ? $config['charges_mode_id-wrapper'] : "",
+                    "label" => isset($config['charges_mode_id-label']) ? $config['charges_mode_id-label'] : "Charges Mode",
+                    "type" => "select",
+                    "default" => isset($config['charges_mode_id']) && in_array($config['charges_mode_id'], array_column($appendixF, "label")) ? $config['charges_mode_id'] : "Invoicing",
+                    "options" => $appendixF,
+                    "custom_options" => isset($config['charges_mode_id-custom_options']) ? $config['charges_mode_id-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "open_shipment",
+                    "field_type" => "optional",
+                    "classes" => isset($config['open_shipment-class']) ? $config['open_shipment-class'] : "",
+                    "attr" => isset($config['open_shipment-attr']) ? $config['open_shipment-attr'] : "",
+                    "wrapper" => isset($config['open_shipment-wrapper']) ? $config['open_shipment-wrapper'] : "",
+                    "label" => isset($config['open_shipment-label']) ? $config['open_shipment-label'] : "Open Shipment",
+                    "type" => "select",
+                    "default" => isset($config['open_shipment']) && in_array($config['open_shipment'], [1,0]) ? $config['open_shipment'] : "0",
+                    "options" => array(
+                        array(
+                            "label" => "Allowed",
+                            "value" => 1
+                        ),
+                        array(
+                            "label" => "Not Allowed",
+                            "value" => 0
+                        ),
+                    ),
+                    "custom_options" => isset($config['open_shipment-custom_options']) ? $config['open_shipment-custom_options'] : array(),
+                ),
+                array(
+                    "name" => "pieces_quantity",
+                    "field_type" => "optional",
+                    "classes" => isset($config['pieces_quantity-class']) ? $config['pieces_quantity-class'] : "",
+                    "attr" => isset($config['pieces_quantity-attr']) ? $config['pieces_quantity-attr'] : "",
+                    "wrapper" => isset($config['pieces_quantity-wrapper']) ? $config['pieces_quantity-wrapper'] : "",
+                    "label" => isset($config['pieces_quantity-label']) ? $config['pieces_quantity-label'] : "Number of Pieces",
+                    "type" => "number",
+                    "default" => isset($config['pieces_quantity']) ? $config['pieces_quantity'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_1",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_1-class']) ? $config['shipper_reference_number_1-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_1-attr']) ? $config['shipper_reference_number_1-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_1-wrapper']) ? $config['shipper_reference_number_1-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_1-label']) ? $config['shipper_reference_number_1-label'] : "Shipper Reference Number 1",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_1']) ? $config['shipper_reference_number_1'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_2",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_2-class']) ? $config['shipper_reference_number_2-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_2-attr']) ? $config['shipper_reference_number_2-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_2-wrapper']) ? $config['shipper_reference_number_2-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_2-label']) ? $config['shipper_reference_number_2-label'] : "Shipper Reference Number 2",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_2']) ? $config['shipper_reference_number_2'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_3",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_3-class']) ? $config['shipper_reference_number_3-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_3-attr']) ? $config['shipper_reference_number_3-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_3-wrapper']) ? $config['shipper_reference_number_3-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_3-label']) ? $config['shipper_reference_number_3-label'] : "Shipper Reference Number 3",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_3']) ? $config['shipper_reference_number_3'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_4",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_4-class']) ? $config['shipper_reference_number_4-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_4-attr']) ? $config['shipper_reference_number_4-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_4-wrapper']) ? $config['shipper_reference_number_4-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_4-label']) ? $config['shipper_reference_number_4-label'] : "Shipper Reference Number 4",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_4']) ? $config['shipper_reference_number_4'] : "",
+                ),
+                array(
+                    "name" => "shipper_reference_number_5",
+                    "field_type" => "optional",
+                    "classes" => isset($config['shipper_reference_number_5-class']) ? $config['shipper_reference_number_5-class'] : "",
+                    "attr" => isset($config['shipper_reference_number_5-attr']) ? $config['shipper_reference_number_5-attr'] : "",
+                    "wrapper" => isset($config['shipper_reference_number_5-wrapper']) ? $config['shipper_reference_number_5-wrapper'] : "",
+                    "label" => isset($config['shipper_reference_number_5-label']) ? $config['shipper_reference_number_5-label'] : "Shipper Reference Number 5",
+                    "type" => "text",
+                    "default" => isset($config['shipper_reference_number_5']) ? $config['shipper_reference_number_5'] : "",
+                ),
+            );
+        }
+        if(isset($config["sort_order"])){
+            $sorted_fields = $config["sort_order"];
+            $sortedArray = array();
+            foreach ($sorted_fields as $key) {
                 foreach ($form_fields as $item) {
-                    if (!in_array($item['name'], $sorted_fields)) {
+                    if ($item['name'] === $key) {
                         $sortedArray[] = $item;
+                        break;
                     }
                 }
-                $form_fields = $sortedArray;
             }
+            foreach ($form_fields as $item) {
+                if (!in_array($item['name'], $sorted_fields)) {
+                    $sortedArray[] = $item;
+                }
+            }
+            $form_fields = $sortedArray;
         }
         if($config['response'] == "form"){
             return $this->getForm($form_fields, $config);
@@ -1362,77 +2123,96 @@ class TraxAPI
             return $form_fields;
         }
     }
-    public function getForm($form_fields, $config){
+    public function getField($form_fields, $config, $field){
         $form_html = "";
         $label_class = isset($config['label_class']) ? $config['label_class'] : "";
         $input_class = isset($config['input_class']) ? $config['input_class'] : "";
+        if($field['field_type'] == "optional"){
+            if($config['optional'] == false && !in_array($field['name'], $config['optional_selective'])){
+                return "";
+            }
+        }
+        if(isset($config['wrappers'][$field['name']]['input_wrapper_start'])){
+            $form_html .= $config['wrappers'][$field['name']]['input_wrapper_start'];
+        }
+        $form_html .= '<label class="' . $label_class . '" for="' . $field['name'] . '">' . $field['label'] . '</label>';
+        $wrapper_data = "name='" . $field['name'] . "' " . " class='" . $input_class . " " . $field['classes'] . "' " . $field['attr'] . " " . $field['field_type'] . " placeholder='" . $field['label'] . "'";
+        if($field['type'] == "select"){
+            $wrapper = "select";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $options_html = "";
+            foreach($field['options'] as $option){
+                $selected = "";
+                if($field['default'] == $option['label']){
+                    $selected = "selected";
+                }
+                $options_html .= '<option ' . $selected . ' value = "' . $option['value'] . '">' . $option['label'] . '</option>';
+            }
+            $form_html .= '<' . $wrapper . ' ' . $wrapper_data . '>' . $options_html . '</' . $wrapper . '>';
+        } else if($field['type'] == "text"){
+            $wrapper = "input";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $form_html .= '<' . $wrapper . ' type = "text" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
+        } else if($field['type'] == "phone"){
+            $wrapper = "input";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $form_html .= '<' . $wrapper . ' type = "text" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
+        } else if($field['type'] == "email"){
+            $wrapper = "input";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $form_html .= '<' . $wrapper . ' type = "email" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
+        } else if($field['type'] == "number"){
+            $wrapper = "input";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $form_html .= '<' . $wrapper . ' type = "number" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
+        } else if($field['type'] == "date"){
+            $wrapper = "input";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $form_html .= '<' . $wrapper . ' type = "date" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
+        } else if($field['type'] == "textarea"){
+            $wrapper = "textarea";
+            if($field['wrapper'] != ""){
+                $wrapper = $field['wrapper'];
+            }
+            $form_html .= '<' . $wrapper . ' ' . $wrapper_data . '>' . $field['default'] . '</' . $wrapper . '>';
+        }
+        if(isset($config['wrappers'][$field['name']]['input_wrapper_end'])){
+            $form_html .= $config['wrappers'][$field['name']]['input_wrapper_end'];
+        }
+        return $form_html;
+    }
+    public function getForm($form_fields, $config){
+        $form_html = "";
         if(!isset($config['optional_selective']) || !is_array($config['optional_selective'])){
             $config['optional_selective'] = array();
         }
+        //row
         foreach($form_fields as $field){
-            if($field['field_type'] == "optional"){
-                if($config['optional'] == false && !in_array($field['name'], $config['optional_selective'])){
-                    continue;
+            if($field['type'] == "row"){
+                
+                if(isset($config['wrappers'][$field['name']]['input_wrapper_start'])){
+                    $form_html .= $config['wrappers'][$field['name']]['input_wrapper_start'];
                 }
-            }
-            if(isset($config['wrappers'][$field['name']]['input_wrapper_start'])){
-                $form_html .= $config['wrappers'][$field['name']]['input_wrapper_start'];
-            }
-            $form_html .= '<label class="' . $label_class . '" for="' . $field['name'] . '">' . $field['label'] . '</label>';
-            $wrapper_data = "name='" . $field['name'] . "' " . " class='" . $input_class . " " . $field['classes'] . "' " . $field['attr'] . " " . $field['field_type'] . " placeholder='" . $field['label'] . "'";
-            if($field['type'] == "select"){
-                $wrapper = "select";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
+                foreach($field['row_fields'] as $row_field){
+                    $form_html .= $this->getField($field['row_fields'], $config, $row_field);
                 }
-                $options_html = "";
-                foreach($field['options'] as $option){
-                    $selected = "";
-                    if($field['default'] == $option['label']){
-                        $selected = "selected";
-                    }
-                    $options_html .= '<option ' . $selected . ' value = "' . $option['value'] . '">' . $option['label'] . '</option>';
+                if(isset($config['wrappers'][$field['name']]['input_wrapper_end'])){
+                    $form_html .= $config['wrappers'][$field['name']]['input_wrapper_end'];
                 }
-                $form_html .= '<' . $wrapper . ' ' . $wrapper_data . '>' . $options_html . '</' . $wrapper . '>';
-            } else if($field['type'] == "text"){
-                $wrapper = "input";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
-                }
-                $form_html .= '<' . $wrapper . ' type = "text" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
-            } else if($field['type'] == "phone"){
-                $wrapper = "input";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
-                }
-                $form_html .= '<' . $wrapper . ' type = "text" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
-            } else if($field['type'] == "email"){
-                $wrapper = "input";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
-                }
-                $form_html .= '<' . $wrapper . ' type = "email" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
-            } else if($field['type'] == "number"){
-                $wrapper = "input";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
-                }
-                $form_html .= '<' . $wrapper . ' type = "number" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
-            } else if($field['type'] == "date"){
-                $wrapper = "input";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
-                }
-                $form_html .= '<' . $wrapper . ' type = "date" ' . $wrapper_data . ' value = "' . $field['default'] . '"></' . $wrapper . '>';
-            } else if($field['type'] == "textarea"){
-                $wrapper = "textarea";
-                if($field['wrapper'] != ""){
-                    $wrapper = $field['wrapper'];
-                }
-                $form_html .= '<' . $wrapper . ' ' . $wrapper_data . '>' . $field['default'] . '</' . $wrapper . '>';
-            }
-            if(isset($config['wrappers'][$field['name']]['input_wrapper_end'])){
-                $form_html .= $config['wrappers'][$field['name']]['input_wrapper_end'];
+            } else {
+                $form_html .= $this->getField($form_fields, $config, $field);
             }
         }
         return $form_html;

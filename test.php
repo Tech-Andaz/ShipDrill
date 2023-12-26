@@ -283,7 +283,7 @@ function viewReceivingSheet($traxAPI){
 function getFormFields($traxAPI){
     try { 
         $config = array(
-            "type" => "regular",
+            "type" => "tryandbuy",
             "response" => "form",
             "label_class" => "form-label",
             "input_class" => "form-control",
@@ -359,6 +359,10 @@ function getFormFields($traxAPI){
                 "charges_mode_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
+                ),
+                "try_buy_fees_row" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
+                    "input_wrapper_end" => "</div></div>"
                 ),
             ),
             "sort_order" => array(

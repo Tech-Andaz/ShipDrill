@@ -499,7 +499,7 @@ try {
 ```
 
 
-## Get Form Fields
+## Get Form Fields - Regular Shipment
 
 Get Form Fields allows you to easily get and customize form fields setup based on the shipment type provided.
 
@@ -537,6 +537,137 @@ Get Form Fields allows you to easily get and customize form fields setup based o
 |shipper_reference_number_4 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
 |shipper_reference_number_5 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
 
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "regular",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+## Get Form Fields - Replacement Shipment
+
+Get Form Fields allows you to easily get and customize form fields setup based on the shipment type provided.
+
+
+| Field Name | Type | Default Value | Field Type | Options/Info |
+| -------- | ------- | ------- | ------- | ------- |
+|delivery_type_id | Select | Regular | Required | Appendix G |
+|pickup_address_id | Select | First Location | Required | List of pick up locations added in Trax. |
+|information_display | Select | Show | Required | Show or Hide contact details on Shipping Label/Airway Bill |
+|consignee_city_id | Select | Lahore | Required | List of cities from Trax. Can be overridden by providing "cities" in config. |
+|consignee_name | Text | - | Required | Name of Consignee |
+|consignee_address | Text | - | Required | Address of Consignee |
+|consignee_phone_number_1 | Phone Number / Text| - | Required | Phone Number of Consignee |
+|consignee_email_address | Email | - | Required | Email of Consignee |
+|item_product_type_id | Select | Marketplace | Required | Appendix B |
+|item_description | Text | - | Required | Description of Goods |
+|item_quantity | Number | 1 | Required | Number of Items |
+|item_insurance | Select | No Insurance | Required | Insured, No Insurance |
+|item_price | Number | - | Required | Subjected to selecting item_insurance. Value of items |
+|replacement_item_product_type_id | Select | Marketplace | Required | Appendix B |
+|replacement_item_quantity | Number | 1 | Required | Replacement Number of Items |
+|pickup_date | Date | - | Required | Date of Shipment |
+|estimated_weight | Number | 1 | Required | Estimated weight of shipment |
+|shipping_mode_id | Select | Rush | Required | Appendix C |
+|amount | Number | 500 | Required | Amount of shipment |
+|payment_mode_id | Select | Cash on Delivery | Required | Appendix D |
+|charges_mode_id | Select | Invoicing | Required | Appendix F |
+|consignee_phone_number_2 | Phone Number / Text | - | Optional | Additional phone number of Consignee |
+|order_id | Text | - | Optional | Unique Shipper's Order ID |
+|replacement_item_image | File | - | Optional | Replacement Item Image |
+|special_instructions | Textarea | - | Optional | Special Instructions for Delivery |
+|same_day_timing_id | Textarea | - | Optional | For same-day shipping mode, define the timeline in  which the shipment will be delivered|
+|open_shipment | Select | - | Optional | Allow opening of shipment |
+|pieces_quantity | Number | - | Optional | To book multiple parcels per shipment. Number of parcels. |
+|shipper_reference_number_1 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_2 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_3 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_4 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_5 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "replacement",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+## Get Form Fields - Try & Buy Shipment
+
+Get Form Fields allows you to easily get and customize form fields setup based on the shipment type provided.
+
+
+| Field Name | Type | Default Value | Field Type | Options/Info |
+| -------- | ------- | ------- | ------- | ------- |
+|delivery_type_id | Select | Regular | Required | Appendix G |
+|pickup_address_id | Select | First Location | Required | List of pick up locations added in Trax. |
+|information_display | Select | Show | Required | Show or Hide contact details on Shipping Label/Airway Bill |
+|consignee_city_id | Select | Lahore | Required | List of cities from Trax. Can be overridden by providing "cities" in config. |
+|consignee_name | Text | - | Required | Name of Consignee |
+|consignee_address | Text | - | Required | Address of Consignee |
+|consignee_phone_number_1 | Phone Number / Text| - | Required | Phone Number of Consignee |
+|consignee_email_address | Email | - | Required | Email of Consignee |
+|items[n][item_product_type_id] | Select | Marketplace | Required | Appendix B |
+|items[n][item_description] | Text | - | Required | Description of Goods |
+|items[n][item_quantity] | Number | 1 | Required | Number of Items |
+|items[n][item_insurance] | Select | No Insurance | Required | Insured, No Insurance |
+|items[n][item_value] | Number | 1 | Required | Value of Item |
+|items[n][item_price] | Number | - | Required | Subjected to selecting item_insurance. Value of items |
+|package_type | Select | 1 | Required | 1=Complete, 2 = Partial |
+|try_and_buy_fees | Number | 500 | Required | The fees for try and buy |
+|pickup_date | Date | - | Required | Date of Shipment |
+|estimated_weight | Number | 1 | Required | Estimated weight of shipment |
+|shipping_mode_id | Select | Rush | Required | Appendix C |
+|amount | Number | 500 | Required | Amount of shipment |
+|payment_mode_id | Select | Cash on Delivery | Required | Appendix D |
+|charges_mode_id | Select | Invoicing | Required | Appendix F |
+|consignee_phone_number_2 | Phone Number / Text | - | Optional | Additional phone number of Consignee |
+|order_id | Text | - | Optional | Unique Shipper's Order ID |
+|replacement_item_image | File | - | Optional | Replacement Item Image |
+|special_instructions | Textarea | - | Optional | Special Instructions for Delivery |
+|same_day_timing_id | Textarea | - | Optional | For same-day shipping mode, define the timeline in  which the shipment will be delivered|
+|open_shipment | Select | - | Optional | Allow opening of shipment |
+|pieces_quantity | Number | - | Optional | To book multiple parcels per shipment. Number of parcels. |
+|shipper_reference_number_1 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_2 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_3 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_4 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+|shipper_reference_number_5 | Text | - | Optional | Custom attributes/reference that shipper wants to add |
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "tryandbuy",
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
 ### Customize Form Fields
 
 All fields of the form can be customized using the following syntax. Pass these keys along with the value in the Config.
@@ -556,6 +687,7 @@ All fields of the form can be customized using the following syntax. Pass these 
 |Custom Options | custom_options | custom_options[] | An array with label and value keys. Only applicable to select fields |
 |Optional Fields | optional | optional | Enable/Disable optional fields. true/false |
 |Selective Optional Fields | optional_selective[] | optional_selective[] | Enable/Disable only certain optional fields. An array of optional field names to enable |
+|Try & Buy Row| try_buy_fees_row | try_buy_fees_row | Wrappers can be aded to Try and Buy item row. It will wrap all internal fields, item description, price, quantity etc within a row which can be configured to create add and remove rows for dynamic items. Only for Try and Buy type. |
 
 #### Customize Form Fields - Classess
 
@@ -896,6 +1028,32 @@ try {
         "optional_selective" => array(
             "shipper_reference_number_1",
             "order_id"
+        ),
+    );
+    $response = $traxAPI->getFormFields($config);
+} catch (TechAndaz\Trax\TraxException $e) {
+    // Handle any exceptions that may occur
+    echo "Error: " . $e->getMessage() . "\n";
+}
+
+?>
+```
+
+#### Customize Form Fields - Try & Buy Row
+
+To contain all try and buy items [n] a helper is provided to wrap row into a wrapper allowing for customization using javascript/jquery to create dynamic row entries. All [n] fields can be customized as previously. Below example will wrap all fields into a parent div.
+
+```php
+<?php
+
+try {
+    $config = array(
+        "type" => "tryandbuy",
+        "wrappers" => array(
+            "try_buy_fees_row" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row try_buy_item_row">',
+                "input_wrapper_end" => "</div></div>"
+            ),
         ),
     );
     $response = $traxAPI->getFormFields($config);
