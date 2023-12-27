@@ -1,23 +1,21 @@
 
-## Usage Guide - PandaGo
-
-## Table of Contents - PandaGo Usage Guide
-- [Initialize PandaGo Client](#initialize)
-- [Submit a New Order](#submit-a-new-order)
-- [Get Specific Order](#get-specific-order)
-- [Cancel Specific Order](#cancel-specific-order)
-- [Update Specific Order](#update-specific-order)
-- [Proof of Pickup](#proof-of-pickup)
-- [Proof of Delivery](#proof-of-delivery)
-- [Proof of Return](#proof-of-return)
-- [Get Rider Coordinates](#get-rider-coordinates)
-- [Estimate Fee For an Order](#estimate-fee-for-an-order)
-- [Estimate Time For an Order](#estimate-time-for-an-order)
-- [Create Or Update an Outlet](#create-or-update-an-outlet)
-- [Get an Outlet](#get-an-outlet)
-- [Get all Outlets](#get-all-outlets)
-- [Get Form Fields - Sender Outlet](#get-form-fields-sender-outlet)
-- [Get Form Fields - Sender Details](#get-form-fields-sender-details)
+## Usage Guide - BlueEx
+## Table of Contents - BlueEx Usage Guide
+- [Initialize BlueEx Client](#initialize)
+- [Place Order](#place-order)
+- [Cancel Shipment](#cancel-shipment)
+- [Reverse Pickup](#reverse-pickup)
+- [Create Loadsheet](#create-loadsheet)
+- [Get Service Types](#get-service-types)
+- [Get Cities](#get-cities)
+- [Get Tariff](#get-tariff)
+- [Get Shipment Tracking](#get-shipment-tracking)
+- [Get Shipment Info](#get-shipment-info)
+- [Get Shipment Settlement](#get-shipment-settlement)
+- [Get Shipment Status](#get-shipment-status)
+- [Get All Pickup Locations](#get-all-pickup-locations)
+- [Get Pickup Location](#get-pickup-location)
+- [Get Form Fields](#get-form-fields)
 ## Initialize
 
 ```php
@@ -25,149 +23,129 @@
 
 require 'vendor/autoload.php';
 
-use TechAndaz\PandaGo\PandaGoClient;
-use TechAndaz\PandaGo\PandaGoAPI;
+use TechAndaz\BlueEx\BlueExClient;
+use TechAndaz\BlueEx\BlueExAPI;
 
-// Initiliaze Client API credentials and Token & API URL. If you don't provide URL it will use production URL automatically.
-//TEST TOKEN URL - https://sts-st.deliveryhero.io/
-//LIVE TOKEN URL - https://sts.deliveryhero.io/
-//TEST API URL - https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/
-//LIVE TOKEN URL - https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/
-
-$PandaGoClient = new PandaGoClient(array(
-    "credentials" => array(
-        "grant_type"=>"client_credentials",
-        "client_id"=>"pandago:sg:bf2029da-89f5-48d1-8f44-f34c03542b2b",
-        "client_assertion_type"=>"urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-        "client_assertion"=>"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNhYjdhNTZmLWFiNTctNGJjOS04MTViLTg3MmVlMGQwODkxYyJ9.eyJleHAiOjIwMTk2ODYzOTksImlzcyI6InBhbmRhZ286c2c6YmYyMDI5ZGEtODlmNS00OGQxLThmNDQtZjM0YzAzNTQyYjJiIiwic3ViIjoicGFuZGFnbzpzZzpiZjIwMjlkYS04OWY1LTQ4ZDEtOGY0NC1mMzRjMDM1NDJiMmIiLCJqdGkiOiJhZGI4ZTRkMS0yZjIzLTRlNzQtODQ1MS04MmJhNWUwYjhiM2QiLCJhdWQiOiJodHRwczovL3N0cy5kZWxpdmVyeWhlcm8uaW8ifQ.pZqBn5U6MdQuloGRzWK6hnFLcU1qfzraX7RLJ5CEONwbFat2HbrEtPHvJhnESL4aTfZOKrr35wICFdPkU9bin8f77Lgno0dFdWxMp3jg9be-7B56hgfOJF4ScyQjS2nBqF4-tauFo9j9qWm99FOYEfTRqQ4aXGWkEg6Huh0G8qXVP19Jdt8mDXUk4UDTwNhcqU4gojGkczixra1OheJVSPGFAUyq0P1UZH3atxSuAp_2Jm-U6eGY4UQGWUjkG_RDpWEJRbD1NasaYYrsqeULA9d8TqHxdX1csKgUgs2WoIJst9Lp2Y-P4b6agAZ3LiFqoXoal0d9ImPkrHHTO__rig",
-        "scope"=>"pandago.api.sg.*",
-    ),
-    "token_url" => "https://sts-st.deliveryhero.io/",
-    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/"
-    
-));
-
-$PandaGoAPI = new PandaGoAPI($PandaGoClient);
+//LIVE URL - https://bigazure.com/api/json_v3/
+$BlueExClient = new BlueExClient("KHI-00000", "64jkuyeh75hkjstgh87", "https://bigazure.com/api/json_v3/");
+$BlueExAPI = new BlueExAPI($BlueExClient);
 ?>
 ```
-## Submit a New Order
+## Place Order
 
 ```php
 <?php
 try {
-    $orderData = [
-        'sender' => array(
-            "name" => "Tech Andaz",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the left door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
+    $data = array(
+        "shipper_name" => "Mubeen Dewani",
+        "shipper_email" => "mubeen.dewani@blue-ex.com",
+        "shipper_contact" => "03242646886",
+        "shipper_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
+        "shipper_city" => "LHE",
+        "customer_name" => "FAHAD",
+        "customer_email" => "mubeen.dewani@blue-ex.com",
+        "customer_contact" => "03242646886",
+        "customer_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
+        "customer_city" => "KHI",
+        "customer_country" => "PK",
+        "customer_comment" => "demo",
+        "shipping_charges" => "150",
+        "payment_type" => "COD",
+        "service_code" => "BE",
+        "total_order_amount" => "4150.00",
+        "total_order_weight" => "1",
+        "order_refernce_code" => "bluedemo1",
+        "fragile" => "N",
+        "parcel_type" => "P",
+        "insurance_require" => "N",
+        "insurance_value" => "0",
+        "testbit" => "Y",
+        "cn_generate" => "Y",
+        "multi_pickup" => "Y",
+        "products_detail" => array(
+            array(
+                "product_code" => "1005",
+                "product_name" => "Polo T shirt",
+                "product_price" => "1000",
+                "product_weight" => "0.5",
+                "product_quantity" => "2",
+                "product_variations" => "small-black",
+                "sku_code" => "12assk11aa"
             )
-        ),
-        'recipient' => array(
-            "name" => "Customer",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the front door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        "amount" => 500.00,
-        "payment_method" => "PAID",
-        "description" => "Order Description",
-        "delivery_tasks" => array(
-            "age_validation_required" => false
         )
-    ];
-    $response = $PandaGoAPI->submitOrder($orderData);
+    );
+    $response = $BlueExAPI->createShipment($data);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Get Specific Order
+## Cancel Shipment
 
 ```php
 <?php
 try {
-    $order_id = "a-xfen-a06d04";
-    $response = $PandaGoAPI->fetchOrder($order_id);
+    $consignment_no = "5027729332";
+    $response = $BlueExAPI->cancelShipment($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Cancel Specific Order
+## Reverse Pickup
 
 ```php
 <?php
 try {
-    $order_id = "a-xfen-c0ad86";
-    $reason = "REASON_UNKNOWN";
-    $response = $PandaGoAPI->cancelOrder($order_id, $reason);
+    $consignment_no = "5027729337";
+    $response = $BlueExAPI->reversePickup($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Update Specific Order
+## Create Loadsheet
 
 ```php
 <?php
 try {
-    $order_id = "a-xfen-c0ad86";
-    $orderData = [
-        'location' => array(
-            "notes" => "Use the left door",
-            "address" => "Test address",
-            "latitude" => 1.2923742,
-            "longitude" => 103.8486029,
-        ),
-        "amount" => 500.00,
-        "payment_method" => "PAID",
-        "description" => "Order Description",
-    ];
-    $response = $PandaGoAPI->updateOrder($order_id, $orderData);
+    $consignment_no = "5027729332, 5027729337";
+    $response = $BlueExAPI->createLoadsheet($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Proof of Pickup
+## Get Service Types
 
 ```php
 <?php
 try {
-    $order_id = "a-xfen-147164";
-    $response = $PandaGoAPI->proofOfPickup($order_id);
+    $response = $BlueExAPI->getServiceType();
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Proof of Delivery
+## Get Cities
 
 ```php
 <?php
 try {
-    $order_id = "a-xfen-147164";
-    $response = $PandaGoAPI->proofOfDelivery($order_id);
+    $country_code = "PK";
+    $response = $BlueExAPI->getCities($country_code);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Proof of Return
+## Get Tariff
 
 ```php
 <?php
@@ -180,330 +158,235 @@ try {
 }
 ?>
 ```
-## Get Rider Coordinates
+## Get Shipment Tracking
 
 ```php
 <?php
 try {
-    $order_id = "a-xfen-147164";
-    $response = $PandaGoAPI->getRiderCoordinates($order_id);
+    $consignment_no = "5027729334";
+    $response = $BlueExAPI->getShipmentTracking($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Estimate Fee For an Order
+## Get Shipment Info
 
 ```php
 <?php
 try {
-    $orderData = [
-        'sender' => array(
-            "name" => "Tech Andaz",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the left door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        'recipient' => array(
-            "name" => "Customer",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the front door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        "amount" => 500.00,
-        "payment_method" => "PAID",
-        "description" => "Order Description",
-    ];
-    $response = $PandaGoAPI->estimateDeliveryFees($orderData);
+    $consignment_no = "5027729334";
+    $response = $BlueExAPI->getShipmentInfo($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Estimate Time For an Order
+## Get Shipment Settlement
 
 ```php
 <?php
 try {
-    $orderData = [
-        'sender' => array(
-            "name" => "Tech Andaz",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the left door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        'recipient' => array(
-            "name" => "Customer",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the front door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        "amount" => 500.00,
-        "payment_method" => "PAID",
-        "description" => "Order Description",
-    ];
-    $response = $PandaGoAPI->estimateDeliveryTime($orderData);
+    $consignment_no = "5027729334";
+    $response = $BlueExAPI->getShipmentSettlement($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Create Or Update an Outlet
+## Get Shipment Status
 
 ```php
 <?php
 try {
-    $outlet_id = uniqid();
-    $orderData = [
-        "name" => "Tech Andaz",
-        "address" => "Test address",
-        "street" => "Test Street",
-        "street_number" => "Street 2",
-        "building" => "Building 1",
-        "district" => "Township",
-        "postal_code" => "12345",
-        "rider_instructions" => "Use Left door",
-        "latitude" => 1.2923742,
-        "longitude" => 103.8486029,
-        "city" => "Lahore",
-        "phone_number" => "+924235113700",
-        "currency" => "PKR",
-        "locale" => "en-US",
-        "description" => "Head Office",
-        "halal" => true,
-        "add_user" => array(
-            "test@test.com",
-            "test2@test.com"
-        ),
-    ];
-    $response = $PandaGoAPI->createUpdateOutlet($outlet_id, $orderData);
+    $consignment_no = "5027729334";
+    $response = $BlueExAPI->getShipmentStatus($consignment_no);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Get an Outlet
+## Get All Pickup Locations
 
 ```php
 <?php
 try {
-    $outlet_id = "658aedab00869";
-    $response = $PandaGoAPI->getOutlet($outlet_id);
+    $response = $BlueExAPI->getAllPickupLocations();
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Get all Outlets
+## Get Pickup Location
 
 ```php
 <?php
 try {
-    $response = $PandaGoAPI->getAllOutlets();
+    $location_id = 31;
+    $response = $BlueExAPI->getPickupLocation($location_id);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
 ```
-## Get Form Fields - Sender Outlet
+## Get Form Fields
 
 Get Form Fields allows you to easily get and customize form fields.
 
 
 | Field Name | Type | Default Value | Field Type | Options/Info |
 | -------- | ------- | ------- | ------- | ------- |
-|sender[client_vendor_id] | Select | - | Required | The outlet from where the order is to be picked up from |
-|sender[notes] | Text | - | Optional | Notes by the Sender |
-|recipient[name] | Text | - | Optional | Name of the Recipient |
-|recipient[phone_number] | Phone Number / Text | - | Optional | Phone number of the Recipient |
-|recipient[location][address] | Text | - | Required | Phone Number of the Recipient |
-|recipient[location][latitude] | Number | - | Required | Latitude of the Recipient |
-|recipient[location][longitude] | Number | - | Required | Longitude of the Recipient |
-|recipient[location][postalcode] | Text | - | Optional | Postal Code of the Recipient |
-|recipient[location][notes] | Text | - | Optional | Notes by the Recipient |
-|payment_method | Select | Cash on Delivery | Required | The payment method of the order|
-|coldbag_needed | Select | Not Required | Optional | If a coldbag is needed|
-|amount | Number | - | Required | Amount of the order|
-|description | Text | - | Required | Description of the order |
-|preordered_for | Date/Time | - | Optional | Date Time picker for scheduled delivery time|
-|delivery_tasks[age_validation_required] | Select | Not Required | Optional | If age validation by rider is required|
+|shipper_name | Text | - | Required | Name of the Shipper |
+|shipper_email | Email | - | Required | Email of the Shipper |
+|shipper_contact | Phone Number / Text | - | Required | Phone number of the Shipper |
+|shipper_address | Text | - | Required | Address of the Shipper |
+|shipper_city | Select | - | Required | City of the Shipper |
+|customer_name | Text | - | Required | Name of the Customer |
+|customer_email | Email | - | Required | Email of the Customer |
+|customer_contact | Phone Number / Text | - | Required | Phone number of the Customer |
+|customer_address | Text | - | Required | Address of the Customer |
+|customer_city | Select | - | Required | City of the Customer |
+|customer_country | Select | - | Required | Country of the Customer |
+|customer_comment | Text | - | Optional | Customer Comments |
+|shipping_charges | Number | - | Optional | Shipping Charges |
+|payment_type | Select | - | Required | Payment method |
+|service_code | Select | - | Required | Service Type |
+|total_order_amount | Number | - | Required | Total Order Amount |
+|total_order_weight | Number | - | Required | Total Order Weight |
+|order_refernce_code | Text | - | Required | Shipper Order ID or Reference Code |
+|fragile | Select | - | Required | Is Item Fragile? |
+|parcel_type | Select | - | Required | Parcel Type |
+|insurance_require | Select | - | Required | Is Insurance Required? |
+|insurance_value | Number | - | Optional | Insurance Amount |
+|cn_generate | Select | - | Required | Generate CN? |
+|multi_pickup | Select | - | Required | Is Multipickup requried? |
+|product_code | Text | - | Optional | Product Code |
+|product_name | Text | - | Required | Product Name |
+|product_price | Number | - | Required | Product Price |
+|product_weight | Number | - | Required | Product Weight |
+|product_quantity | Number | - | Required | Quantity of Product |
+|product_variations | Text | - | Optional | Product Variations |
+|sku_code | Text | - | Optional | Product SKU |
 
 ```php
 <?php
 
 try { 
     $config = array(
-        "sender_type" => "sender_outlet",
         "response" => "form",
         "label_class" => "form-label",
         "input_class" => "form-control",
         "wrappers" => array(
-            "sender[client_vendor_id]" => array(
+            "shipper_name" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[name]" => array(
+            "shipper_email" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[phone_number]" => array(
+            "shipper_contact" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[location][address]" => array(
+            "shipper_address" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[location][latitude]" => array(
+            "shipper_city" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[location][longitude]" => array(
+            "customer_name" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "payment_method" => array(
+            "customer_contact" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "amount" => array(
+            "customer_address" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "description" => array(
+            "customer_city" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "customer_country" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "payment_type" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "service_code" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "total_order_amount" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "total_order_weight" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "order_refernce_code" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "fragile" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "parcel_type" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "insurance_require" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "cn_generate" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "products_detail_row" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
+                "input_wrapper_end" => "</div></div>"
+            ),
+            "product_name" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "product_price" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "product_quantity" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "product_weight" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
         ),
         "optional" => false,
-    );
-    $response = $PandaGoAPI->getFormFields($config);
-    return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
-    echo "Error: " . $e->getMessage() . "\n";
-}
-
-?>
-```
-
-## Get Form Fields - Sender Details
-
-Get Form Fields allows you to easily get and customize form fields.
-
-
-| Field Name | Type | Default Value | Field Type | Options/Info |
-| -------- | ------- | ------- | ------- | ------- |
-|sender[name] | Text | - | Optional | Name of the Sender |
-|sender[phone_number] | Phone Number / Text | - | Optional | Phone number of the sender |
-|sender[location][address] | Text | - | Optional | Phone Number of the sender |
-|sender[location][latitude] | Number | - | Required | Latitude of the Sender |
-|sender[location][longitude] | Number | - | Required | Longitude of the Sender |
-|sender[location][postalcode] | Text | - | Optional | Postal Code of the Sender |
-|sender[notes] | Text | - | Optional | Notes by the Sender |
-|recipient[name] | Text | - | Optional | Name of the Recipient |
-|recipient[phone_number] | Phone Number / Text | - | Optional | Phone number of the Recipient |
-|recipient[location][address] | Text | - | Required | Phone Number of the Recipient |
-|recipient[location][latitude] | Number | - | Required | Latitude of the Recipient |
-|recipient[location][longitude] | Number | - | Required | Longitude of the Recipient |
-|recipient[location][postalcode] | Text | - | Optional | Postal Code of the Recipient |
-|recipient[location][notes] | Text | - | Optional | Notes by the Recipient |
-|payment_method | Select | Cash on Delivery | Required | The payment method of the order|
-|coldbag_needed | Select | Not Required | Optional | If a coldbag is needed|
-|amount | Number | - | Required | Amount of the order|
-|description | Text | - | Required | Description of the order |
-|preordered_for | Date/Time | - | Optional | Date Time picker for scheduled delivery time|
-|delivery_tasks[age_validation_required] | Select | Not Required | Optional | If age validation by rider is required|
-
-```php
-<?php
-
-try { 
-    $config = array(
-        "sender_type" => "sender_details",
-        "response" => "form",
-        "label_class" => "form-label",
-        "input_class" => "form-control",
-        "wrappers" => array(
-            "sender[name]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "sender[phone_number]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "sender[location][address]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "sender[location][latitude]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "sender[location][longitude]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "recipient[name]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "recipient[phone_number]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "recipient[location][address]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "recipient[location][latitude]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "recipient[location][longitude]" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "payment_method" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "amount" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
-            "description" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                "input_wrapper_end" => "</div>"
-            ),
+        "optional_selective" => array(
         ),
-        "optional" => false,
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -517,11 +400,11 @@ All fields of the form can be customized using the following syntax. Pass these 
 
 | Field Name | Format | Example | Options/Info |
 | -------- | ------- | ------- | ------- |
-|Classess | {field_name}-class | sender[location][address]-class | Add classess to the input field |
-|Attributes | {field_name}-attr | sender[location][latitude]-attr | Add custom attributes to the input field |
-|Wrappers | {field_name}-wrapper | sender[location][longitude]-wrapper | Add custom html element types to the input field. For example '<div>' or '<custom>' |
-|Labels | {field_name}-label | payment_method-label | Add custom labels to the input field |
-|Default Value | {field_name} | amount | Add a default value to the input field |
+|Classess | {field_name}-class | shipper_name-class | Add classess to the input field |
+|Attributes | {field_name}-attr | shipper_email-attr | Add custom attributes to the input field |
+|Wrappers | {field_name}-wrapper | shipper_contact-wrapper | Add custom html element types to the input field. For example '<div>' or '<custom>' |
+|Labels | {field_name}-label | shipper_address-label | Add custom labels to the input field |
+|Default Value | {field_name} | shipper_city | Add a default value to the input field |
 |Input Wrappers | wrappers | - | Add a custom wrappers to the entire input and label field element. For example, wrap everything within a <div> |
 |Label Class | label_class | - | Add classess to the label field |
 |Sort Order | sort_order | sort_order[] | An array with field names, any missing items will use default order after the defined order |
@@ -536,12 +419,11 @@ All fields of the form can be customized using the following syntax. Pass these 
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
-        "payment_method-class" => "custom_class",
+        "shipper_name-class" => "custom_class",
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -554,12 +436,11 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
-        "amount-attr" => "step='0.00' min='0'",
+        "total_order_amount-attr" => "step='0.00' min='0'",
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -573,12 +454,11 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
-        "description-wrapper" => "textarea",
+        "customer_comment-wrapper" => "textarea",
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -592,12 +472,11 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
-        "payment_method" => "Mode of Payment",
+        "payment_type" => "Mode of Payment",
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -611,12 +490,11 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
-        "recipient[name]" => "Tech Andaz",
+        "customer_name" => "Tech Andaz",
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -630,24 +508,22 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
         "wrappers" => array(
-            "sender[client_vendor_id]" => array(
+            "shipper_name" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[name]" => array(
+            "shipper_email" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
         )
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
-
 ?>
 ```
 
@@ -660,12 +536,11 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
         "label_class" => "form-label",
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -677,47 +552,105 @@ try {
 
 ```php
 <?php
-
 try { 
     $config = array(
-        "sender_type" => "sender_outlet",
         "response" => "form",
         "label_class" => "form-label",
         "input_class" => "form-control",
         "wrappers" => array(
-            "sender[client_vendor_id]" => array(
+            "shipper_name" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[name]" => array(
+            "shipper_email" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[phone_number]" => array(
+            "shipper_contact" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[location][address]" => array(
+            "shipper_address" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[location][latitude]" => array(
+            "shipper_city" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "recipient[location][longitude]" => array(
+            "customer_name" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "payment_method" => array(
+            "customer_contact" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "amount" => array(
+            "customer_address" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
-            "description" => array(
+            "customer_city" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "customer_country" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "payment_type" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "service_code" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "total_order_amount" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "total_order_weight" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "order_refernce_code" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "fragile" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "parcel_type" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "insurance_require" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "cn_generate" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "products_detail_row" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
+                "input_wrapper_end" => "</div></div>"
+            ),
+            "product_name" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "product_price" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "product_quantity" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_end" => "</div>"
+            ),
+            "product_weight" => array(
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
@@ -726,9 +659,9 @@ try {
         "optional_selective" => array(
         ),
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
@@ -741,16 +674,14 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
         "sort_order" => array(
-            "amount",
-            "payment_method",
-            "sender[client_vendor_id]",
+            "customer_address",
+            "customer_city",
         )
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -764,19 +695,18 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
         "custom_options" => array(
-            "sender[client_vendor_id]" => array(
+            "customer_country" => array(
                 array(
-                    "label" => "Tech Andaz",
-                    "value" => "23456"
+                    "label" => "Pakistan",
+                    "value" => "PK"
                 )
             )
         )
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -790,12 +720,11 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
         "optional" => false
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
@@ -809,16 +738,15 @@ try {
 
 try {
     $config = array(
-        "sender_type" => "sender_details",
         "optional" => false,
         "optional_selective" => array(
-            "coldbag_needed",
-            "preordered_for"
+            "shipping_charges",
+            "customer_comment"
         ),
     );
-    $response = $PandaGoAPI->getFormFields($config);
+    $response = $BlueExAPI->getFormFields($config);
     return $response;
-} catch (TechAndaz\PandaGo\PandaGoException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 
