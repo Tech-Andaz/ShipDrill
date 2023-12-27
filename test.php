@@ -303,5 +303,5 @@ function getFormFields($BlueExAPI){
 // echo json_encode(cancelShipment($BlueExAPI));
 // echo json_encode(reversePickup($BlueExAPI));
 // echo json_encode(createLoadsheet($BlueExAPI));
-echo (getFormFields($BlueExAPI));
+// echo (getFormFields($BlueExAPI));
 ?>

@@ -2,317 +2,280 @@
 
 require 'vendor/autoload.php';
 
-use TechAndaz\PandaGo\PandaGoClient;
-use TechAndaz\PandaGo\PandaGoAPI;
+use TechAndaz\BlueEx\BlueExClient;
+use TechAndaz\BlueEx\BlueExAPI;
 
-$PandaGoClient = new PandaGoClient(array(
-    "credentials" => array(
-        "grant_type"=>"client_credentials",
-        "client_id"=>"pandago:sg:bf2029da-89f5-48d1-8f44-f34c03542b2b",
-        "client_assertion_type"=>"urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-        "client_assertion"=>"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNhYjdhNTZmLWFiNTctNGJjOS04MTViLTg3MmVlMGQwODkxYyJ9.eyJleHAiOjIwMTk2ODYzOTksImlzcyI6InBhbmRhZ286c2c6YmYyMDI5ZGEtODlmNS00OGQxLThmNDQtZjM0YzAzNTQyYjJiIiwic3ViIjoicGFuZGFnbzpzZzpiZjIwMjlkYS04OWY1LTQ4ZDEtOGY0NC1mMzRjMDM1NDJiMmIiLCJqdGkiOiJhZGI4ZTRkMS0yZjIzLTRlNzQtODQ1MS04MmJhNWUwYjhiM2QiLCJhdWQiOiJodHRwczovL3N0cy5kZWxpdmVyeWhlcm8uaW8ifQ.pZqBn5U6MdQuloGRzWK6hnFLcU1qfzraX7RLJ5CEONwbFat2HbrEtPHvJhnESL4aTfZOKrr35wICFdPkU9bin8f77Lgno0dFdWxMp3jg9be-7B56hgfOJF4ScyQjS2nBqF4-tauFo9j9qWm99FOYEfTRqQ4aXGWkEg6Huh0G8qXVP19Jdt8mDXUk4UDTwNhcqU4gojGkczixra1OheJVSPGFAUyq0P1UZH3atxSuAp_2Jm-U6eGY4UQGWUjkG_RDpWEJRbD1NasaYYrsqeULA9d8TqHxdX1csKgUgs2WoIJst9Lp2Y-P4b6agAZ3LiFqoXoal0d9ImPkrHHTO__rig",
-        "scope"=>"pandago.api.sg.*",
-    ),
-    "token_url" => "https://sts-st.deliveryhero.io/",
-    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/"
-    
-));
-$PandaGoAPI = new PandaGoAPI($PandaGoClient);
+$BlueExClient = new BlueExClient("KHI-00000", "64jkuyeh75hkjstgh87", "https://bigazure.com/api/json_v3/");
+$BlueExAPI = new BlueExAPI($BlueExClient);
 
-//Submit a New Order
-function submitOrder($PandaGoAPI){
+//Get All Pickup Locations
+function getAllPickupLocations($BlueExAPI){
     try {
-        $orderData = [
-            'sender' => array(
-                "name" => "Tech Andaz",
-                "phone_number" => "+924235113700",
-                "notes" => "Use the left door",
-                "location" => array(
-                    "address" => "Test address",
-                    "latitude" => 1.2923742,
-                    "longitude" => 103.8486029,
+        $response = $BlueExAPI->getAllPickupLocations();
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Specific Pickup Location
+function getPickupLocation($BlueExAPI){
+    try {
+        $location_id = 31;
+        $response = $BlueExAPI->getPickupLocation($location_id);
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Shipment Status
+function getShipmentStatus($BlueExAPI){
+    try {
+        $consignment_no = "5027729334";
+        $response = $BlueExAPI->getShipmentStatus($consignment_no);
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Shipment Settlement
+function getShipmentSettlement($BlueExAPI){
+    try {
+        $consignment_no = "5027729334";
+        $response = $BlueExAPI->getShipmentSettlement($consignment_no);
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Shipment Info
+function getShipmentInfo($BlueExAPI){
+    try {
+        $consignment_no = "5027729334";
+        $response = $BlueExAPI->getShipmentInfo($consignment_no);
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Shipment Info
+function getShipmentTracking($BlueExAPI){
+    try {
+        $consignment_no = "5027729334";
+        $response = $BlueExAPI->getShipmentTracking($consignment_no);
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Cities
+function getCities($BlueExAPI){
+    try {
+        $country_code = "PK";
+        $response = $BlueExAPI->getCities($country_code);
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Service Type
+function getServiceType($BlueExAPI){
+    try {
+        $response = $BlueExAPI->getServiceType();
+        return $response;
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Create Shipment
+function createShipment($BlueExAPI){
+    try {
+        $data = array(
+            "shipper_name" => "Mubeen Dewani",
+            "shipper_email" => "mubeen.dewani@blue-ex.com",
+            "shipper_contact" => "03242646886",
+            "shipper_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
+            "shipper_city" => "LHE",
+            "customer_name" => "FAHAD",
+            "customer_email" => "mubeen.dewani@blue-ex.com",
+            "customer_contact" => "03242646886",
+            "customer_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
+            "customer_city" => "KHI",
+            "customer_country" => "PK",
+            "customer_comment" => "demo",
+            "shipping_charges" => "150",
+            "payment_type" => "COD",
+            "service_code" => "BE",
+            "total_order_amount" => "4150.00",
+            "total_order_weight" => "1",
+            "order_refernce_code" => "bluedemo1",
+            "fragile" => "N",
+            "parcel_type" => "P",
+            "insurance_require" => "N",
+            "insurance_value" => "0",
+            "testbit" => "Y",
+            "cn_generate" => "Y",
+            "multi_pickup" => "Y",
+            "products_detail" => array(
+                array(
+                    "product_code" => "1005",
+                    "product_name" => "Polo T shirt",
+                    "product_price" => "1000",
+                    "product_weight" => "0.5",
+                    "product_quantity" => "2",
+                    "product_variations" => "small-black",
+                    "sku_code" => "12assk11aa"
                 )
-            ),
-            'recipient' => array(
-                "name" => "Customer",
-                "phone_number" => "+924235113700",
-                "notes" => "Use the front door",
-                "location" => array(
-                    "address" => "Test address",
-                    "latitude" => 1.2923742,
-                    "longitude" => 103.8486029,
-                )
-            ),
-            "amount" => 500.00,
-            "payment_method" => "PAID",
-            "description" => "Order Description",
-            "delivery_tasks" => array(
-                "age_validation_required" => false
             )
-        ];
-        $response = $PandaGoAPI->submitOrder($orderData);
+        );
+        $response = $BlueExAPI->createShipment($data);
         return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Fetch an Order
-function fetchOrder($PandaGoAPI){
+//Cancel Shipment
+function cancelShipment($BlueExAPI){
     try {
-        $order_id = "a-xfen-a06d04";
-        $response = $PandaGoAPI->fetchOrder($order_id);
+        $consignment_no = "5027729332";
+        $response = $BlueExAPI->cancelShipment($consignment_no);
         return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Cancel an Order
-function cancelOrder($PandaGoAPI){
+//Reverse Pickup
+function reversePickup($BlueExAPI){
     try {
-        $order_id = "a-xfen-c0ad86";
-        $reason = "REASON_UNKNOWN";
-        $response = $PandaGoAPI->cancelOrder($order_id, $reason);
+        $consignment_no = "5027729337";
+        $response = $BlueExAPI->reversePickup($consignment_no);
         return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Update an Order
-function updateOrder($PandaGoAPI){
+//Create Loadsheet
+function createLoadsheet($BlueExAPI){
     try {
-        $order_id = "a-xfen-c0ad86";
-        $orderData = [
-            'location' => array(
-                "notes" => "Use the left door",
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            ),
-            "amount" => 500.00,
-            "payment_method" => "PAID",
-            "description" => "Order Description",
-        ];
-        $response = $PandaGoAPI->updateOrder($order_id, $orderData);
+        $consignment_no = "5027729332, 5027729337";
+        $response = $BlueExAPI->createLoadsheet($consignment_no);
         return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-
-//Proof of Pickup
-function proofOfPickup($PandaGoAPI){
-    try {
-        $order_id = "a-xfen-147164";
-        $response = $PandaGoAPI->proofOfPickup($order_id);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Proof of Delivery
-function proofOfDelivery($PandaGoAPI){
-    try {
-        $order_id = "a-xfen-147164";
-        $response = $PandaGoAPI->proofOfDelivery($order_id);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Proof of Return
-function proofOfReturn($PandaGoAPI){
-    try {
-        $order_id = "a-xfen-147164";
-        $response = $PandaGoAPI->proofOfReturn($order_id);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Get Rider's Coordinates
-function getRiderCoordinates($PandaGoAPI){
-    try {
-        $order_id = "a-xfen-147164";
-        $response = $PandaGoAPI->getRiderCoordinates($order_id);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Estimate Delivery Fees
-function estimateDeliveryFees($PandaGoAPI){
-    try {
-        $orderData = [
-            'sender' => array(
-                "name" => "Tech Andaz",
-                "phone_number" => "+924235113700",
-                "notes" => "Use the left door",
-                "location" => array(
-                    "address" => "Test address",
-                    "latitude" => 1.2923742,
-                    "longitude" => 103.8486029,
-                )
-            ),
-            'recipient' => array(
-                "name" => "Customer",
-                "phone_number" => "+924235113700",
-                "notes" => "Use the front door",
-                "location" => array(
-                    "address" => "Test address",
-                    "latitude" => 1.2923742,
-                    "longitude" => 103.8486029,
-                )
-            ),
-            "amount" => 500.00,
-            "payment_method" => "PAID",
-            "description" => "Order Description",
-        ];
-        $response = $PandaGoAPI->estimateDeliveryFees($orderData);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Estimate Delivery Time
-function estimateDeliveryTime($PandaGoAPI){
-    $orderData = [
-        'sender' => array(
-            "name" => "Tech Andaz",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the left door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        'recipient' => array(
-            "name" => "Customer",
-            "phone_number" => "+924235113700",
-            "notes" => "Use the front door",
-            "location" => array(
-                "address" => "Test address",
-                "latitude" => 1.2923742,
-                "longitude" => 103.8486029,
-            )
-        ),
-        "amount" => 500.00,
-        "payment_method" => "PAID",
-        "description" => "Order Description",
-    ];
-    try {
-        $response = $PandaGoAPI->estimateDeliveryTime($orderData);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Create or Update an Outlet
-function createUpdateOutlet($PandaGoAPI){
-    try {
-        $outlet_id = uniqid();
-        $orderData = [
-            "name" => "Tech Andaz",
-            "address" => "Test address",
-            "street" => "Test Street",
-            "street_number" => "Street 2",
-            "building" => "Building 1",
-            "district" => "Township",
-            "postal_code" => "12345",
-            "rider_instructions" => "Use Left door",
-            "latitude" => 1.2923742,
-            "longitude" => 103.8486029,
-            "city" => "Lahore",
-            "phone_number" => "+924235113700",
-            "currency" => "PKR",
-            "locale" => "en-US",
-            "description" => "Head Office",
-            "halal" => true,
-            "add_user" => array(
-                "test@test.com",
-                "test2@test.com"
-            ),
-        ];
-        $response = $PandaGoAPI->createUpdateOutlet($outlet_id, $orderData);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Get an Outlet
-function getOutlet($PandaGoAPI){
-    try {
-        $outlet_id = "658aedab00869";
-        $response = $PandaGoAPI->getOutlet($outlet_id);
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Get all Outlets
-function getAllOutlets($PandaGoAPI){
-    try {
-        $response = $PandaGoAPI->getAllOutlets();
-        return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
 
 //Get Form Fields
-function getFormFields($PandaGoAPI){
+function getFormFields($BlueExAPI){
     try { 
         $config = array(
-            "sender_type" => "sender_outlet",
             "response" => "form",
             "label_class" => "form-label",
             "input_class" => "form-control",
             "wrappers" => array(
-                "sender[client_vendor_id]" => array(
+                "shipper_name" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "recipient[name]" => array(
+                "shipper_email" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "recipient[phone_number]" => array(
+                "shipper_contact" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "recipient[location][address]" => array(
+                "shipper_address" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "recipient[location][latitude]" => array(
+                "shipper_city" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "recipient[location][longitude]" => array(
+                "customer_name" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "payment_method" => array(
+                "customer_contact" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "amount" => array(
+                "customer_address" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "description" => array(
+                "customer_city" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "customer_country" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "payment_type" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "service_code" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "total_order_amount" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "total_order_weight" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "order_refernce_code" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "fragile" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "parcel_type" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "insurance_require" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "cn_generate" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "products_detail_row" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
+                    "input_wrapper_end" => "</div></div>"
+                ),
+                "product_name" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "product_price" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "product_quantity" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "product_weight" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -321,26 +284,24 @@ function getFormFields($PandaGoAPI){
             "optional_selective" => array(
             ),
         );
-        $response = $PandaGoAPI->getFormFields($config);
+        $response = $BlueExAPI->getFormFields($config);
         return $response;
-    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+    } catch (TechAndaz\BlueEx\BlueExException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-// echo json_encode(submitOrder($PandaGoAPI));
-// echo json_encode(fetchOrder($PandaGoAPI));
-// echo json_encode(cancelOrder($PandaGoAPI));
-// echo json_encode(updateOrder($PandaGoAPI));
-// echo json_encode(proofOfPickup($PandaGoAPI));
-// echo json_encode(proofOfDelivery($PandaGoAPI));
-// echo json_encode(proofOfReturn($PandaGoAPI));
-// echo json_encode(getRiderCoordinates($PandaGoAPI));
-// echo json_encode(estimateDeliveryFees($PandaGoAPI));
-// echo json_encode(estimateDeliveryTime($PandaGoAPI));
-// echo json_encode(createOutlet($PandaGoAPI));
-// echo json_encode(getOutlet($PandaGoAPI));
-// echo json_encode(getAllOutlets($PandaGoAPI));
-// echo (getFormFields($PandaGoAPI));
 
-
+// echo json_encode(getAllPickupLocations($BlueExAPI));
+// echo json_encode(getPickupLocation($BlueExAPI));
+// echo json_encode(getShipmentStatus($BlueExAPI));
+// echo json_encode(getShipmentSettlement($BlueExAPI));
+// echo json_encode(getShipmentInfo($BlueExAPI));
+// echo json_encode(getShipmentTracking($BlueExAPI));
+// echo json_encode(getCities($BlueExAPI));
+// echo json_encode(getServiceType($BlueExAPI));
+// echo json_encode(createShipment($BlueExAPI));
+// echo json_encode(cancelShipment($BlueExAPI));
+// echo json_encode(reversePickup($BlueExAPI));
+// echo json_encode(createLoadsheet($BlueExAPI));
+// echo (getFormFields($BlueExAPI));
 ?>
