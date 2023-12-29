@@ -130,11 +130,9 @@ class CallCourierAPI
                 "remarks" => (isset($booking['remarks']) && $booking['remarks'] != "") ? $booking['remarks'] : "",
             ));
         }
-        print_r($data);
-        exit;
         $bookings_data = array(
             "loginId" => $this->CallCourierClient->login_id,
-            "ShipperName" => (isset($data['login_id']) && $data['login_id'] != "") ? $data['login_id'] : throw new CallCourierException("Shipper Name is missing"),
+            "ShipperName" => (isset($data['shipper_name']) && $data['shipper_name'] != "") ? $data['shipper_name'] : throw new CallCourierException("Shipper Name is missing"),
             "ShipperCellNo" => (isset($data['shipper_cell']) && $data['shipper_cell'] != "") ? $data['shipper_cell'] : throw new CallCourierException("Shipper Phone Number is missing"),
             "ShipperArea" => (isset($data['shipper_area']) && $data['shipper_area'] != "") ? $data['shipper_area'] : throw new CallCourierException("Shipper Area ID is missing"),
             "ShipperCity" => (isset($data['shipper_city']) && $data['shipper_city'] != "") ? $data['shipper_city'] : throw new CallCourierException("Shipper City ID is missing"),
@@ -144,11 +142,63 @@ class CallCourierAPI
             "ShipperEmail" => (isset($data['shipper_email']) && $data['shipper_email'] != "") ? $data['shipper_email'] : "",
             "bookingList" => $booking_list
         );
-        print_r($bookings_data);
-        exit;
         $endpoint = "API/CallCourier/BulkBookings";
         $method = 'POST';
-        $payload = $this->CallCourierClient->makeRequest($endpoint, $method, $data);
+        $payload = $this->CallCourierClient->makeRequest($endpoint, $method, $bookings_data);
         return $payload;
+    }
+    /**
+    * View/Print a Receiving Sheet.
+    *
+    * @param int $receivingSheetId
+    *   The number generated upon the creation of the receiving sheet.
+    * @param int $type
+    *   Type of print, whether pdf or jpeg.
+    *
+    * @return array
+    *   Decoded response data.
+    */
+    public function getShippingLabel($cn_number, $type)
+    {
+        $this->validateViewReceivingSheetData($cn_number, $type);
+        if($type == 0){
+            print_r($this->CallCourierClient->api_url . '/Booking/AfterSavePublic/' . $cn_number);
+            exit;
+            header($this->CallCourierClient->api_url . '/Booking/AfterSavePublic/' . $cn_number);
+            return;
+        } else if($type == 1){
+            $endpoint = '/Booking/AfterSavePublic/' . $cn_number;
+            $method = 'GET';
+            $responseContent = $this->CallCourierClient->makeRequestFile($endpoint, array(), $savePath = "");
+            $file_url = $savePath . uniqid(mt_rand(), true) . ".pdf";
+        } else {
+            throw new CallCourierException('Unknown Type');
+        }
+        if(file_put_contents($file_url, $responseContent)){
+            return array(
+                "status" => 1,
+                "filename" => $file_url
+            );
+        } else {
+            throw new CallCourierException('Unable to save file: ' . error_get_last());
+        }
+    }
+
+    /**
+     * Validate data for viewing/printing a Receiving Sheet.
+     *
+     * @param int $receivingSheetId
+     *   The number generated upon the creation of the receiving sheet.
+     * @param int $type
+     *   Type of print, whether pdf or jpeg.
+     *
+     * @throws CallCourierException
+     *   If the data does not meet the required conditions.
+     */
+    private function validateViewReceivingSheetData($receivingSheetId, $type)
+    {
+        if (!is_numeric($receivingSheetId) || !is_numeric($type)) {
+            throw new CallCourierException('Invalid data for viewing/printing a receiving sheet.');
+        }
     }
 }

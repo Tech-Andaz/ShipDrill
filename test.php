@@ -107,10 +107,42 @@ function createBookings($CallCourierAPI){
                     "holiday" => "false", // Optional
                     "remarks" => "Bulk Test Remarks 1" // Optional
                     
+                ),
+                array(
+                    "name" => "Consigne name",
+                    "reference_number" => "56270876367",
+                    "cell" => "03001234567",
+                    "address" => "abc",
+                    "city_id" => "1",
+                    "service_type" => "7",
+                    "pieces" => "01",
+                    "weight" => "01",
+                    "description" => "Test Description",
+                    "origin" => "Domestic",
+                    "amount" => "100",
+                    "box_id" => "My Box ID",
+                    "special_handling" => "false", // Optional
+                    "holiday" => "false", // Optional
+                    "remarks" => "Bulk Test Remarks 1" // Optional
+                    
                 )
             )
         );
         $response = $CallCourierAPI->createBookings($data);
+        return $response;
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Shipping Label
+function getShippingLabel($CallCourierAPI){
+    try { 
+        //0 = PDF
+        //1 = PDF file name - Locally Saved
+        $cn_number = "10002423232893";
+        $type = "0";
+        $response = $CallCourierAPI->getShippingLabel($cn_number, $type);
         return $response;
     } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
@@ -239,6 +271,7 @@ function getFormFields($CallCourierAPI){
 // echo json_encode(checkIfServiceIsCOD($CallCourierAPI));
 // echo json_encode(getCityListByService($CallCourierAPI));
 // echo json_encode(getAreasByCity($CallCourierAPI));
-echo json_encode(createBookings($CallCourierAPI));
+// echo json_encode(createBookings($CallCourierAPI));
+echo json_encode(getShippingLabel($CallCourierAPI));
 // echo (getFormFields($CallCourierAPI));
 ?>
