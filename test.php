@@ -2,181 +2,123 @@
 
 require 'vendor/autoload.php';
 
-use TechAndaz\BlueEx\BlueExClient;
-use TechAndaz\BlueEx\BlueExAPI;
+use TechAndaz\CallCourier\CallCourierClient;
+use TechAndaz\CallCourier\CallCourierAPI;
 
-$BlueExClient = new BlueExClient("KHI-00000", "64jkuyeh75hkjstgh87", "https://bigazure.com/api/json_v3/");
-$BlueExAPI = new BlueExAPI($BlueExClient);
+$CallCourierClient = new CallCourierClient(array(
+    "environment" => "production", // Optional - Defaults to production. Options are: sandbox / production. Call courier doesnt have a sandbox so in sandbox mode test credentials will be applied automatically unless specified otherwise.
+    "login_id" => "test-0001", // Optional if sandbox
+    "password" => "test0001new", // Optional if sandbox
+    "account_id" => "242", // Optional if sandbox - Found as Account Code ID in profile on dashboard
+));
 
-//Get All Pickup Locations
-function getAllPickupLocations($BlueExAPI){
+$CallCourierAPI = new CallCourierAPI($CallCourierClient);
+
+//Get Return City List By Shipper
+function getReturnCityListByShipper($CallCourierAPI){
     try {
-        $response = $BlueExAPI->getAllPickupLocations();
+        $response = $CallCourierAPI->getReturnCityListByShipper();
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Specific Pickup Location
-function getPickupLocation($BlueExAPI){
+//Get Origin City List By Shipper
+function getOriginCityListByShipper($CallCourierAPI){
     try {
-        $location_id = 31;
-        $response = $BlueExAPI->getPickupLocation($location_id);
+        $response = $CallCourierAPI->getOriginCityListByShipper();
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Status
-function getShipmentStatus($BlueExAPI){
+//Get Service Types
+function getServiceTypes($CallCourierAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentStatus($consignment_no);
+        $response = $CallCourierAPI->getServiceTypes();
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Settlement
-function getShipmentSettlement($BlueExAPI){
+//Check if Service is COD
+function checkIfServiceIsCOD($CallCourierAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentSettlement($consignment_no);
+        $service_id = "1";
+        $response = $CallCourierAPI->checkIfServiceIsCOD($service_id);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Info
-function getShipmentInfo($BlueExAPI){
+//Get City List by Service
+function getCityListByService($CallCourierAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentInfo($consignment_no);
+        $service_id = "1";
+        $response = $CallCourierAPI->getCityListByService($service_id);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Info
-function getShipmentTracking($BlueExAPI){
+//Get Areas by City
+function getAreasByCity($CallCourierAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentTracking($consignment_no);
+        $city_id = "1";
+        $response = $CallCourierAPI->getAreasByCity($city_id);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Cities
-function getCities($BlueExAPI){
-    try {
-        $country_code = "PK";
-        $response = $BlueExAPI->getCities($country_code);
-        return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Get Service Type
-function getServiceType($BlueExAPI){
-    try {
-        $response = $BlueExAPI->getServiceType();
-        return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Create Shipment
-function createShipment($BlueExAPI){
+//Create Bookings
+function createBookings($CallCourierAPI){
     try {
         $data = array(
-            "shipper_name" => "Mubeen Dewani",
-            "shipper_email" => "mubeen.dewani@blue-ex.com",
-            "shipper_contact" => "03242646886",
-            "shipper_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
-            "shipper_city" => "LHE",
-            "customer_name" => "FAHAD",
-            "customer_email" => "mubeen.dewani@blue-ex.com",
-            "customer_contact" => "03242646886",
-            "customer_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
-            "customer_city" => "KHI",
-            "customer_country" => "PK",
-            "customer_comment" => "demo",
-            "shipping_charges" => "150",
-            "payment_type" => "COD",
-            "service_code" => "BE",
-            "total_order_amount" => "4150.00",
-            "total_order_weight" => "1",
-            "order_refernce_code" => "bluedemo1",
-            "fragile" => "N",
-            "parcel_type" => "P",
-            "insurance_require" => "N",
-            "insurance_value" => "0",
-            "testbit" => "Y",
-            "cn_generate" => "Y",
-            "multi_pickup" => "Y",
-            "products_detail" => array(
+            "shipper_name" => "Tech Andaz",
+            "shipper_cell" => "+924235113700",
+            "shipper_area" => "1",
+            "shipper_city" => "1",
+            "shipper_landline" => "+924235113700",
+            "shipper_address" => "119/2 M Quaid-e-Azam Industrial Estate, Kot Lakhpat", // Optional
+            "shipper_return_address" => "119/2 M Quaid-e-Azam Industrial Estate, Kot Lakhpat", // Optional
+            "shipper_email" => "email@techandaz.com", // Optional
+            "bookings" => array(
                 array(
-                    "product_code" => "1005",
-                    "product_name" => "Polo T shirt",
-                    "product_price" => "1000",
-                    "product_weight" => "0.5",
-                    "product_quantity" => "2",
-                    "product_variations" => "small-black",
-                    "sku_code" => "12assk11aa"
+                    "name" => "Consigne name",
+                    "reference_number" => "56270876367",
+                    "cell" => "03001234567",
+                    "address" => "abc",
+                    "city_id" => "1",
+                    "service_type" => "7",
+                    "pieces" => "01",
+                    "weight" => "01",
+                    "description" => "Test Description",
+                    "origin" => "Domestic",
+                    "amount" => "100",
+                    "box_id" => "My Box ID",
+                    "special_handling" => "false", // Optional
+                    "holiday" => "false", // Optional
+                    "remarks" => "Bulk Test Remarks 1" // Optional
+                    
                 )
             )
         );
-        $response = $BlueExAPI->createShipment($data);
+        $response = $CallCourierAPI->createBookings($data);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Cancel Shipment
-function cancelShipment($BlueExAPI){
-    try {
-        $consignment_no = "5027729332";
-        $response = $BlueExAPI->cancelShipment($consignment_no);
-        return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Reverse Pickup
-function reversePickup($BlueExAPI){
-    try {
-        $consignment_no = "5027729337";
-        $response = $BlueExAPI->reversePickup($consignment_no);
-        return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Create Loadsheet
-function createLoadsheet($BlueExAPI){
-    try {
-        $consignment_no = "5027729332, 5027729337";
-        $response = $BlueExAPI->createLoadsheet($consignment_no);
-        return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
 //Get Form Fields
-function getFormFields($BlueExAPI){
+function getFormFields($CallCourierAPI){
     try { 
         $config = array(
             "response" => "form",
@@ -284,24 +226,19 @@ function getFormFields($BlueExAPI){
             "optional_selective" => array(
             ),
         );
-        $response = $BlueExAPI->getFormFields($config);
+        $response = $CallCourierAPI->getFormFields($config);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-// echo json_encode(getAllPickupLocations($BlueExAPI));
-// echo json_encode(getPickupLocation($BlueExAPI));
-// echo json_encode(getShipmentStatus($BlueExAPI));
-// echo json_encode(getShipmentSettlement($BlueExAPI));
-// echo json_encode(getShipmentInfo($BlueExAPI));
-// echo json_encode(getShipmentTracking($BlueExAPI));
-// echo json_encode(getCities($BlueExAPI));
-// echo json_encode(getServiceType($BlueExAPI));
-// echo json_encode(createShipment($BlueExAPI));
-// echo json_encode(cancelShipment($BlueExAPI));
-// echo json_encode(reversePickup($BlueExAPI));
-// echo json_encode(createLoadsheet($BlueExAPI));
-// echo (getFormFields($BlueExAPI));
+// echo json_encode(getReturnCityListByShipper($CallCourierAPI));
+// echo json_encode(getOriginCityListByShipper($CallCourierAPI));
+// echo json_encode(getServiceTypes($CallCourierAPI));
+// echo json_encode(checkIfServiceIsCOD($CallCourierAPI));
+// echo json_encode(getCityListByService($CallCourierAPI));
+// echo json_encode(getAreasByCity($CallCourierAPI));
+echo json_encode(createBookings($CallCourierAPI));
+// echo (getFormFields($CallCourierAPI));
 ?>
