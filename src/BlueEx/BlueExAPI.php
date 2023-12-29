@@ -400,7 +400,7 @@ class BlueExAPI
                 "default" => isset($config['shipper_city']) && in_array($config['shipper_city'], array_column($cities, "label")) ? $config['shipper_city'] : "LHE",
                 "options" => $cities,
                 "custom_options" => isset($config['shipper_city-custom_options']) ? $config['shipper_city-custom_options'] : array(),
-            ),
+            ),
             array(
                 "name" => "customer_name",
                 "field_type" => "required",
