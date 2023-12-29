@@ -622,7 +622,7 @@ class BlueExAPI
                 "row_fields" => array(
                     array(
                         "name" => "products_detail[0][product_code]",
-                        "field_type" => "optional",
+                        "field_type" => "required",
                         "classes" => isset($config['product_code-class']) ? $config['product_code-class'] : "",
                         "attr" => isset($config['product_code-attr']) ? $config['product_code-attr'] : "",
                         "wrapper" => isset($config['product_code-wrapper']) ? $config['product_code-wrapper'] : "",
