@@ -621,7 +621,7 @@ class BlueExAPI
                 "default" => isset($config['products_detail_row']) ? $config['products_detail_row'] : "",
                 "row_fields" => array(
                     array(
-                        "name" => "products_detail[product_code]",
+                        "name" => "products_detail[0][product_code]",
                         "field_type" => "optional",
                         "classes" => isset($config['product_code-class']) ? $config['product_code-class'] : "",
                         "attr" => isset($config['product_code-attr']) ? $config['product_code-attr'] : "",
@@ -631,7 +631,7 @@ class BlueExAPI
                         "default" => isset($config['product_code']) ? $config['product_code'] : "",
                     ),
                     array(
-                        "name" => "products_detail[product_name]",
+                        "name" => "products_detail[0][product_name]",
                         "field_type" => "required",
                         "classes" => isset($config['product_name-class']) ? $config['product_name-class'] : "",
                         "attr" => isset($config['product_name-attr']) ? $config['product_name-attr'] : "",
@@ -641,7 +641,7 @@ class BlueExAPI
                         "default" => isset($config['product_name']) ? $config['product_name'] : "",
                     ),
                     array(
-                        "name" => "products_detail[product_price]",
+                        "name" => "products_detail[0][product_price]",
                         "field_type" => "required",
                         "classes" => isset($config['product_price-class']) ? $config['product_price-class'] : "",
                         "attr" => isset($config['product_price-attr']) ? $config['product_price-attr'] : "",
@@ -651,7 +651,7 @@ class BlueExAPI
                         "default" => isset($config['product_price']) ? $config['product_price'] : "",
                     ),
                     array(
-                        "name" => "products_detail[product_quantity]",
+                        "name" => "products_detail[0][product_quantity]",
                         "field_type" => "required",
                         "classes" => isset($config['product_quantity-class']) ? $config['product_quantity-class'] : "",
                         "attr" => isset($config['product_quantity-attr']) ? $config['product_quantity-attr'] : "",
@@ -661,7 +661,7 @@ class BlueExAPI
                         "default" => isset($config['product_quantity']) ? $config['product_quantity'] : "",
                     ),
                     array(
-                        "name" => "products_detail[product_weight]",
+                        "name" => "products_detail[0][product_weight]",
                         "field_type" => "required",
                         "classes" => isset($config['product_weight-class']) ? $config['product_weight-class'] : "",
                         "attr" => isset($config['product_weight-attr']) ? $config['product_weight-attr'] : "",
@@ -671,7 +671,7 @@ class BlueExAPI
                         "default" => isset($config['product_weight']) ? $config['product_weight'] : "",
                     ),
                     array(
-                        "name" => "products_detail[product_variations]",
+                        "name" => "products_detail[0][product_variations]",
                         "field_type" => "optional",
                         "classes" => isset($config['product_variations-class']) ? $config['product_variations-class'] : "",
                         "attr" => isset($config['product_variations-attr']) ? $config['product_variations-attr'] : "",
@@ -681,7 +681,7 @@ class BlueExAPI
                         "default" => isset($config['product_variations']) ? $config['product_variations'] : "",
                     ),
                     array(
-                        "name" => "products_detail[sku_code]",
+                        "name" => "products_detail[0][sku_code]",
                         "field_type" => "optional",
                         "classes" => isset($config['sku_code-class']) ? $config['sku_code-class'] : "",
                         "attr" => isset($config['sku_code-attr']) ? $config['sku_code-attr'] : "",

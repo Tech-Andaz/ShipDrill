@@ -100,7 +100,7 @@ function createBookings($CallCourierAPI){
                     "pieces" => "01",
                     "weight" => "01",
                     "description" => "Test Description",
-                    "origin" => "Domestic",
+                    "origin" => "Domestic", // Optional - Defaults to "Domestic"
                     "amount" => "100",
                     "box_id" => "My Box ID",
                     "special_handling" => "false", // Optional
@@ -118,7 +118,7 @@ function createBookings($CallCourierAPI){
                     "pieces" => "01",
                     "weight" => "01",
                     "description" => "Test Description",
-                    "origin" => "Domestic",
+                    "origin" => "Domestic", // Optional - Defaults to "Domestic"
                     "amount" => "100",
                     "box_id" => "My Box ID",
                     "special_handling" => "false", // Optional
@@ -140,9 +140,42 @@ function getShippingLabel($CallCourierAPI){
     try { 
         //0 = PDF
         //1 = PDF file name - Locally Saved
+        //2 = PDF URL
         $cn_number = "10002423232893";
         $type = "0";
         $response = $CallCourierAPI->getShippingLabel($cn_number, $type);
+        return $response;
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Tracking History
+function getTrackingHistory($CallCourierAPI){
+    try { 
+        $cn_number = "10002423232893";
+        $response = $CallCourierAPI->getTrackingHistory($cn_number);
+        return $response;
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Tracking By Reference Number
+function getTrackingByReferenceNumber($CallCourierAPI){
+    try { 
+        $order_reference = "56270876367";
+        $response = $CallCourierAPI->getTrackingByReferenceNumber($order_reference);
+        return $response;
+    } catch (TechAndaz\CallCourier\CallCourierException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Tracking Status List
+function getTrackingStatusList($CallCourierAPI){
+    try {
+        $response = $CallCourierAPI->getTrackingStatusList();
         return $response;
     } catch (TechAndaz\CallCourier\CallCourierException $e) {
         echo "Error: " . $e->getMessage() . "\n";
@@ -161,15 +194,7 @@ function getFormFields($CallCourierAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "shipper_email" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "shipper_contact" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "shipper_address" => array(
+                "shipper_cell" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -177,79 +202,71 @@ function getFormFields($CallCourierAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_name" => array(
+                "shipper_area" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_contact" => array(
+                "shipper_landline" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_address" => array(
+                "shipper_address" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_city" => array(
+                "shipper_return_address" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_country" => array(
+                "shipper_email" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "payment_type" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "service_code" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "total_order_amount" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "total_order_weight" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "order_refernce_code" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "fragile" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "parcel_type" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "insurance_require" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "cn_generate" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "products_detail_row" => array(
+                "bookings_row" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
                     "input_wrapper_end" => "</div></div>"
                 ),
-                "product_name" => array(
+                "bookings[name]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "product_price" => array(
+                "bookings[reference_number]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "product_quantity" => array(
+                "bookings[cell]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "product_weight" => array(
+                "bookings[address]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[city]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[service_type]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[pieces]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[weight]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[description]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[amount]" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "bookings[box_id]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -272,6 +289,9 @@ function getFormFields($CallCourierAPI){
 // echo json_encode(getCityListByService($CallCourierAPI));
 // echo json_encode(getAreasByCity($CallCourierAPI));
 // echo json_encode(createBookings($CallCourierAPI));
-echo json_encode(getShippingLabel($CallCourierAPI));
-// echo (getFormFields($CallCourierAPI));
+// echo json_encode(getShippingLabel($CallCourierAPI));
+// echo json_encode(getTrackingHistory($CallCourierAPI));
+// echo json_encode(getTrackingByReferenceNumber($CallCourierAPI));
+// echo json_encode(getTrackingStatusList($CallCourierAPI));
+echo (getFormFields($CallCourierAPI));
 ?>
