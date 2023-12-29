@@ -432,7 +432,7 @@ class CallCourierAPI
                 "default" => isset($config['bookings_row']) ? $config['bookings_row'] : "",
                 "row_fields" => array(
                     array(
-                        "name" => "bookings[name]",
+                        "name" => "bookings[0][name]",
                         "field_type" => "required",
                         "classes" => isset($config['product_code-class']) ? $config['product_code-class'] : "",
                         "attr" => isset($config['product_code-attr']) ? $config['product_code-attr'] : "",
@@ -442,7 +442,7 @@ class CallCourierAPI
                         "default" => isset($config['product_code']) ? $config['product_code'] : "",
                     ),
                     array(
-                        "name" => "bookings[reference_number]",
+                        "name" => "bookings[0][reference_number]",
                         "field_type" => "required",
                         "classes" => isset($config['reference_number-class']) ? $config['reference_number-class'] : "",
                         "attr" => isset($config['reference_number-attr']) ? $config['reference_number-attr'] : "",
@@ -452,7 +452,7 @@ class CallCourierAPI
                         "default" => isset($config['reference_number']) ? $config['reference_number'] : "",
                     ),
                     array(
-                        "name" => "bookings[cell]",
+                        "name" => "bookings[0][cell]",
                         "field_type" => "required",
                         "classes" => isset($config['cell-class']) ? $config['cell-class'] : "",
                         "attr" => isset($config['cell-attr']) ? $config['cell-attr'] : "",
@@ -462,7 +462,7 @@ class CallCourierAPI
                         "default" => isset($config['cell']) ? $config['cell'] : "",
                     ),
                     array(
-                        "name" => "bookings[address]",
+                        "name" => "bookings[0][address]",
                         "field_type" => "required",
                         "classes" => isset($config['address-class']) ? $config['address-class'] : "",
                         "attr" => isset($config['address-attr']) ? $config['address-attr'] : "",
@@ -472,7 +472,7 @@ class CallCourierAPI
                         "default" => isset($config['address']) ? $config['address'] : "",
                     ),
                     array(
-                        "name" => "bookings[city]",
+                        "name" => "bookings[0][city]",
                         "field_type" => "required",
                         "classes" => isset($config['city-class']) ? $config['city-class'] : "",
                         "attr" => isset($config['city-attr']) ? $config['city-attr'] : "",
@@ -484,7 +484,7 @@ class CallCourierAPI
                         "custom_options" => isset($config['city-custom_options']) ? $config['city-custom_options'] : array(),
                     ),
                     array(
-                        "name" => "bookings[service_type]",
+                        "name" => "bookings[0][service_type]",
                         "field_type" => "required",
                         "classes" => isset($config['service_type-class']) ? $config['service_type-class'] : "",
                         "attr" => isset($config['service_type-attr']) ? $config['service_type-attr'] : "",
@@ -496,7 +496,7 @@ class CallCourierAPI
                         "custom_options" => isset($config['service_type-custom_options']) ? $config['service_type-custom_options'] : array(),
                     ),
                     array(
-                        "name" => "bookings[pieces]",
+                        "name" => "bookings[0][pieces]",
                         "field_type" => "required",
                         "classes" => isset($config['pieces-class']) ? $config['pieces-class'] : "",
                         "attr" => isset($config['pieces-attr']) ? $config['pieces-attr'] : "",
@@ -506,7 +506,7 @@ class CallCourierAPI
                         "default" => isset($config['pieces']) ? $config['pieces'] : "",
                     ),
                     array(
-                        "name" => "bookings[weight]",
+                        "name" => "bookings[0][weight]",
                         "field_type" => "required",
                         "classes" => isset($config['weight-class']) ? $config['weight-class'] : "",
                         "attr" => isset($config['weight-attr']) ? $config['weight-attr'] : "",
@@ -516,7 +516,7 @@ class CallCourierAPI
                         "default" => isset($config['weight']) ? $config['weight'] : "",
                     ),
                     array(
-                        "name" => "bookings[description]",
+                        "name" => "bookings[0][description]",
                         "field_type" => "required",
                         "classes" => isset($config['description-class']) ? $config['description-class'] : "",
                         "attr" => isset($config['description-attr']) ? $config['description-attr'] : "",
@@ -526,7 +526,7 @@ class CallCourierAPI
                         "default" => isset($config['description']) ? $config['description'] : "",
                     ),
                     array(
-                        "name" => "bookings[origin]",
+                        "name" => "bookings[0][origin]",
                         "field_type" => "optional",
                         "classes" => isset($config['origin-class']) ? $config['origin-class'] : "",
                         "attr" => isset($config['origin-attr']) ? $config['origin-attr'] : "",
@@ -536,7 +536,7 @@ class CallCourierAPI
                         "default" => isset($config['origin']) ? $config['origin'] : "",
                     ),
                     array(
-                        "name" => "bookings[amount]",
+                        "name" => "bookings[0][amount]",
                         "field_type" => "required",
                         "classes" => isset($config['amount-class']) ? $config['amount-class'] : "",
                         "attr" => isset($config['amount-attr']) ? $config['amount-attr'] : "",
@@ -546,7 +546,7 @@ class CallCourierAPI
                         "default" => isset($config['amount']) ? $config['amount'] : "",
                     ),
                     array(
-                        "name" => "bookings[box_id]",
+                        "name" => "bookings[0][box_id]",
                         "field_type" => "required",
                         "classes" => isset($config['box_id-class']) ? $config['box_id-class'] : "",
                         "attr" => isset($config['box_id-attr']) ? $config['box_id-attr'] : "",
@@ -556,7 +556,7 @@ class CallCourierAPI
                         "default" => isset($config['box_id']) ? $config['box_id'] : "",
                     ),
                     array(
-                        "name" => "bookings[special_handling]",
+                        "name" => "bookings[0][special_handling]",
                         "field_type" => "optional",
                         "classes" => isset($config['special_handling-class']) ? $config['special_handling-class'] : "",
                         "attr" => isset($config['special_handling-attr']) ? $config['special_handling-attr'] : "",
@@ -568,7 +568,7 @@ class CallCourierAPI
                         "custom_options" => isset($config['special_handling-custom_options']) ? $config['special_handling-custom_options'] : array(),
                     ),
                     array(
-                        "name" => "bookings[holiday]",
+                        "name" => "bookings[0][holiday]",
                         "field_type" => "optional",
                         "classes" => isset($config['holiday-class']) ? $config['holiday-class'] : "",
                         "attr" => isset($config['holiday-attr']) ? $config['holiday-attr'] : "",
@@ -580,7 +580,7 @@ class CallCourierAPI
                         "custom_options" => isset($config['holiday-custom_options']) ? $config['holiday-custom_options'] : array(),
                     ),
                     array(
-                        "name" => "bookings[remarks]",
+                        "name" => "bookings[0][remarks]",
                         "field_type" => "optional",
                         "classes" => isset($config['remarks-class']) ? $config['remarks-class'] : "",
                         "attr" => isset($config['remarks-attr']) ? $config['remarks-attr'] : "",

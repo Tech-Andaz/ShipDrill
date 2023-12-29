@@ -100,9 +100,9 @@ function createBookings($CallCourierAPI){
                     "pieces" => "01",
                     "weight" => "01",
                     "description" => "Test Description",
-                    "origin" => "Domestic", // Optional - Defaults to "Domestic"
                     "amount" => "100",
                     "box_id" => "My Box ID",
+                    "origin" => "Domestic", // Optional - Defaults to "Domestic"
                     "special_handling" => "false", // Optional
                     "holiday" => "false", // Optional
                     "remarks" => "Bulk Test Remarks 1" // Optional
@@ -118,9 +118,9 @@ function createBookings($CallCourierAPI){
                     "pieces" => "01",
                     "weight" => "01",
                     "description" => "Test Description",
-                    "origin" => "Domestic", // Optional - Defaults to "Domestic"
                     "amount" => "100",
                     "box_id" => "My Box ID",
+                    "origin" => "Domestic", // Optional - Defaults to "Domestic"
                     "special_handling" => "false", // Optional
                     "holiday" => "false", // Optional
                     "remarks" => "Bulk Test Remarks 1" // Optional
