@@ -765,12 +765,10 @@ try {
 try {
     $config = array(
         "sender_type" => "sender_details",
-        "custom_options" => array(
-            "sender[client_vendor_id]" => array(
-                array(
-                    "label" => "Tech Andaz",
-                    "value" => "23456"
-                )
+        "sender[client_vendor_id]-custom_options" => array(
+            array(
+                "label" => "Tech Andaz",
+                "value" => "23456"
             )
         )
     );
