@@ -258,13 +258,18 @@ class PandaGoAPI
             $config['optional'] = false;
         }
         $vendor_outlets = array();
-        $vendor_outlets_temp = $this->getAllOutlets()['response'];
-        foreach ($vendor_outlets_temp as $item) {
-            array_push($vendor_outlets,array(
-                "value" => $item['client_vendor_id'],
-                "label" => $item['name'],
-            ));
+        if(isset($config['sender[client_vendor_id]-custom_options']) && is_array($config['sender[client_vendor_id]-custom_options']) && count($config['sender[client_vendor_id]-custom_options']) > 0){
+            $vendor_outlets = $config['sender[client_vendor_id]-custom_options'];
+        } else {
+            $vendor_outlets_temp = $this->getAllOutlets()['response'];
+            foreach ($vendor_outlets_temp as $item) {
+                array_push($vendor_outlets,array(
+                    "value" => $item['client_vendor_id'],
+                    "label" => $item['name'],
+                ));
+            }
         }
+        
         $payment_methods =  array(
             array(
                 "label" => "Cash on Delivery",
