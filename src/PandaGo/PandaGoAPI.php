@@ -265,7 +265,25 @@ class PandaGoAPI
         // Validation passed
         return true;
     }
-
+    function getAllUniqueKeys($array) {
+        $keys = [];
+        foreach ($array as $key => $value) {
+            $keys[] = $key;
+    
+            if (is_array($value)) {
+                $keys = array_merge($keys, $this->getAllUniqueKeys($value));
+            }
+        }
+        return array_unique($keys);
+    }
+    function andaz_array_column($array, $key = ""){
+        //Key is there just for backward compatibility
+        $uniqueKeys = $this->getAllUniqueKeys($array);
+        $result = array_merge(...array_map(function ($item) use ($uniqueKeys) {
+            return array_values(array_intersect_key($item, array_flip($uniqueKeys)));
+        }, $array));
+        return $result;
+    }
     /**
     * Get Form Fields
     *
@@ -295,7 +313,7 @@ class PandaGoAPI
                 ));
             }
         }
-        $this->validateIdNameData($vendor_outlets);        
+        $this->validateIdNameData($vendor_outlets);   
         $payment_methods =  array(
             array(
                 "label" => "Cash on Delivery",
@@ -476,7 +494,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['payment_method-wrapper']) ? $config['payment_method-wrapper'] : "",
                     "label" => isset($config['payment_method-label']) ? $config['payment_method-label'] : "Payment Method",
                     "type" => "select",
-                    "default" => isset($config['payment_method']) && in_array($config['payment_method'], array_column($payment_methods, "label")) ? $config['payment_method'] : $payment_methods[0]['label'],
+                    "default" => isset($config['payment_method']) && in_array($config['payment_method'], $this->andaz_array_column($payment_methods, "label")) ? $config['payment_method'] : $payment_methods[0]['label'],
                     "options" => $payment_methods,
                     "custom_options" => isset($config['payment_method-custom_options']) ? $config['payment_method-custom_options'] : array(),
                 ),
@@ -488,7 +506,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['coldbag_needed-wrapper']) ? $config['coldbag_needed-wrapper'] : "",
                     "label" => isset($config['coldbag_needed-label']) ? $config['coldbag_needed-label'] : "Coldbag Needed",
                     "type" => "select",
-                    "default" => isset($config['coldbag_needed']) && in_array($config['coldbag_needed'], array_column($coldbag, "label")) ? $config['coldbag_needed'] : $coldbag[0]['label'],
+                    "default" => isset($config['coldbag_needed']) && in_array($config['coldbag_needed'], $this->andaz_array_column($coldbag, "label")) ? $config['coldbag_needed'] : $coldbag[0]['label'],
                     "options" => $coldbag,
                     "custom_options" => isset($config['coldbag_needed-custom_options']) ? $config['coldbag_needed-custom_options'] : array(),
                 ),
@@ -530,7 +548,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['delivery_tasks[age_validation_required]-wrapper']) ? $config['delivery_tasks[age_validation_required]-wrapper'] : "",
                     "label" => isset($config['delivery_tasks[age_validation_required]-label']) ? $config['delivery_tasks[age_validation_required]-label'] : "Age Verification",
                     "type" => "select",
-                    "default" => isset($config['delivery_tasks[age_validation_required]']) && in_array($config['delivery_tasks[age_validation_required]'], array_column($age_verification, "label")) ? $config['delivery_tasks[age_validation_required]'] : $age_verification[0]['label'],
+                    "default" => isset($config['delivery_tasks[age_validation_required]']) && in_array($config['delivery_tasks[age_validation_required]'], $this->andaz_array_column($age_verification, "label")) ? $config['delivery_tasks[age_validation_required]'] : $age_verification[0]['label'],
                     "options" => $age_verification,
                     "custom_options" => isset($config['delivery_tasks[age_validation_required]-custom_options']) ? $config['delivery_tasks[age_validation_required]-custom_options'] : array(),
                 ),
@@ -545,7 +563,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['sender[client_vendor_id]-wrapper']) ? $config['sender[client_vendor_id]-wrapper'] : "",
                     "label" => isset($config['sender[client_vendor_id]-label']) ? $config['sender[client_vendor_id]-label'] : "Sender Outlet",
                     "type" => "select",
-                    "default" => isset($config['sender[client_vendor_id]']) && in_array($config['sender[client_vendor_id]'], array_column($vendor_outlets, "label")) ? $config['sender[client_vendor_id]'] : $vendor_outlets[0]['label'],
+                    "default" => isset($config['sender[client_vendor_id]']) && in_array($config['sender[client_vendor_id]'], $this->andaz_array_column($vendor_outlets, "label")) ? $config['sender[client_vendor_id]'] : $vendor_outlets[0]['label'],
                     "options" => $vendor_outlets,
                     "custom_options" => isset($config['sender[client_vendor_id]-custom_options']) ? $config['sender[client_vendor_id]-custom_options'] : array(),
                 ),
@@ -637,7 +655,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['payment_method-wrapper']) ? $config['payment_method-wrapper'] : "",
                     "label" => isset($config['payment_method-label']) ? $config['payment_method-label'] : "Payment Method",
                     "type" => "select",
-                    "default" => isset($config['payment_method']) && in_array($config['payment_method'], array_column($payment_methods, "label")) ? $config['payment_method'] : $payment_methods[0]['label'],
+                    "default" => isset($config['payment_method']) && in_array($config['payment_method'], $this->andaz_array_column($payment_methods, "label")) ? $config['payment_method'] : $payment_methods[0]['label'],
                     "options" => $payment_methods,
                     "custom_options" => isset($config['payment_method-custom_options']) ? $config['payment_method-custom_options'] : array(),
                 ),
@@ -649,7 +667,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['coldbag_needed-wrapper']) ? $config['coldbag_needed-wrapper'] : "",
                     "label" => isset($config['coldbag_needed-label']) ? $config['coldbag_needed-label'] : "Coldbag Needed",
                     "type" => "select",
-                    "default" => isset($config['coldbag_needed']) && in_array($config['coldbag_needed'], array_column($coldbag, "label")) ? $config['coldbag_needed'] : $coldbag[0]['label'],
+                    "default" => isset($config['coldbag_needed']) && in_array($config['coldbag_needed'], $this->andaz_array_column($coldbag, "label")) ? $config['coldbag_needed'] : $coldbag[0]['label'],
                     "options" => $coldbag,
                     "custom_options" => isset($config['coldbag_needed-custom_options']) ? $config['coldbag_needed-custom_options'] : array(),
                 ),
@@ -691,7 +709,7 @@ class PandaGoAPI
                     "wrapper" => isset($config['delivery_tasks[age_validation_required]-wrapper']) ? $config['delivery_tasks[age_validation_required]-wrapper'] : "",
                     "label" => isset($config['delivery_tasks[age_validation_required]-label']) ? $config['delivery_tasks[age_validation_required]-label'] : "Age Verification",
                     "type" => "select",
-                    "default" => isset($config['delivery_tasks[age_validation_required]']) && in_array($config['delivery_tasks[age_validation_required]'], array_column($age_verification, "label")) ? $config['delivery_tasks[age_validation_required]'] : $age_verification[0]['label'],
+                    "default" => isset($config['delivery_tasks[age_validation_required]']) && in_array($config['delivery_tasks[age_validation_required]'], $this->andaz_array_column($age_verification, "label")) ? $config['delivery_tasks[age_validation_required]'] : $age_verification[0]['label'],
                     "options" => $age_verification,
                     "custom_options" => isset($config['delivery_tasks[age_validation_required]-custom_options']) ? $config['delivery_tasks[age_validation_required]-custom_options'] : array(),
                 ),

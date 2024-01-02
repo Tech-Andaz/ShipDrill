@@ -334,7 +334,8 @@ function getFormFields($PandaGoAPI){
             "optional" => false,
             "optional_selective" => array(
             ),
-            "sender[client_vendor_id]-custom_options"=> $locations
+            "sender[client_vendor_id]-custom_options"=> $locations,
+            "sender[client_vendor_id]"=> "6593a55a75116"
         );
         $response = $PandaGoAPI->getFormFields($config);
         return $response;
