@@ -240,6 +240,32 @@ class PandaGoAPI
         return $this->PandaGoClient->makeRequest($endpoint, $method, array());
     }
 
+    public function validateIdNameData($data)
+    {
+        if (!is_array($data)) {
+            throw new PandaGoException('Invalid data structure. Each data must be an associative array.');
+        }
+        foreach ($data as $item) {
+            // Check if the item is an array
+            if (!is_array($item)) {
+                throw new PandaGoException('Invalid data structure. Each item must be an associative array.');
+            }
+
+            // Check if the item contains only 'id' and 'name' keys
+            $keys = array_keys($item);
+            $allowedKeys = ['label', 'value'];
+            if (count($keys) != count($allowedKeys)) {
+                throw new PandaGoException('Invalid data structure. Each item must contain both "value" and "label" keys.');
+            }
+            if (count($keys) != count(array_intersect($keys, $allowedKeys))) {
+                throw new PandaGoException('Invalid data structure. Each item must contain only "value" and "label" keys.');
+            }
+        }
+
+        // Validation passed
+        return true;
+    }
+
     /**
     * Get Form Fields
     *
@@ -269,7 +295,7 @@ class PandaGoAPI
                 ));
             }
         }
-        
+        $this->validateIdNameData($vendor_outlets);        
         $payment_methods =  array(
             array(
                 "label" => "Cash on Delivery",
