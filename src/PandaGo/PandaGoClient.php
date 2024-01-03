@@ -8,6 +8,7 @@ class PandaGoClient
     private $access_token;
     private $token_url;
     private $api_url;
+    public $webhook_secret;
 
     /**
     * PandaGoClient constructor.
@@ -27,7 +28,8 @@ class PandaGoClient
         } else {
             $this->api_url = $config['api_url'];
         }
-        $this->credentials = $config['credentials'];
+        $this->credentials = isset($config['credentials']) ? $config['credentials'] : throw new PandaGoException('Credentials are required');;
+        $this->webhook_secret = isset($config['webhook_secret']) ? $config['webhook_secret'] : "";
         $this->oAuthRequest();
     }
     /**

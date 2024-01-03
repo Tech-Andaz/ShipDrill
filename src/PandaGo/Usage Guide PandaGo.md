@@ -16,6 +16,7 @@
 - [Create Or Update an Outlet](#create-or-update-an-outlet)
 - [Get an Outlet](#get-an-outlet)
 - [Get all Outlets](#get-all-outlets)
+- [Verify Webhook Signature](#verify-webhook-signature)
 - [Get Form Fields - Sender Outlet](#get-form-fields-sender-outlet)
 - [Get Form Fields - Sender Details](#get-form-fields-sender-details)
 ## Initialize
@@ -43,7 +44,8 @@ $PandaGoClient = new PandaGoClient(array(
         "scope"=>"pandago.api.sg.*",
     ),
     "token_url" => "https://sts-st.deliveryhero.io/",
-    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/"
+    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/",
+    "webhook_secret"=>"supersecret", // Optional - Webhook secret setup with PandaGo. Required for webhook verification
     
 ));
 
@@ -321,6 +323,19 @@ try {
 <?php
 try {
     $response = $PandaGoAPI->getAllOutlets();
+    return $response;
+} catch (TechAndaz\PandaGo\PandaGoException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+
+## Verify Webhook Signature
+
+```php
+<?php
+try {
+    $response = $PandaGoAPI->verifyWebHook();
     return $response;
 } catch (TechAndaz\PandaGo\PandaGoException $e) {
     echo "Error: " . $e->getMessage() . "\n";

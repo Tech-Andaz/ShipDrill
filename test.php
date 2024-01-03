@@ -14,7 +14,8 @@ $PandaGoClient = new PandaGoClient(array(
         "scope"=>"pandago.api.sg.*",
     ),
     "token_url" => "https://sts-st.deliveryhero.io/",
-    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/"
+    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/",
+    "webhook_secret"=>"supersecret", // Optional - Webhook secret setup with PandaGo. Required for webhook verification
     
 ));
 $PandaGoAPI = new PandaGoAPI($PandaGoClient);
@@ -271,6 +272,16 @@ function getAllOutlets($PandaGoAPI){
 }
 
 
+//Webhook Verificaiton
+function verifyWebHook($PandaGoAPI){
+    try {
+        $response = $PandaGoAPI->verifyWebHook();
+        return $response;
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
 //Get Form Fields
 function getFormFields($PandaGoAPI){
     try { 
@@ -356,7 +367,8 @@ function getFormFields($PandaGoAPI){
 // echo json_encode(createOutlet($PandaGoAPI));
 // echo json_encode(getOutlet($PandaGoAPI));
 // echo json_encode(getAllOutlets($PandaGoAPI));
-echo (getFormFields($PandaGoAPI));
+echo json_encode(verifyWebHook($PandaGoAPI));
+// echo (getFormFields($PandaGoAPI));
 
 
 ?>

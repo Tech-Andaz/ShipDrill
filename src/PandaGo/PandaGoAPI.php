@@ -5,7 +5,7 @@ namespace TechAndaz\PandaGo;
 class PandaGoAPI
 {
     private $PandaGoClient;
-
+    private $SignatureHeader = "X-Signature-SHA256";
     public function __construct(PandaGoClient $PandaGoClient)
     {
         $this->PandaGoClient = $PandaGoClient;
@@ -240,6 +240,54 @@ class PandaGoAPI
         return $this->PandaGoClient->makeRequest($endpoint, $method, array());
     }
 
+
+    public function verifyWebHook() {
+        $request = getallheaders();
+        if($this->PandaGoClient->webhook_secret == ""){
+            throw new PandaGoException('Webhook Secret has not been set during initialize stage.');
+        }
+        $body = file_get_contents('php://input');
+        if ($body === false) {
+            return array(
+                "status" => 0,
+                "error" => "Unable to verify data"
+            );
+        }
+        if(!isset($request[$this->SignatureHeader])){
+            return array(
+                "status" => 0,
+                "error" => "No signature received."
+            );
+        }
+        $ok = $this->verify($body, $request[$this->SignatureHeader]);
+        if ($ok === false) {
+            return array(
+                "status" => 0,
+                "error" => "Unable to verify signature"
+            );
+        } elseif (!$ok) {
+            return array(
+                "status" => 0,
+                "error" => "Invalid Signature"
+            );
+        }
+        return array(
+            "status" => 1,
+            "error" => "Signature Verified",
+            "body" => $body
+        );
+    }
+    
+    function verify($body, $signature) {
+        $sig = hex2bin($signature);
+        if ($sig === false) {
+            return false;
+        }
+    
+        $mac = hash_hmac('sha256', $body, $this->PandaGoClient->webhook_secret, true);
+    
+        return hash_equals($sig, $mac);
+    }
     public function validateIdNameData($data)
     {
         if (!is_array($data)) {
