@@ -2,7 +2,7 @@
 ## Usage Guide - TCS
 ## Table of Contents
 - [Initialize TCS Client](#initialize)
-- [Add Shipment](#create-customer)
+- [Add Shipment](#add-shipment)
 - [Get Form Fields](#get-form-fields)
 ## Initialize
 ```php
