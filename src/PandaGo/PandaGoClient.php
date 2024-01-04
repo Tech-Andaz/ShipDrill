@@ -28,7 +28,7 @@ class PandaGoClient
         } else {
             $this->api_url = $config['api_url'];
         }
-        $this->credentials = isset($config['credentials']) ? $config['credentials'] : throw new PandaGoException('Credentials are required');;
+        $this->credentials = isset($config['credentials']) ? $config['credentials'] : throw new PandaGoException('Credentials are required');
         $this->webhook_secret = isset($config['webhook_secret']) ? $config['webhook_secret'] : "";
         $this->oAuthRequest();
     }
