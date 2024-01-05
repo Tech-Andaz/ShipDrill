@@ -63,7 +63,8 @@ try {
 <?php
 try {
     $tracking_number = "779404467784";
-    $response = $TCSAPI->trackShipment($tracking_number);
+    $type = "data"; //Optional - Defaults to url. Options are: data / url / redirect
+    $response = $TCSAPI->trackShipment($tracking_number, $type);
     return $response;
 } catch (TechAndaz\TCS\TCSException $e) {
     echo "Error: " . $e->getMessage() . "\n";

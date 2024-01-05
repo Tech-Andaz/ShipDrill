@@ -14,6 +14,7 @@ class TCSClient
     public $cost_centers;
     public $cost_centers_codes;
     public $cost_centers_names;
+    public $tracking_url;
     private $api_url;
 
     /**
@@ -44,6 +45,7 @@ class TCSClient
             $this->client_id = isset($config['client_id']) ? $config['client_id'] : throw new TCSException('Client ID are required');
             $this->cost_centers = isset($config['cost_centers']) ? $config['cost_centers'] : throw new TCSException('Cost Centers are required');
         }
+        $this->tracking_url = isset($config['tracking_url']) ? $config['tracking_url'] : "https://www.tcsexpress.com/track/";
         $this->cities = $this->getCitiesList();
         $this->services = array(
             array(
@@ -176,30 +178,6 @@ class TCSClient
         $responseData = json_decode($response, true);
         return $responseData;
     }
-    public function makeRequestFile($endpoint, $queryParams = []){
-        $url = $this->api_url . '/' . ltrim($endpoint, '/');
-        if (!empty($queryParams)) {
-            $url .= '?' . http_build_query($queryParams);
-        }
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: ' . $this->apiKey
-            ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return $response;
-    }
-
     private function sendRequest($url, $method, $headers, $data, $queryParams = [])
     {
         if (!empty($queryParams)) {

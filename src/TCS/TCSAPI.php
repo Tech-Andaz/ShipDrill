@@ -108,35 +108,57 @@ class TCSAPI
     * @return array
     *   Decoded response data.
     */
-    public function trackShipment($tracking_number = "")
+    public function trackShipment($tracking_number = "", $type = "url")
     {
         if(!isset($tracking_number) || $tracking_number == ""){
             throw new TCSException('Tracking Number is required');
         }
-        $params = array(
-            "consignmentNo" => $tracking_number
-        );
-        $endpoint = 'track/v1/shipments/detail';
-        $method = 'GET';
-        $response = $this->TCSClient->makeRequest($endpoint, $method, array(), $params);
-        if(isset($response['returnStatus']['status'])){
-            if($response['returnStatus']['status'] == "SUCCESS"){
-                $tracking_response = array();
-                if(isset($response['TrackDetailReply']['DeliveryInfo'])){
-                    $tracking_response = $response['TrackDetailReply']['DeliveryInfo'];
+        if($type != "url" && $type != "data" && $type != "redirect"){
+            $type = "url";
+        }
+        $url = $this->TCSClient->tracking_url . $tracking_number;
+        if($type == "redirect"){
+            header('Location: '.$url);
+        } else if($type == "url"){
+            return array(
+                "status" => 1,
+                "url" => $url
+            );
+        } else if($type == "data"){
+            $params = array(
+                "consignmentNo" => $tracking_number
+            );
+            $endpoint = 'track/v1/shipments/detail';
+            $method = 'GET';
+            $response = $this->TCSClient->makeRequest($endpoint, $method, array(), $params);
+            if(isset($response['returnStatus']['status'])){
+                if($response['returnStatus']['status'] == "SUCCESS"){
+                    $tracking_response = array();
+                    $track_response = $response['TrackDetailReply'];
+                    foreach($track_response as $key => $delivery){
+                        if($key != "TrackInfo"){
+                            foreach($delivery as $movement){
+                                array_push($tracking_response, $movement);
+                            }
+                        }
+                    }
+                    usort($tracking_response, function($a, $b) { return strtotime($b['dateTime']) - strtotime($a['dateTime']); });
+                    return array(
+                        "status" => 1,
+                        "tracking" => $tracking_response
+                    );
                 }
-                return array(
-                    "status" => 1,
-                    "cn_number" => $tracking_response
-                );
             }
+            return array(
+                "status" => 0,
+                "response" => $response
+            );
         }
         return array(
             "status" => 0,
-            "response" => $response
+            "error" => "Unknown type provided"
         );
     }
-
     public function validateIdNameData($data)
     {
         if (!is_array($data)) {

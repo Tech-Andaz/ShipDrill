@@ -46,27 +46,11 @@ function addShipment($TCSAPI){
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-//Add Shipment
+//Track Shipment
 function trackShipment($TCSAPI){
     try {
-        $data = [
-            'cost_center' => 'Test',
-            'consignee_name' => 'Tech Andaz',
-            'consignee_phone' => '+924235113700',
-            'consignee_email' => 'contact@techandaz.com',
-            'consignee_address' => '119/2 M Quaid-e-Azam Industrial Estate, Kot Lakhpat',
-            'consignee_city' => 'Lahore',
-            'weight' => 1,
-            'pieces' => 1,
-            'amount' => 0,
-            'order_id' => '12345', // Optional - Defaults to unique ID
-            'service_id' => 'overnight', //Options are: overnight / second_day / same_day / self_collection
-            'order_details' => 'Order ID: 12345', // Optional
-            'fragile' => 0, // Optional - Defaults to 0. Options are: 0 / 1, where 0 = No, 1 = Yes
-            'remarks' => 'Come in the evening', // Optional
-            'insurance_value' => 100, // Optional - Defaults to 0
-        ];
-        $response = $TCSAPI->trackShipment($data);
+        $tracking_number = "779404467784";
+        $response = $TCSAPI->trackShipment($tracking_number);
         return $response;
     } catch (TechAndaz\TCS\TCSException $e) {
         echo "Error: " . $e->getMessage() . "\n";
@@ -150,7 +134,8 @@ function getFormFields($TCSAPI){
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-echo json_encode(addShipment($TCSAPI));
+// echo json_encode(addShipment($TCSAPI));
+echo json_encode(trackShipment($TCSAPI));
 // echo (getFormFields($TCSAPI));
 
 ?>
