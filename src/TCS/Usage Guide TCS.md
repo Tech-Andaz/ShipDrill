@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Initialize TCS Client](#initialize)
 - [Add Shipment](#add-shipment)
+- [Track Shipment](#track-shipment)
 - [Get Form Fields](#get-form-fields)
 ## Initialize
 ```php
@@ -51,6 +52,18 @@ try {
         'insurance_value' => 100, // Optional - Defaults to 0
     ];
     $response = $TCSAPI->addShipment($data);
+    return $response;
+} catch (TechAndaz\TCS\TCSException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Track Shipment
+```php
+<?php
+try {
+    $tracking_number = "779404467784";
+    $response = $TCSAPI->trackShipment($tracking_number);
     return $response;
 } catch (TechAndaz\TCS\TCSException $e) {
     echo "Error: " . $e->getMessage() . "\n";

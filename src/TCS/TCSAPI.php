@@ -84,7 +84,7 @@ class TCSAPI
             "remarks" => isset($data['remarks']) ? $data['remarks'] : "",
             "insuranceValue" => isset($data['insurance_value']) ? $data['insurance_value'] : 0,
         );
-        $endpoint = 'cod/create-order';
+        $endpoint = 'v1/cod/create-order';
         $method = 'POST';
         $response = $this->TCSClient->makeRequest($endpoint, $method, $order_data);
         if(isset($response['returnStatus']['status'])){
@@ -92,6 +92,42 @@ class TCSAPI
                 return array(
                     "status" => 1,
                     "cn_number" => trim(explode("Your generated CN is: ", $response['bookingReply']['result'])[1])
+                );
+            }
+        }
+        return array(
+            "status" => 0,
+            "response" => $response
+        );
+    }
+    /**
+    * Track a Shipment.
+    *
+    * @param array $data
+    *
+    * @return array
+    *   Decoded response data.
+    */
+    public function trackShipment($tracking_number = "")
+    {
+        if(!isset($tracking_number) || $tracking_number == ""){
+            throw new TCSException('Tracking Number is required');
+        }
+        $params = array(
+            "consignmentNo" => $tracking_number
+        );
+        $endpoint = 'track/v1/shipments/detail';
+        $method = 'GET';
+        $response = $this->TCSClient->makeRequest($endpoint, $method, array(), $params);
+        if(isset($response['returnStatus']['status'])){
+            if($response['returnStatus']['status'] == "SUCCESS"){
+                $tracking_response = array();
+                if(isset($response['TrackDetailReply']['DeliveryInfo'])){
+                    $tracking_response = $response['TrackDetailReply']['DeliveryInfo'];
+                }
+                return array(
+                    "status" => 1,
+                    "cn_number" => $tracking_response
                 );
             }
         }

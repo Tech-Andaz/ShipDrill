@@ -26,7 +26,7 @@ class TCSClient
         //TEST URL - https://api.tcscourier.com/production/v1/ - No Sandbox Environment, only sandbox credentials
         //LIVE URL - https://api.tcscourier.com/production/v1/
         $this->environment = (isset($config['environment']) && in_array($config['environment'], ['sandbox','production'])) ? $config['environment'] : "production";
-        $this->api_url = ($this->environment == 'production') ? "https://api.tcscourier.com/production/v1" : "https://api.tcscourier.com/production/v1";
+        $this->api_url = ($this->environment == 'production') ? "https://api.tcscourier.com/production" : "https://api.tcscourier.com/production";
         if($this->environment == "sandbox"){
             $this->username = isset($config['username']) ? $config['username'] : "testenvio";
             $this->password = isset($config['password']) ? $config['password'] : "abc123+";

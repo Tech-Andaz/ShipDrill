@@ -46,6 +46,16 @@ function addShipment($TCSAPI){
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
+//Track Shipment
+function trackShipment($TCSAPI){
+    try {
+        $tracking_number = "779404467784";
+        $response = $TCSAPI->trackShipment($tracking_number);
+        return $response;
+    } catch (TechAndaz\TCS\TCSException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
 
 //Get Form Fields
 function getFormFields($TCSAPI){
@@ -125,6 +135,7 @@ function getFormFields($TCSAPI){
     }
 }
 // echo json_encode(addShipment($TCSAPI));
-echo (getFormFields($TCSAPI));
+echo json_encode(trackShipment($TCSAPI));
+// echo (getFormFields($TCSAPI));
 
 ?>
