@@ -16,6 +16,7 @@ class TCSClient
     public $cost_centers_names;
     public $tracking_url;
     private $api_url;
+    public $label_url;
 
     /**
     * TCSClient constructor.
@@ -93,6 +94,7 @@ class TCSClient
                 throw new TCSException('Cost Center City is not a valid City: ' . json_encode($centers));
             }
         }
+        $this->label_url = 'https://envio.tcscourier.com/BookingReportPDF/GenerateLabels?consingmentNumber=';
     }
     function getAllUniqueKeys($array) {
         $keys = [];

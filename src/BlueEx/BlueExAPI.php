@@ -224,8 +224,6 @@ class BlueExAPI
         return $this->BlueExClient->makeRequest($endpoint, $method, $data);
     }
 
-    
-
     public function validateIdNameData($data)
     {
         if (!is_array($data)) {
@@ -257,7 +255,6 @@ class BlueExAPI
         $keys = [];
         foreach ($array as $key => $value) {
             $keys[] = $key;
-    
             if (is_array($value)) {
                 $keys = array_merge($keys, $this->getAllUniqueKeys($value));
             }
@@ -265,12 +262,10 @@ class BlueExAPI
         return array_unique($keys);
     }
     function andaz_array_column($array, $key = ""){
-        //Key is there just for backward compatibility
         $uniqueKeys = $this->getAllUniqueKeys($array);
         $result = array_merge(...array_map(function ($item) use ($uniqueKeys) {
             return array_values(array_intersect_key($item, array_flip($uniqueKeys)));
         }, $array));
-        // print_r($result);
         return $result;
     }
 

@@ -47,12 +47,33 @@ function addShipment($TCSAPI){
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
+//Get City List
+function getCityList($TCSAPI){
+    try {
+        $response = $TCSAPI->getCityList();
+        return $response;
+    } catch (TechAndaz\TCS\TCSException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
 //Track Shipment
 function trackShipment($TCSAPI){
     try {
         $tracking_number = "779404467784";
         $type = "data"; //Optional - Defaults to url. Options are: data / url / redirect
         $response = $TCSAPI->trackShipment($tracking_number, $type);
+        return $response;
+    } catch (TechAndaz\TCS\TCSException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Print Shipping Label
+function printShippingLabel($TCSAPI){
+    try {
+        $tracking_number = "779404467784";
+        $type = "url"; //Optional - Defaults to url. Options are: url / redirect
+        $response = $TCSAPI->printShippingLabel($tracking_number, $type);
         return $response;
     } catch (TechAndaz\TCS\TCSException $e) {
         echo "Error: " . $e->getMessage() . "\n";
@@ -137,7 +158,9 @@ function getFormFields($TCSAPI){
     }
 }
 // echo json_encode(addShipment($TCSAPI));
-echo json_encode(trackShipment($TCSAPI));
+echo json_encode(getCityList($TCSAPI));
+// echo json_encode(trackShipment($TCSAPI));
+// echo json_encode(printShippingLabel($TCSAPI));
 // echo (getFormFields($TCSAPI));
 
 ?>

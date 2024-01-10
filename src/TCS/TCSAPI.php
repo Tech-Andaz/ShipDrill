@@ -159,6 +159,50 @@ class TCSAPI
             "error" => "Unknown type provided"
         );
     }
+
+    
+    /**
+    * Get List of Cities
+    *
+    * @return array
+    *   Decoded response data.
+    */
+    public function getCityList()
+    {
+        return array(
+            "status" => 1,
+            "data" => $this->TCSClient->cities
+        );
+    }
+    
+    /**
+    * Print Shipping Label
+    *
+    * @param string $consignment_no
+    *   The Consignment Number of the requested shipment.
+    *
+    * @return array
+    *   Decoded response data.
+    */
+    public function printShippingLabel($consignment_no, $type = "url")
+    {
+        $url = $this->TCSClient->label_url . $consignment_no;
+        if($type == "url"){
+            return array(
+                "status" => 1,
+                "label_url" => $url
+            );
+        } else if($type == "redirect"){
+            header("Location: " . $url);
+            die();
+        } else {
+            return array(
+                "status" => 0,
+                "error" => "Unknown Type"
+            );
+        }
+    }
+
     public function validateIdNameData($data)
     {
         if (!is_array($data)) {

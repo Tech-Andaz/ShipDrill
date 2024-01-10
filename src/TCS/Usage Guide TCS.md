@@ -4,6 +4,8 @@
 - [Initialize TCS Client](#initialize)
 - [Add Shipment](#add-shipment)
 - [Track Shipment](#track-shipment)
+- [Get City List](#get-city-list)
+- [Print Shipping Label](#print-shipping-label)
 - [Get Form Fields](#get-form-fields)
 ## Initialize
 ```php
@@ -65,6 +67,30 @@ try {
     $tracking_number = "779404467784";
     $type = "data"; //Optional - Defaults to url. Options are: data / url / redirect
     $response = $TCSAPI->trackShipment($tracking_number, $type);
+    return $response;
+} catch (TechAndaz\TCS\TCSException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Get City List
+```php
+<?php
+try {
+    $response = $TCSAPI->getCityList();
+    return $response;
+} catch (TechAndaz\TCS\TCSException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Print Shipping Label
+```php
+<?php
+try {
+    $tracking_number = "779404467784";
+    $type = "url"; //Optional - Defaults to url. Options are: url / redirect
+    $response = $TCSAPI->printShippingLabel($tracking_number, $type);
     return $response;
 } catch (TechAndaz\TCS\TCSException $e) {
     echo "Error: " . $e->getMessage() . "\n";
