@@ -223,6 +223,34 @@ class BlueExAPI
         ];
         return $this->BlueExClient->makeRequest($endpoint, $method, $data);
     }
+    
+    /**
+    * Print Shipping Label
+    *
+    * @param string $consignment_no
+    *   The Consignment Number of the requested shipment.
+    *
+    * @return array
+    *   Decoded response data.
+    */
+    public function printShippingLabel($consignment_no, $type = "url")
+    {
+        $url = $this->BlueExClient->label_url . $consignment_no;
+        if($type == "url"){
+            return array(
+                "status" => 1,
+                "label_url" => $url
+            );
+        } else if($type == "redirect"){
+            header("Location: " . $url);
+            die();
+        } else {
+            return array(
+                "status" => 0,
+                "error" => "Unknown Type"
+            );
+        }
+    }
 
     public function validateIdNameData($data)
     {

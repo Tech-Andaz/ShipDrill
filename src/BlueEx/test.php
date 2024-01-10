@@ -175,6 +175,18 @@ function createLoadsheet($BlueExAPI){
     }
 }
 
+//Print Shipping Label
+function printShippingLabel($TCSAPI){
+    try {
+        $tracking_number = "5027606021";
+        $type = "url"; //Optional - Defaults to url. Options are: url / redirect
+        $response = $TCSAPI->printShippingLabel($tracking_number, $type);
+        return $response;
+    } catch (TechAndaz\TCS\TCSException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
 //Get Form Fields
 function getFormFields($BlueExAPI){
     try { 
@@ -303,5 +315,6 @@ function getFormFields($BlueExAPI){
 // echo json_encode(cancelShipment($BlueExAPI));
 // echo json_encode(reversePickup($BlueExAPI));
 // echo json_encode(createLoadsheet($BlueExAPI));
+// echo json_encode(printShippingLabel($BlueExAPI));
 // echo (getFormFields($BlueExAPI));
 ?>

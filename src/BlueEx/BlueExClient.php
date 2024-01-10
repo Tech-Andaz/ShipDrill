@@ -7,6 +7,7 @@ class BlueExClient
     private $api_url;
     private $username;
     private $password;
+    public $label_url;
 
     /**
     * BlueExClient constructor.
@@ -24,6 +25,7 @@ class BlueExClient
         }
         $this->username = $username;
         $this->password = $password;
+        $this->label_url = "https://benefitx.blue-ex.com/customerportal/inc/cnprnb.php?";
     }
     /**
     * Make a request to the BlueEx API.

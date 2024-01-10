@@ -15,6 +15,7 @@
 - [Get Shipment Status](#get-shipment-status)
 - [Get All Pickup Locations](#get-all-pickup-locations)
 - [Get Pickup Location](#get-pickup-location)
+- [Print Shipping Label](#print-shipping-label)
 - [Get Form Fields](#get-form-fields)
 ## Initialize
 
@@ -231,6 +232,19 @@ try {
     $response = $BlueExAPI->getPickupLocation($location_id);
     return $response;
 } catch (TechAndaz\BlueEx\BlueExException $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+}
+?>
+```
+## Print Shipping Label
+```php
+<?php
+try {
+    $tracking_number = "5027606021";
+    $type = "url"; //Optional - Defaults to url. Options are: url / redirect
+    $response = $TCSAPI->printShippingLabel($tracking_number, $type);
+    return $response;
+} catch (TechAndaz\TCS\TCSException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
