@@ -252,6 +252,27 @@ class BlueExAPI
         return true;
     }
 
+    
+    function getAllUniqueKeys($array) {
+        $keys = [];
+        foreach ($array as $key => $value) {
+            $keys[] = $key;
+    
+            if (is_array($value)) {
+                $keys = array_merge($keys, $this->getAllUniqueKeys($value));
+            }
+        }
+        return array_unique($keys);
+    }
+    function andaz_array_column($array, $key = ""){
+        //Key is there just for backward compatibility
+        $uniqueKeys = $this->getAllUniqueKeys($array);
+        $result = array_merge(...array_map(function ($item) use ($uniqueKeys) {
+            return array_values(array_intersect_key($item, array_flip($uniqueKeys)));
+        }, $array));
+        return $result;
+    }
+
     /**
     * Get Form Fields
     *
@@ -397,7 +418,7 @@ class BlueExAPI
                 "wrapper" => isset($config['shipper_city-wrapper']) ? $config['shipper_city-wrapper'] : "",
                 "label" => isset($config['shipper_city-label']) ? $config['shipper_city-label'] : "Shipper City",
                 "type" => "select",
-                "default" => isset($config['shipper_city']) && in_array($config['shipper_city'], array_column($cities, "label")) ? $config['shipper_city'] : "LHE",
+                "default" => isset($config['shipper_city']) && in_array($config['shipper_city'], $this->andaz_array_column($cities, "label")) ? $config['shipper_city'] : "LHE",
                 "options" => $cities,
                 "custom_options" => isset($config['shipper_city-custom_options']) ? $config['shipper_city-custom_options'] : array(),
             ),
@@ -449,7 +470,7 @@ class BlueExAPI
                 "wrapper" => isset($config['customer_city-wrapper']) ? $config['customer_city-wrapper'] : "",
                 "label" => isset($config['customer_city-label']) ? $config['customer_city-label'] : "Customer City",
                 "type" => "select",
-                "default" => isset($config['customer_city']) && in_array($config['customer_city'], array_column($cities, "label")) ? $config['customer_city'] : "Lahore",
+                "default" => isset($config['customer_city']) && in_array($config['customer_city'], $this->andaz_array_column($cities, "label")) ? $config['customer_city'] : "Lahore",
                 "options" => $cities,
                 "custom_options" => isset($config['customer_city-custom_options']) ? $config['customer_city-custom_options'] : array(),
             ),
@@ -461,7 +482,7 @@ class BlueExAPI
                 "wrapper" => isset($config['customer_country-wrapper']) ? $config['customer_country-wrapper'] : "",
                 "label" => isset($config['customer_country-label']) ? $config['customer_country-label'] : "Customer Country",
                 "type" => "select",
-                "default" => isset($config['customer_country']) && in_array($config['customer_country'], array_column($countries, "label")) ? $config['customer_country'] : "Pakistan",
+                "default" => isset($config['customer_country']) && in_array($config['customer_country'], $this->andaz_array_column($countries, "label")) ? $config['customer_country'] : "Pakistan",
                 "options" => $countries,
                 "custom_options" => isset($config['customer_country-custom_options']) ? $config['customer_country-custom_options'] : array(),
             ),
@@ -493,7 +514,7 @@ class BlueExAPI
                 "wrapper" => isset($config['payment_type-wrapper']) ? $config['payment_type-wrapper'] : "",
                 "label" => isset($config['payment_type-label']) ? $config['payment_type-label'] : "Customer Country",
                 "type" => "select",
-                "default" => isset($config['payment_type']) && in_array($config['payment_type'], array_column($payment_type, "label")) ? $config['payment_type'] : "Cash on Delivery",
+                "default" => isset($config['payment_type']) && in_array($config['payment_type'], $this->andaz_array_column($payment_type, "label")) ? $config['payment_type'] : "Cash on Delivery",
                 "options" => $payment_type,
                 "custom_options" => isset($config['payment_type-custom_options']) ? $config['payment_type-custom_options'] : array(),
             ),
@@ -505,7 +526,7 @@ class BlueExAPI
                 "wrapper" => isset($config['service_code-wrapper']) ? $config['service_code-wrapper'] : "",
                 "label" => isset($config['service_code-label']) ? $config['service_code-label'] : "Service Type",
                 "type" => "select",
-                "default" => isset($config['service_code']) && in_array($config['service_code'], array_column($service_types, "label")) ? $config['service_code'] : $service_types[0]['label'],
+                "default" => isset($config['service_code']) && in_array($config['service_code'], $this->andaz_array_column($service_types, "label")) ? $config['service_code'] : $service_types[0]['label'],
                 "options" => $service_types,
                 "custom_options" => isset($config['service_code-custom_options']) ? $config['service_code-custom_options'] : array(),
             ),
@@ -547,7 +568,7 @@ class BlueExAPI
                 "wrapper" => isset($config['fragile-wrapper']) ? $config['fragile-wrapper'] : "",
                 "label" => isset($config['fragile-label']) ? $config['fragile-label'] : "Service Type",
                 "type" => "select",
-                "default" => isset($config['fragile']) && in_array($config['fragile'], array_column($fragile, "label")) ? $config['fragile'] : $fragile[0]['label'],
+                "default" => isset($config['fragile']) && in_array($config['fragile'], $this->andaz_array_column($fragile, "label")) ? $config['fragile'] : $fragile[0]['label'],
                 "options" => $fragile,
                 "custom_options" => isset($config['fragile-custom_options']) ? $config['fragile-custom_options'] : array(),
             ),
@@ -559,7 +580,7 @@ class BlueExAPI
                 "wrapper" => isset($config['parcel_type-wrapper']) ? $config['parcel_type-wrapper'] : "",
                 "label" => isset($config['parcel_type-label']) ? $config['parcel_type-label'] : "Parcel Type",
                 "type" => "select",
-                "default" => isset($config['parcel_type']) && in_array($config['parcel_type'], array_column($parcel_type, "label")) ? $config['parcel_type'] : $parcel_type[0]['label'],
+                "default" => isset($config['parcel_type']) && in_array($config['parcel_type'], $this->andaz_array_column($parcel_type, "label")) ? $config['parcel_type'] : $parcel_type[0]['label'],
                 "options" => $parcel_type,
                 "custom_options" => isset($config['parcel_type-custom_options']) ? $config['parcel_type-custom_options'] : array(),
             ),
@@ -571,7 +592,7 @@ class BlueExAPI
                 "wrapper" => isset($config['insurance_require-wrapper']) ? $config['insurance_require-wrapper'] : "",
                 "label" => isset($config['insurance_require-label']) ? $config['insurance_require-label'] : "Insurance",
                 "type" => "select",
-                "default" => isset($config['insurance_require']) && in_array($config['insurance_require'], array_column($insurance_require, "label")) ? $config['insurance_require'] : $insurance_require[0]['label'],
+                "default" => isset($config['insurance_require']) && in_array($config['insurance_require'], $this->andaz_array_column($insurance_require, "label")) ? $config['insurance_require'] : $insurance_require[0]['label'],
                 "options" => $insurance_require,
                 "custom_options" => isset($config['insurance_require-custom_options']) ? $config['insurance_require-custom_options'] : array(),
             ),
@@ -593,7 +614,7 @@ class BlueExAPI
                 "wrapper" => isset($config['cn_generate-wrapper']) ? $config['cn_generate-wrapper'] : "",
                 "label" => isset($config['cn_generate-label']) ? $config['cn_generate-label'] : "Generate CN",
                 "type" => "select",
-                "default" => isset($config['cn_generate']) && in_array($config['cn_generate'], array_column($cn_generate, "label")) ? $config['cn_generate'] : $cn_generate[0]['label'],
+                "default" => isset($config['cn_generate']) && in_array($config['cn_generate'], $this->andaz_array_column($cn_generate, "label")) ? $config['cn_generate'] : $cn_generate[0]['label'],
                 "options" => $cn_generate,
                 "custom_options" => isset($config['cn_generate-custom_options']) ? $config['cn_generate-custom_options'] : array(),
             ),
@@ -605,7 +626,7 @@ class BlueExAPI
                 "wrapper" => isset($config['multi_pickup-wrapper']) ? $config['multi_pickup-wrapper'] : "",
                 "label" => isset($config['multi_pickup-label']) ? $config['multi_pickup-label'] : "Multi Pickup",
                 "type" => "select",
-                "default" => isset($config['multi_pickup']) && in_array($config['multi_pickup'], array_column($multi_pickup, "label")) ? $config['multi_pickup'] : $multi_pickup[0]['label'],
+                "default" => isset($config['multi_pickup']) && in_array($config['multi_pickup'], $this->andaz_array_column($multi_pickup, "label")) ? $config['multi_pickup'] : $multi_pickup[0]['label'],
                 "options" => $multi_pickup,
                 "custom_options" => isset($config['multi_pickup-custom_options']) ? $config['multi_pickup-custom_options'] : array(),
             ),
