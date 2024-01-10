@@ -158,9 +158,9 @@ function getFormFields($TCSAPI){
     }
 }
 // echo json_encode(addShipment($TCSAPI));
-echo json_encode(getCityList($TCSAPI));
+// echo json_encode(getCityList($TCSAPI));
 // echo json_encode(trackShipment($TCSAPI));
 // echo json_encode(printShippingLabel($TCSAPI));
-// echo (getFormFields($TCSAPI));
+echo (getFormFields($TCSAPI));
 
 ?>
