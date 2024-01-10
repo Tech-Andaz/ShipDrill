@@ -242,9 +242,9 @@ try {
 try {
     $tracking_number = "5027606021";
     $type = "url"; //Optional - Defaults to url. Options are: url / redirect
-    $response = $TCSAPI->printShippingLabel($tracking_number, $type);
+    $response = $BlueExAPI->printShippingLabel($tracking_number, $type);
     return $response;
-} catch (TechAndaz\TCS\TCSException $e) {
+} catch (TechAndaz\BlueEx\BlueExException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
 ?>
