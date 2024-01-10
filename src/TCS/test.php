@@ -16,7 +16,8 @@ $TCSClient = new TCSClient(array(
             "code" => "Test", // Cost Center Code
             "name" => "Karachi Cost Center", //Sender City
         )
-    ) //Optional if sandbox, Defaults to Karachi Center. Required array if production.
+    ), //Optional if sandbox, Defaults to Karachi Center. Required array if production.
+    "tracking_url" => "https://www.tcsexpress.com/track/" //Optional for URL based tracking - Defaults to https://www.tcsexpress.com/track/
 ));
 $TCSAPI = new TCSAPI($TCSClient);
 
@@ -50,7 +51,8 @@ function addShipment($TCSAPI){
 function trackShipment($TCSAPI){
     try {
         $tracking_number = "779404467784";
-        $response = $TCSAPI->trackShipment($tracking_number);
+        $type = "data"; //Optional - Defaults to url. Options are: data / url / redirect
+        $response = $TCSAPI->trackShipment($tracking_number, $type);
         return $response;
     } catch (TechAndaz\TCS\TCSException $e) {
         echo "Error: " . $e->getMessage() . "\n";

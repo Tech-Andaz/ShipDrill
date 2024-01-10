@@ -270,6 +270,7 @@ class BlueExAPI
         $result = array_merge(...array_map(function ($item) use ($uniqueKeys) {
             return array_values(array_intersect_key($item, array_flip($uniqueKeys)));
         }, $array));
+        // print_r($result);
         return $result;
     }
 
@@ -760,7 +761,7 @@ class BlueExAPI
             $options_html = "";
             foreach($field['options'] as $option){
                 $selected = "";
-                if($field['default'] == $option['label']){
+                if($field['default'] == $option['label'] || $field['default'] == $option['value']){
                     $selected = "selected";
                 }
                 $options_html .= '<option ' . $selected . ' value = "' . $option['value'] . '">' . $option['label'] . '</option>';
