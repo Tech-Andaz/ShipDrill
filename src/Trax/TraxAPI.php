@@ -1248,7 +1248,7 @@ class TraxAPI
                 ),
                 array(
                     "name" => "charges_mode_id",
-                    "field_type" => "required",
+                    "field_type" => "optional",
                     "classes" => isset($config['charges_mode_id-class']) ? $config['charges_mode_id-class'] : "",
                     "attr" => isset($config['charges_mode_id-attr']) ? $config['charges_mode_id-attr'] : "",
                     "wrapper" => isset($config['charges_mode_id-wrapper']) ? $config['charges_mode_id-wrapper'] : "",
@@ -1642,7 +1642,7 @@ class TraxAPI
                 ),
                 array(
                     "name" => "charges_mode_id",
-                    "field_type" => "required",
+                    "field_type" => "optional",
                     "classes" => isset($config['charges_mode_id-class']) ? $config['charges_mode_id-class'] : "",
                     "attr" => isset($config['charges_mode_id-attr']) ? $config['charges_mode_id-attr'] : "",
                     "wrapper" => isset($config['charges_mode_id-wrapper']) ? $config['charges_mode_id-wrapper'] : "",
@@ -2006,7 +2006,7 @@ class TraxAPI
                 ),
                 array(
                     "name" => "charges_mode_id",
-                    "field_type" => "required",
+                    "field_type" => "optional",
                     "classes" => isset($config['charges_mode_id-class']) ? $config['charges_mode_id-class'] : "",
                     "attr" => isset($config['charges_mode_id-attr']) ? $config['charges_mode_id-attr'] : "",
                     "wrapper" => isset($config['charges_mode_id-wrapper']) ? $config['charges_mode_id-wrapper'] : "",

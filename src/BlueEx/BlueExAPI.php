@@ -590,7 +590,7 @@ class BlueExAPI
                 "classes" => isset($config['fragile-class']) ? $config['fragile-class'] : "",
                 "attr" => isset($config['fragile-attr']) ? $config['fragile-attr'] : "",
                 "wrapper" => isset($config['fragile-wrapper']) ? $config['fragile-wrapper'] : "",
-                "label" => isset($config['fragile-label']) ? $config['fragile-label'] : "Service Type",
+                "label" => isset($config['fragile-label']) ? $config['fragile-label'] : "Fragile",
                 "type" => "select",
                 "default" => isset($config['fragile']) && in_array($config['fragile'], $this->andaz_array_column($fragile, "label")) ? $config['fragile'] : $fragile[0]['label'],
                 "options" => $fragile,

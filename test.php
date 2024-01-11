@@ -2,319 +2,411 @@
 
 require 'vendor/autoload.php';
 
-use TechAndaz\BlueEx\BlueExClient;
-use TechAndaz\BlueEx\BlueExAPI;
+use TechAndaz\Trax\TraxClient;
+use TechAndaz\Trax\TraxAPI;
 
-$BlueExClient = new BlueExClient("KHI-00000", "64jkuyeh75hkjstgh87", "https://bigazure.com/api/json_v3/");
-$BlueExAPI = new BlueExAPI($BlueExClient);
+$traxClient = new TraxClient('eTNZQjRwQ1ZVQjkxQ2hvaWwxdmR6aExjSE9aV0R4b2xNMThMNm93WTdkUHgyNmpqOGF6dHAzemN4THRP5c10b0414332f', 'https://app.sonic.pk');
+$traxAPI = new TraxAPI($traxClient);
 
-//Get All Pickup Locations
-function getAllPickupLocations($BlueExAPI){
+//Add Pickup Address
+function addPickUpAddress($traxAPI){
+    $pickupAddressData = [
+        'person_of_contact' => 'Tech Andaz',
+        'phone_number' => '03000000000',
+        'email_address' => 'contact@techandaz.com',
+        'address' => 'Tech Andaz, Lahore, Pakistan.',
+        'city_id' => 202,
+    ];
     try {
-        $response = $BlueExAPI->getAllPickupLocations();
+        $response = $traxAPI->addPickupAddress($pickupAddressData);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Specific Pickup Location
-function getPickupLocation($BlueExAPI){
+//List Pickup Address
+function listPickupAddresses($traxAPI){
     try {
-        $location_id = 31;
-        $response = $BlueExAPI->getPickupLocation($location_id);
+        $response = $traxAPI->listPickupAddresses();
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//List Cities
+function cityList($traxAPI){
+    try {
+        $response = $traxAPI->cityList();
+        return $response;
+    } catch (TechAndaz\Trax\TraxException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Add Regular Shipment
+function addRegularShipment($traxAPI){
+    $shipmentDetails = [
+        "pickup_address_id" => 4184,
+        "information_display" => 1,
+        "consignee_city_id" => 223,
+        "consignee_name" => "John Doe",
+        "consignee_address" => "John Doe House, DHA Phase 1",
+        "consignee_phone_number_1" => "03234896599",
+        "consignee_email_address" => "contact@techandaz.com",
+        "order_id" => "TA-123",
+        "item_product_type_id" => 1, //Appendix B
+        "item_description" => "Shirt and Jeans",
+        "item_quantity" => 10,
+        "item_insurance" => 0,
+        "pickup_date" => date("Y-m-d"),
+        "estimated_weight" => 1.05,
+        "shipping_mode_id" => 1, //Appendix C
+        "amount" => 10650,
+        "payment_mode_id" => 1, //Appendix D
+    ];
+    try {
+        $response = $traxAPI->addRegularShipment($shipmentDetails);
+        return $response;
+    } catch (TechAndaz\Trax\TraxException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Add Replacement Shipment
+function addReplacementShipment($traxAPI){
+    $shipmentDetails = [
+        "pickup_address_id" => 4184,
+        "information_display" => 1,
+        "consignee_city_id" => 223,
+        "consignee_name" => "John Doe",
+        "consignee_address" => "John Doe House, DHA Phase 1",
+        "consignee_phone_number_1" => "03234896599",
+        "consignee_email_address" => "contact@techandaz.com",
+        "order_id" => "TA-123",
+        "item_product_type_id" => 1, //Appendix B
+        "item_description" => "Shirt and Jeans",
+        "item_quantity" => 10,
+        "item_insurance" => 0,
+        "item_price" => 10650,
+        "replacement_item_product_type_id" => 1, //Appendix B
+        "replacement_item_description" => "Shirt and Jeans",
+        "replacement_item_quantity" => 10,
+        "estimated_weight" => 1.05,
+        "shipping_mode_id" => 1, //Appendix C
+        "amount" => 10650,
+        "charges_mode_id" => 4, //Appendix F
+        "payment_mode_id" => 1, //Appendix D        
+    ];
+    try {
+        $response = $traxAPI->addReplacementShipment($shipmentDetails);
+        return $response;
+    } catch (TechAndaz\Trax\TraxException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Add Try & Buy Shipment
+function addTryAndBuyShipment($traxAPI){
+    $shipmentDetails = [
+        "pickup_address_id" => 4184,
+        "information_display" => 1,
+        "consignee_city_id" => 223,
+        "consignee_name" => "John Doe",
+        "consignee_address" => "John Doe House, DHA Phase 1",
+        "consignee_phone_number_1" => "03234896599",
+        "consignee_email_address" => "contact@techandaz.com",
+        "order_id" => "TA-123",
+        "items" => array(
+            array(
+                "item_product_type_id" => 1, //Appendix B
+                "item_description" => "Shirt and Jeans",
+                "item_quantity" => 10,
+                "item_insurance" => 0,
+                "product_value" => 500,
+                "item_price" => 1000,
+            )
+        ),
+        "package_type" => 1, //1=Complete, 2=Partial
+        "pickup_date" => date("Y-m-d"),
+        "try_and_buy_fees" => 500,
+        "estimated_weight" => 1.05,
+        "shipping_mode_id" => 1, //Appendix C
+        "amount" => 10650,
+        "charges_mode_id" => 4, //Appendix F
+        "payment_mode_id" => 1, //Appendix D        
+    ];
+    try {
+        $response = $traxAPI->addTryAndBuyShipment($shipmentDetails);
+        return $response;
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
 //Get Shipment Status
-function getShipmentStatus($BlueExAPI){
+function getShipmentStatus($traxAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentStatus($consignment_no);
+        $response = $traxAPI->getShipmentStatus(202223372182, 0);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Settlement
-function getShipmentSettlement($BlueExAPI){
+//Track Shipment
+function trackShipment($traxAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentSettlement($consignment_no);
+        $response = $traxAPI->trackShipment(202223372182, 0);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Info
-function getShipmentInfo($BlueExAPI){
+//Shipment Charges
+function getShipmentCharges($traxAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentInfo($consignment_no);
+        $response = $traxAPI->getShipmentCharges(202223372182);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Info
-function getShipmentTracking($BlueExAPI){
+//Payment Status of a Shipment
+function getPaymentStatus($traxAPI){
     try {
-        $consignment_no = "5027729334";
-        $response = $BlueExAPI->getShipmentTracking($consignment_no);
+        $response = $traxAPI->getPaymentStatus(202223372182);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Cities
-function getCities($BlueExAPI){
+//Invoice of a Shipment
+function getInvoice($traxAPI){
     try {
-        $country_code = "PK";
-        $response = $BlueExAPI->getCities($country_code);
+        $response = $traxAPI->getInvoice(930, 1);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Service Type
-function getServiceType($BlueExAPI){
+//Payments of a Shipment
+function getPaymentDetails($traxAPI){
     try {
-        $response = $BlueExAPI->getServiceType();
+        $response = $traxAPI->getPaymentDetails(202223372182);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Create Shipment
-function createShipment($BlueExAPI){
+//Shipping Label of a Shipment
+function printShippingLabel($traxAPI){
     try {
-        $data = array(
-            "shipper_name" => "Mubeen Dewani",
-            "shipper_email" => "mubeen.dewani@blue-ex.com",
-            "shipper_contact" => "03242646886",
-            "shipper_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
-            "shipper_city" => "LHE",
-            "customer_name" => "FAHAD",
-            "customer_email" => "mubeen.dewani@blue-ex.com",
-            "customer_contact" => "03242646886",
-            "customer_address" => "Plot # 5 blueEx Awami Markaz Shahrah-E-Faisal Karachi",
-            "customer_city" => "KHI",
-            "customer_country" => "PK",
-            "customer_comment" => "demo",
-            "shipping_charges" => "150",
-            "payment_type" => "COD",
-            "service_code" => "BE",
-            "total_order_amount" => "4150.00",
-            "total_order_weight" => "1",
-            "order_refernce_code" => "bluedemo1",
-            "fragile" => "N",
-            "parcel_type" => "P",
-            "insurance_require" => "N",
-            "insurance_value" => "0",
-            "testbit" => "Y",
-            "cn_generate" => "Y",
-            "multi_pickup" => "Y",
-            "products_detail" => array(
-                array(
-                    "product_code" => "1005",
-                    "product_name" => "Polo T shirt",
-                    "product_price" => "1000",
-                    "product_weight" => "0.5",
-                    "product_quantity" => "2",
-                    "product_variations" => "small-black",
-                    "sku_code" => "12assk11aa"
-                )
-            )
-        );
-        $response = $BlueExAPI->createShipment($data);
+        //0 = Image
+        //1 = PDF
+        //2 = Image file name - Locally Saved
+        //3 = PDF file name - Locally Saved
+        $response = $traxAPI->printShippingLabel(223223372260, 1);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
+        // Handle any exceptions that may occur
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Cancel Shipment
-function cancelShipment($BlueExAPI){
+//Cancel a shipment
+function cancelShipment($traxAPI){
     try {
-        $consignment_no = "5027729332";
-        $response = $BlueExAPI->cancelShipment($consignment_no);
+        $response = $traxAPI->cancelShipment(202223372182);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Reverse Pickup
-function reversePickup($BlueExAPI){
-    try {
-        $consignment_no = "5027729337";
-        $response = $BlueExAPI->reversePickup($consignment_no);
+//Calculate rates for a shipment
+function calculateRates($traxAPI){
+    try { 
+        $serviceTypeId = 1;
+        $originCityId = 202;
+        $destinationCityId = 203;
+        $estimatedWeight = 1.05;
+        $shippingModeId = 1;
+        $amount = 1000;
+        $response = $traxAPI->calculateRates($serviceTypeId, $originCityId, $destinationCityId, $estimatedWeight, $shippingModeId, $amount);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Create Loadsheet
-function createLoadsheet($BlueExAPI){
-    try {
-        $consignment_no = "5027729332, 5027729337";
-        $response = $BlueExAPI->createLoadsheet($consignment_no);
+//Create a receiving sheet
+function createReceivingSheet($traxAPI){
+    try { 
+        $trackingNumbers = [202223372184, 202223372185];
+        $response = $traxAPI->createReceivingSheet($trackingNumbers);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Print Shipping Label
-function printShippingLabel($TCSAPI){
-    try {
-        $tracking_number = "5027606021";
-        $type = "url"; //Optional - Defaults to url. Options are: url / redirect
-        $response = $TCSAPI->printShippingLabel($tracking_number, $type);
+//View a receiving sheet
+function viewReceivingSheet($traxAPI){
+    try { 
+        //0 = Image
+        //1 = PDF
+        //2 = Image file name - Locally Saved
+        //3 = PDF file name - Locally Saved
+        $response = $traxAPI->viewReceivingSheet(6504, 3);
         return $response;
-    } catch (TechAndaz\TCS\TCSException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
+
+
 
 //Get Form Fields
-function getFormFields($BlueExAPI){
+function getFormFields($traxAPI){
     try { 
         $config = array(
+            "type" => "tryandbuy",
             "response" => "form",
             "label_class" => "form-label",
             "input_class" => "form-control",
             "wrappers" => array(
-                "shipper_name" => array(
+                "delivery_type_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "shipper_email" => array(
+                "pickup_address_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "shipper_contact" => array(
+                "information_display" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "shipper_address" => array(
+                "consignee_city_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "shipper_city" => array(
+                "consignee_name" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_name" => array(
+                "consignee_address" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_contact" => array(
+                "consignee_phone_number_1" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_address" => array(
+                "consignee_email_address" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_city" => array(
+                "item_product_type_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "customer_country" => array(
+                "item_description" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "payment_type" => array(
+                "item_quantity" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "service_code" => array(
+                "item_insurance" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "total_order_amount" => array(
+                "pickup_date" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "total_order_weight" => array(
+                "estimated_weight" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "order_refernce_code" => array(
+                "shipping_mode_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "fragile" => array(
+                "amount" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "parcel_type" => array(
+                "payment_mode_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "insurance_require" => array(
+                "charges_mode_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "cn_generate" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "products_detail_row" => array(
+                "try_buy_fees_row" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
                     "input_wrapper_end" => "</div></div>"
                 ),
-                "product_name" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "product_price" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "product_quantity" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "product_weight" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
+            ),
+            "sort_order" => array(
+                "consignee_name",
+                "information_display",
+                "consignee_city_id",
+            ),
+            "custom_options" => array(
+                "same_day_timing_id" => array(
+                    array(
+                        "label" => "6 Hours",
+                        "value" => 1
+                    )
+                )
             ),
             "optional" => false,
             "optional_selective" => array(
+                "shipper_reference_number_1",
+                "order_id"
             ),
         );
-        $response = $BlueExAPI->getFormFields($config);
+        $response = $traxAPI->getFormFields($config);
         return $response;
-    } catch (TechAndaz\BlueEx\BlueExException $e) {
+    } catch (TechAndaz\Trax\TraxException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
+// echo json_encode(addPickUpAddress($traxAPI));
+// echo json_encode(listPickupAddresses($traxAPI));
+// echo json_encode(cityList($traxAPI));
+// echo json_encode(addRegularShipment($traxAPI));
+// echo json_encode(addReplacementShipment($traxAPI));
+// echo json_encode(addTryAndBuyShipment($traxAPI));
+// echo json_encode(getShipmentStatus($traxAPI));
+// echo json_encode(trackShipment($traxAPI));
+// echo json_encode(getShipmentCharges($traxAPI));
+// echo json_encode(getPaymentStatus($traxAPI));
+// echo (getInvoice($traxAPI));
+// echo json_encode(getPaymentDetails($traxAPI));
+echo (printShippingLabel($traxAPI));
+// echo json_encode(cancelShipment($traxAPI));
+// echo json_encode(calculateRates($traxAPI));
+// echo json_encode(createReceivingSheet($traxAPI));
+// echo (viewReceivingSheet($traxAPI));
+// echo (getFormFields($traxAPI));
 
-// echo json_encode(getAllPickupLocations($BlueExAPI));
-// echo json_encode(getPickupLocation($BlueExAPI));
-// echo json_encode(getShipmentStatus($BlueExAPI));
-// echo json_encode(getShipmentSettlement($BlueExAPI));
-// echo json_encode(getShipmentInfo($BlueExAPI));
-// echo json_encode(getShipmentTracking($BlueExAPI));
-// echo json_encode(getCities($BlueExAPI));
-// echo json_encode(getServiceType($BlueExAPI));
-// echo json_encode(createShipment($BlueExAPI));
-// echo json_encode(cancelShipment($BlueExAPI));
-// echo json_encode(reversePickup($BlueExAPI));
-// echo json_encode(createLoadsheet($BlueExAPI));
-echo json_encode(printShippingLabel($BlueExAPI));
-// echo (getFormFields($BlueExAPI));
 ?>
