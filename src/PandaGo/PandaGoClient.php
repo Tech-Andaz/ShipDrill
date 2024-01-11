@@ -115,7 +115,7 @@ class PandaGoClient
         } else {
             return array(
                 "status" => 0,
-                "response" => $response
+                "response" => $response['message']
             );
         }
     }
