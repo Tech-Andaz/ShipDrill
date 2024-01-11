@@ -237,7 +237,21 @@ class PandaGoAPI
     {
         $endpoint = 'outletList';
         $method = 'GET';
-        return $this->PandaGoClient->makeRequest($endpoint, $method, array());
+        $outlets = $this->PandaGoClient->makeRequest($endpoint, $method, array());
+        if($outlets['status'] == 1){
+            $vendor_outlets = array();
+            foreach($outlets['response'] as $outlet){
+                if(isset($outlet['client_vendor_id']) && $outlet['client_vendor_id'] != ""){
+                    array_push($vendor_outlets, $outlet);
+                }
+            }
+            return array(
+                "status" => 1,
+                "response" => $vendor_outlets
+            );
+        } else {
+            return $outlets;
+        }
     }
 
 

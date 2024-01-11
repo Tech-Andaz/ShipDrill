@@ -2,349 +2,309 @@
 
 require 'vendor/autoload.php';
 
-use TechAndaz\Trax\TraxClient;
-use TechAndaz\Trax\TraxAPI;
+use TechAndaz\PandaGo\PandaGoClient;
+use TechAndaz\PandaGo\PandaGoAPI;
 
-$traxClient = new TraxClient('eTNZQjRwQ1ZVQjkxQ2hvaWwxdmR6aExjSE9aV0R4b2xNMThMNm93WTdkUHgyNmpqOGF6dHAzemN4THRP5c10b0414332f', 'https://app.sonic.pk');
-$traxAPI = new TraxAPI($traxClient);
+$PandaGoClient = new PandaGoClient(array(
+    "credentials" => array(
+        "grant_type"=>"client_credentials",
+        "client_id"=>"pandago:sg:bf2029da-89f5-48d1-8f44-f34c03542b2b",
+        "client_assertion_type"=>"urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+        "client_assertion"=>"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImNhYjdhNTZmLWFiNTctNGJjOS04MTViLTg3MmVlMGQwODkxYyJ9.eyJleHAiOjIwMTk2ODYzOTksImlzcyI6InBhbmRhZ286c2c6YmYyMDI5ZGEtODlmNS00OGQxLThmNDQtZjM0YzAzNTQyYjJiIiwic3ViIjoicGFuZGFnbzpzZzpiZjIwMjlkYS04OWY1LTQ4ZDEtOGY0NC1mMzRjMDM1NDJiMmIiLCJqdGkiOiJhZGI4ZTRkMS0yZjIzLTRlNzQtODQ1MS04MmJhNWUwYjhiM2QiLCJhdWQiOiJodHRwczovL3N0cy5kZWxpdmVyeWhlcm8uaW8ifQ.pZqBn5U6MdQuloGRzWK6hnFLcU1qfzraX7RLJ5CEONwbFat2HbrEtPHvJhnESL4aTfZOKrr35wICFdPkU9bin8f77Lgno0dFdWxMp3jg9be-7B56hgfOJF4ScyQjS2nBqF4-tauFo9j9qWm99FOYEfTRqQ4aXGWkEg6Huh0G8qXVP19Jdt8mDXUk4UDTwNhcqU4gojGkczixra1OheJVSPGFAUyq0P1UZH3atxSuAp_2Jm-U6eGY4UQGWUjkG_RDpWEJRbD1NasaYYrsqeULA9d8TqHxdX1csKgUgs2WoIJst9Lp2Y-P4b6agAZ3LiFqoXoal0d9ImPkrHHTO__rig",
+        "scope"=>"pandago.api.sg.*",
+    ),
+    "token_url" => "https://sts-st.deliveryhero.io/",
+    "api_url" => "https://pandago-api-sandbox.deliveryhero.io/sg/api/v1/"
+    
+));
+$PandaGoAPI = new PandaGoAPI($PandaGoClient);
 
-//Add Pickup Address
-function addPickUpAddress($traxAPI){
-    $pickupAddressData = [
-        'person_of_contact' => 'Tech Andaz',
-        'phone_number' => '03000000000',
-        'email_address' => 'contact@techandaz.com',
-        'address' => 'Tech Andaz, Lahore, Pakistan.',
-        'city_id' => 202,
-    ];
+//Submit a New Order
+function submitOrder($PandaGoAPI){
     try {
-        $response = $traxAPI->addPickupAddress($pickupAddressData);
+        $orderData = [
+            'sender' => array(
+                "name" => "Tech Andaz",
+                "phone_number" => "+924235113700",
+                "notes" => "Use the left door",
+                "location" => array(
+                    "address" => "Test address",
+                    "latitude" => 1.2923742,
+                    "longitude" => 103.8486029,
+                )
+            ),
+            'recipient' => array(
+                "name" => "Customer",
+                "phone_number" => "+924235113700",
+                "notes" => "Use the front door",
+                "location" => array(
+                    "address" => "Test address",
+                    "latitude" => 1.2923742,
+                    "longitude" => 103.8486029,
+                )
+            ),
+            "amount" => 500.00,
+            "payment_method" => "PAID",
+            "description" => "Order Description",
+            "delivery_tasks" => array(
+                "age_validation_required" => false
+            )
+        ];
+        $response = $PandaGoAPI->submitOrder($orderData);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//List Pickup Address
-function listPickupAddresses($traxAPI){
+//Fetch an Order
+function fetchOrder($PandaGoAPI){
     try {
-        $response = $traxAPI->listPickupAddresses();
+        $order_id = "a-xfen-a06d04";
+        $response = $PandaGoAPI->fetchOrder($order_id);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//List Cities
-function cityList($traxAPI){
+//Cancel an Order
+function cancelOrder($PandaGoAPI){
     try {
-        $response = $traxAPI->cityList();
+        $order_id = "a-xfen-c0ad86";
+        $reason = "REASON_UNKNOWN";
+        $response = $PandaGoAPI->cancelOrder($order_id, $reason);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Add Regular Shipment
-function addRegularShipment($traxAPI){
-    $shipmentDetails = [
-        "pickup_address_id" => 4184,
-        "information_display" => 1,
-        "consignee_city_id" => 223,
-        "consignee_name" => "John Doe",
-        "consignee_address" => "John Doe House, DHA Phase 1",
-        "consignee_phone_number_1" => "03234896599",
-        "consignee_email_address" => "contact@techandaz.com",
-        "order_id" => "TA-123",
-        "item_product_type_id" => 1, //Appendix B
-        "item_description" => "Shirt and Jeans",
-        "item_quantity" => 10,
-        "item_insurance" => 0,
-        "pickup_date" => date("Y-m-d"),
-        "estimated_weight" => 1.05,
-        "shipping_mode_id" => 1, //Appendix C
-        "amount" => 10650,
-        "payment_mode_id" => 1, //Appendix D
-    ];
+//Update an Order
+function updateOrder($PandaGoAPI){
     try {
-        $response = $traxAPI->addRegularShipment($shipmentDetails);
+        $order_id = "a-xfen-c0ad86";
+        $orderData = [
+            'location' => array(
+                "notes" => "Use the left door",
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            ),
+            "amount" => 500.00,
+            "payment_method" => "PAID",
+            "description" => "Order Description",
+        ];
+        $response = $PandaGoAPI->updateOrder($order_id, $orderData);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Add Replacement Shipment
-function addReplacementShipment($traxAPI){
-    $shipmentDetails = [
-        "pickup_address_id" => 4184,
-        "information_display" => 1,
-        "consignee_city_id" => 223,
-        "consignee_name" => "John Doe",
-        "consignee_address" => "John Doe House, DHA Phase 1",
-        "consignee_phone_number_1" => "03234896599",
-        "consignee_email_address" => "contact@techandaz.com",
-        "order_id" => "TA-123",
-        "item_product_type_id" => 1, //Appendix B
-        "item_description" => "Shirt and Jeans",
-        "item_quantity" => 10,
-        "item_insurance" => 0,
-        "item_price" => 10650,
-        "replacement_item_product_type_id" => 1, //Appendix B
-        "replacement_item_description" => "Shirt and Jeans",
-        "replacement_item_quantity" => 10,
-        "estimated_weight" => 1.05,
-        "shipping_mode_id" => 1, //Appendix C
-        "amount" => 10650,
-        "charges_mode_id" => 4, //Appendix F
-        "payment_mode_id" => 1, //Appendix D        
-    ];
+//Proof of Pickup
+function proofOfPickup($PandaGoAPI){
     try {
-        $response = $traxAPI->addReplacementShipment($shipmentDetails);
+        $order_id = "a-xfen-147164";
+        $response = $PandaGoAPI->proofOfPickup($order_id);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Add Try & Buy Shipment
-function addTryAndBuyShipment($traxAPI){
-    $shipmentDetails = [
-        "pickup_address_id" => 4184,
-        "information_display" => 1,
-        "consignee_city_id" => 223,
-        "consignee_name" => "John Doe",
-        "consignee_address" => "John Doe House, DHA Phase 1",
-        "consignee_phone_number_1" => "03234896599",
-        "consignee_email_address" => "contact@techandaz.com",
-        "order_id" => "TA-123",
-        "items" => array(
-            array(
-                "item_product_type_id" => 1, //Appendix B
-                "item_description" => "Shirt and Jeans",
-                "item_quantity" => 10,
-                "item_insurance" => 0,
-                "product_value" => 500,
-                "item_price" => 1000,
+//Proof of Delivery
+function proofOfDelivery($PandaGoAPI){
+    try {
+        $order_id = "a-xfen-147164";
+        $response = $PandaGoAPI->proofOfDelivery($order_id);
+        return $response;
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Proof of Return
+function proofOfReturn($PandaGoAPI){
+    try {
+        $order_id = "a-xfen-147164";
+        $response = $PandaGoAPI->proofOfReturn($order_id);
+        return $response;
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Get Rider's Coordinates
+function getRiderCoordinates($PandaGoAPI){
+    try {
+        $order_id = "a-xfen-147164";
+        $response = $PandaGoAPI->getRiderCoordinates($order_id);
+        return $response;
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Estimate Delivery Fees
+function estimateDeliveryFees($PandaGoAPI){
+    try {
+        $orderData = [
+            'sender' => array(
+                "name" => "Tech Andaz",
+                "phone_number" => "+924235113700",
+                "notes" => "Use the left door",
+                "location" => array(
+                    "address" => "Test address",
+                    "latitude" => 1.2923742,
+                    "longitude" => 103.8486029,
+                )
+            ),
+            'recipient' => array(
+                "name" => "Customer",
+                "phone_number" => "+924235113700",
+                "notes" => "Use the front door",
+                "location" => array(
+                    "address" => "Test address",
+                    "latitude" => 1.2923742,
+                    "longitude" => 103.8486029,
+                )
+            ),
+            "amount" => 500.00,
+            "payment_method" => "PAID",
+            "description" => "Order Description",
+        ];
+        $response = $PandaGoAPI->estimateDeliveryFees($orderData);
+        return $response;
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+
+//Estimate Delivery Time
+function estimateDeliveryTime($PandaGoAPI){
+    $orderData = [
+        'sender' => array(
+            "name" => "Tech Andaz",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the left door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
             )
         ),
-        "package_type" => 1, //1=Complete, 2=Partial
-        "pickup_date" => date("Y-m-d"),
-        "try_and_buy_fees" => 500,
-        "estimated_weight" => 1.05,
-        "shipping_mode_id" => 1, //Appendix C
-        "amount" => 10650,
-        "charges_mode_id" => 4, //Appendix F
-        "payment_mode_id" => 1, //Appendix D        
+        'recipient' => array(
+            "name" => "Customer",
+            "phone_number" => "+924235113700",
+            "notes" => "Use the front door",
+            "location" => array(
+                "address" => "Test address",
+                "latitude" => 1.2923742,
+                "longitude" => 103.8486029,
+            )
+        ),
+        "amount" => 500.00,
+        "payment_method" => "PAID",
+        "description" => "Order Description",
     ];
     try {
-        $response = $traxAPI->addTryAndBuyShipment($shipmentDetails);
+        $response = $PandaGoAPI->estimateDeliveryTime($orderData);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Get Shipment Status
-function getShipmentStatus($traxAPI){
+//Create or Update an Outlet
+function createUpdateOutlet($PandaGoAPI){
     try {
-        $response = $traxAPI->getShipmentStatus(202223372182, 0);
+        $outlet_id = uniqid();
+        $orderData = [
+            "name" => "Tech Andaz",
+            "address" => "Test address",
+            "street" => "Test Street",
+            "street_number" => "Street 2",
+            "building" => "Building 1",
+            "district" => "Township",
+            "postal_code" => "12345",
+            "rider_instructions" => "Use Left door",
+            "latitude" => 1.2923742,
+            "longitude" => 103.8486029,
+            "city" => "Lahore",
+            "phone_number" => "+924235113700",
+            "currency" => "PKR",
+            "locale" => "en-US",
+            "description" => "Head Office",
+            "halal" => true,
+            "add_user" => array(
+                "test@test.com",
+                "test2@test.com"
+            ),
+        ];
+        $response = $PandaGoAPI->createUpdateOutlet($outlet_id, $orderData);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Track Shipment
-function trackShipment($traxAPI){
+//Get an Outlet
+function getOutlet($PandaGoAPI){
     try {
-        $response = $traxAPI->trackShipment(202223372182, 0);
+        $outlet_id = "658aedab00869";
+        $response = $PandaGoAPI->getOutlet($outlet_id);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 
-//Shipment Charges
-function getShipmentCharges($traxAPI){
+//Get all Outlets
+function getAllOutlets($PandaGoAPI){
     try {
-        $response = $traxAPI->getShipmentCharges(202223372182);
+        $response = $PandaGoAPI->getAllOutlets();
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-
-//Payment Status of a Shipment
-function getPaymentStatus($traxAPI){
-    try {
-        $response = $traxAPI->getPaymentStatus(202223372182);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Invoice of a Shipment
-function getInvoice($traxAPI){
-    try {
-        $response = $traxAPI->getInvoice(930, 1);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Payments of a Shipment
-function getPaymentDetails($traxAPI){
-    try {
-        $response = $traxAPI->getPaymentDetails(202223372182);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Shipping Label of a Shipment
-function printShippingLabel($traxAPI){
-    try {
-        //0 = Image
-        //1 = PDF
-        //2 = Image file name - Locally Saved
-        //3 = PDF file name - Locally Saved
-        $response = $traxAPI->printShippingLabel(223223372260, 1);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        // Handle any exceptions that may occur
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Cancel a shipment
-function cancelShipment($traxAPI){
-    try {
-        $response = $traxAPI->cancelShipment(202223372182);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Calculate rates for a shipment
-function calculateRates($traxAPI){
-    try { 
-        $serviceTypeId = 1;
-        $originCityId = 202;
-        $destinationCityId = 203;
-        $estimatedWeight = 1.05;
-        $shippingModeId = 1;
-        $amount = 1000;
-        $response = $traxAPI->calculateRates($serviceTypeId, $originCityId, $destinationCityId, $estimatedWeight, $shippingModeId, $amount);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//Create a receiving sheet
-function createReceivingSheet($traxAPI){
-    try { 
-        $trackingNumbers = [202223372184, 202223372185];
-        $response = $traxAPI->createReceivingSheet($trackingNumbers);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
-//View a receiving sheet
-function viewReceivingSheet($traxAPI){
-    try { 
-        //0 = Image
-        //1 = PDF
-        //2 = Image file name - Locally Saved
-        //3 = PDF file name - Locally Saved
-        $response = $traxAPI->viewReceivingSheet(6504, 3);
-        return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-
 
 
 //Get Form Fields
-function getFormFields($traxAPI){
+function getFormFields($PandaGoAPI){
     try { 
         $config = array(
-            "type" => "tryandbuy",
+            "sender_type" => "sender_outlet",
             "response" => "form",
             "label_class" => "form-label",
             "input_class" => "form-control",
             "wrappers" => array(
-                "delivery_type_id" => array(
+                "sender[client_vendor_id]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "pickup_address_id" => array(
+                "recipient[name]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "information_display" => array(
+                "recipient[phone_number]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "consignee_city_id" => array(
+                "recipient[location][address]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "consignee_name" => array(
+                "recipient[location][latitude]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "consignee_address" => array(
+                "recipient[location][longitude]" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "consignee_phone_number_1" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "consignee_email_address" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "item_product_type_id" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "item_description" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "item_quantity" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "item_insurance" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "pickup_date" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "estimated_weight" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "shipping_mode_id" => array(
+                "payment_method" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -352,61 +312,35 @@ function getFormFields($traxAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "payment_mode_id" => array(
+                "description" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "charges_mode_id" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "try_buy_fees_row" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
-                    "input_wrapper_end" => "</div></div>"
-                ),
-            ),
-            "sort_order" => array(
-                "consignee_name",
-                "information_display",
-                "consignee_city_id",
-            ),
-            "custom_options" => array(
-                "same_day_timing_id" => array(
-                    array(
-                        "label" => "6 Hours",
-                        "value" => 1
-                    )
-                )
             ),
             "optional" => false,
             "optional_selective" => array(
-                "shipper_reference_number_1",
-                "order_id"
             ),
         );
-        $response = $traxAPI->getFormFields($config);
+        $response = $PandaGoAPI->getFormFields($config);
         return $response;
-    } catch (TechAndaz\Trax\TraxException $e) {
+    } catch (TechAndaz\PandaGo\PandaGoException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-// echo json_encode(addPickUpAddress($traxAPI));
-// echo json_encode(listPickupAddresses($traxAPI));
-// echo json_encode(cityList($traxAPI));
-// echo json_encode(addRegularShipment($traxAPI));
-// echo json_encode(addReplacementShipment($traxAPI));
-// echo json_encode(addTryAndBuyShipment($traxAPI));
-// echo json_encode(getShipmentStatus($traxAPI));
-// echo json_encode(trackShipment($traxAPI));
-// echo json_encode(getShipmentCharges($traxAPI));
-// echo json_encode(getPaymentStatus($traxAPI));
-// echo (getInvoice($traxAPI));
-// echo json_encode(getPaymentDetails($traxAPI));
-echo (printShippingLabel($traxAPI));
-// echo json_encode(cancelShipment($traxAPI));
-// echo json_encode(calculateRates($traxAPI));
-// echo json_encode(createReceivingSheet($traxAPI));
-// echo (viewReceivingSheet($traxAPI));
-// echo (getFormFields($traxAPI));
+// echo json_encode(submitOrder($PandaGoAPI));
+// echo json_encode(fetchOrder($PandaGoAPI));
+// echo json_encode(cancelOrder($PandaGoAPI));
+// echo json_encode(updateOrder($PandaGoAPI));
+// echo json_encode(proofOfPickup($PandaGoAPI));
+// echo json_encode(proofOfDelivery($PandaGoAPI));
+// echo json_encode(proofOfReturn($PandaGoAPI));
+// echo json_encode(getRiderCoordinates($PandaGoAPI));
+// echo json_encode(estimateDeliveryFees($PandaGoAPI));
+// echo json_encode(estimateDeliveryTime($PandaGoAPI));
+// echo json_encode(createOutlet($PandaGoAPI));
+// echo json_encode(getOutlet($PandaGoAPI));
+echo json_encode(getAllOutlets($PandaGoAPI));
+// echo (getFormFields($PandaGoAPI));
+
 
 ?>
