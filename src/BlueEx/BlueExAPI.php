@@ -494,7 +494,7 @@ class BlueExAPI
                 "wrapper" => isset($config['customer_city-wrapper']) ? $config['customer_city-wrapper'] : "",
                 "label" => isset($config['customer_city-label']) ? $config['customer_city-label'] : "Customer City",
                 "type" => "select",
-                "default" => isset($config['customer_city']) && in_array($config['customer_city'], $this->andaz_array_column($cities, "label")) ? $config['customer_city'] : "Lahore",
+                "default" => isset($config['customer_city']) && in_array($config['customer_city'], $this->andaz_array_column($cities, "label")) ? $config['customer_city'] : "",
                 "options" => $cities,
                 "custom_options" => isset($config['customer_city-custom_options']) ? $config['customer_city-custom_options'] : array(),
             ),
