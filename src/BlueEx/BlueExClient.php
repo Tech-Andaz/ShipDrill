@@ -6,7 +6,7 @@ class BlueExClient
 {
     private $api_url;
     private $username;
-    private $password;
+    private $password; 
     public $label_url;
 
     /**
