@@ -134,11 +134,13 @@ class TCSAPI
             if(isset($response['returnStatus']['status'])){
                 if($response['returnStatus']['status'] == "SUCCESS"){
                     $tracking_response = array();
-                    $track_response = $response['TrackDetailReply'];
-                    foreach($track_response as $key => $delivery){
-                        if($key != "TrackInfo"){
-                            foreach($delivery as $movement){
-                                array_push($tracking_response, $movement);
+                    if(isset($response['TrackDetailReply'])){
+                        $track_response = $response['TrackDetailReply'];
+                        foreach($track_response as $key => $delivery){
+                            if($key != "TrackInfo"){
+                                foreach($delivery as $movement){
+                                    array_push($tracking_response, $movement);
+                                }
                             }
                         }
                     }
