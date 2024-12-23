@@ -172,6 +172,6 @@ function getFormFields($SmartLaneAPI){
 // echo (printShippingLabel($SmartLaneAPI));
 // echo json_encode(getCityList($SmartLaneAPI));
 // echo json_encode(getWarehouseList($SmartLaneAPI));
-echo (getFormFields($SmartLaneAPI));
+// echo (getFormFields($SmartLaneAPI));
 
 ?>

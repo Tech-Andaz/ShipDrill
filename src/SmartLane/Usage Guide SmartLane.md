@@ -1,7 +1,7 @@
 
-## Usage Guide - Call Courier
-## Table of Contents - Call Courier Usage Guide
-- [Initialize Call Courier Client](#initialize)
+## Usage Guide - Smart Lane
+## Table of Contents - Smart Lane Usage Guide
+- [Initialize Smart Lane Client](#initialize)
 - [Get City List](#get-city-list)
 - [Get Warehouse List](#get-warehouse-list)
 - [Get Shipping Label](#get-shipping-label)
