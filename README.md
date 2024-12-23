@@ -25,6 +25,7 @@ composer require tech-andaz/ship-drill
 |BlueEx|[BlueEx Usage Guide](src/BlueEx/Usage%20Guide%20BlueEx.md)| [BlueEx API Docs](https://beta.blue-ex.com/developer-center/open-api-json)|
 |CallCourier|[CallCourier Usage Guide](src/CallCourier/Usage%20Guide%20CallCourier.md) | [CallCourier API Docs](src/CallCourier/API%20Docs%20Call%20Courier.pdf)|
 |TCS|[TCS Usage Guide](src/TCS/Usage%20Guide%20TCS.md) | -|
+|SmartLane|[SmartLane Usage Guide](src/SmartLane/Usage%20Guide%20SmartLane.md) | [SmartLane API Docs](src/SmartLane/Documentation.pdf)|
 
 ## License
 

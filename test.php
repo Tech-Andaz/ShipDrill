@@ -2,93 +2,110 @@
 
 require 'vendor/autoload.php';
 
-use TechAndaz\TCS\TCSClient;
-use TechAndaz\TCS\TCSAPI;
+use TechAndaz\SmartLane\SmartLaneClient;
+use TechAndaz\SmartLane\SmartLaneAPI;
 
-$TCSClient = new TCSClient(array(
-    "environment" => "sandbox", //Optional - Defaults to production. Options are: sandbox / production
-    "username" => "testenvio", //Optional if sandbox, Defaults to testenvio. Required if production
-    "password" => "abc123+", //Optional if sandbox, Defaults to abc123+. Required if production
-    "client_id" => "33b3ef31-8474-45d8-aa0f-afed317ef8b8", //Optional if sandbox, Defaults to 33b3ef31-8474-45d8-aa0f-afed317ef8b8. Required if production,
-    "cost_centers" => array(
-        array(
-            "city" => "KARACHI", //Sender City
-            "code" => "Test", // Cost Center Code
-            "name" => "Karachi Cost Center", //Sender City
-        )
-    ), //Optional if sandbox, Defaults to Karachi Center. Required array if production.
-    "tracking_url" => "https://www.tcsexpress.com/track/" //Optional for URL based tracking - Defaults to https://www.tcsexpress.com/track/
+$SmartLaneClient = new SmartLaneClient(array(
+    "api_token" => "kktelzTjknBvP3qDrxU28rrgd6Ywn32PraaM6re7", //Token determins sandbox or production
 ));
-$TCSAPI = new TCSAPI($TCSClient);
+$SmartLaneAPI = new SmartLaneAPI($SmartLaneClient);
 
 //Add Shipment
-function addShipment($TCSAPI){
+function addShipment($SmartLaneAPI){
     try {
         $data = [
-            'cost_center' => 'Test',
+            'warehouse_code' => 'WH1690289367237',
+            'store_order_id' => "AF-1001712", //Optional, will assign unique if not provided
             'consignee_name' => 'Tech Andaz',
             'consignee_phone' => '+924235113700',
             'consignee_email' => 'contact@techandaz.com',
             'consignee_address' => '119/2 M Quaid-e-Azam Industrial Estate, Kot Lakhpat',
             'consignee_city' => 'Lahore',
-            'weight' => 1,
-            'pieces' => 1,
-            'amount' => 0,
-            'order_id' => '12345', // Optional - Defaults to unique ID
-            'service_id' => 'overnight', //Options are: overnight / second_day / same_day / self_collection
-            'order_details' => 'Order ID: 12345', // Optional
-            'fragile' => 0, // Optional - Defaults to 0. Options are: 0 / 1, where 0 = No, 1 = Yes
-            'remarks' => 'Come in the evening', // Optional
-            'insurance_value' => 100, // Optional - Defaults to 0
+            'description' => 'Order ID: 12345', // Optional
+            'payment_method' => "cod",
+            'amount' => 1000,
+            'product_count' => 4,
+            'products' => array(
+                array(
+                    "sku" => "1002",
+                    "name" => "Web Development",
+                    "qty" => 2,
+                ),
+                array(
+                    "sku" => "1003",
+                    "name" => "App Development",
+                    "qty" => 2,
+                ),
+            )
+            
         ];
-        $response = $TCSAPI->addShipment($data);
+        $response = $SmartLaneAPI->createBookings($data);
         return $response;
-    } catch (TechAndaz\TCS\TCSException $e) {
-        echo "Error: " . $e->getMessage() . "\n";
-    }
-}
-//Get City List
-function getCityList($TCSAPI){
-    try {
-        $response = $TCSAPI->getCityList();
-        return $response;
-    } catch (TechAndaz\TCS\TCSException $e) {
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
 //Track Shipment
-function trackShipment($TCSAPI){
+function trackShipment($SmartLaneAPI){
     try {
-        $tracking_number = "779410964437";
-        $type = "data"; //Optional - Defaults to url. Options are: data / url / redirect
-        $response = $TCSAPI->trackShipment($tracking_number, $type);
+        $store_order_id = "AF-10017";
+        $response = $SmartLaneAPI->trackShipment($store_order_id);
         return $response;
-    } catch (TechAndaz\TCS\TCSException $e) {
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-
+//Cancel Shipment
+function cancelShipment($SmartLaneAPI){
+    try {
+        $store_order_id = "AF-10017";
+        $response = $SmartLaneAPI->cancelShipment($store_order_id);
+        return $response;
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
 //Print Shipping Label
-function printShippingLabel($TCSAPI){
+function printShippingLabel($SmartLaneAPI){
     try {
-        $tracking_number = "779404467784";
-        $type = "url"; //Optional - Defaults to url. Options are: url / redirect
-        $response = $TCSAPI->printShippingLabel($tracking_number, $type);
+        $store_order_id = "AF-100171";
+        $response = $SmartLaneAPI->printShippingLabel($store_order_id);
         return $response;
-    } catch (TechAndaz\TCS\TCSException $e) {
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-
+//Get City List
+function getCityList($SmartLaneAPI){
+    try {
+        $response = $SmartLaneAPI->getCityList();
+        return $response;
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
+//Get Warehouse List
+function getWarehouseList($SmartLaneAPI){
+    try {
+        $response = $SmartLaneAPI->getWarehouseList();
+        return $response;
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
+        echo "Error: " . $e->getMessage() . "\n";
+    }
+}
 //Get Form Fields
-function getFormFields($TCSAPI){
+function getFormFields($SmartLaneAPI){
     try { 
         $config = array(
             "response" => "form",
             "label_class" => "form-label",
             "input_class" => "form-control",
             "wrappers" => array(
-                "cost_center" => array(
+                "warehouse_code" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "store_order_id" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -96,11 +113,11 @@ function getFormFields($TCSAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "consignee_phone" => array(
+                "consignee_email" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "consignee_email" => array(
+                "consignee_phone" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -112,11 +129,15 @@ function getFormFields($TCSAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "weight" => array(
+                "description" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "pieces" => array(
+                "payment_method" => array(
+                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                    "input_wrapper_end" => "</div>"
+                ),
+                "product_count" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
@@ -124,43 +145,33 @@ function getFormFields($TCSAPI){
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "order_id" => array(
+                "product_sku" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "service_id" => array(
+                "product_name" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "order_details" => array(
+                "quantity" => array(
                     "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                     "input_wrapper_end" => "</div>"
                 ),
-                "fragile" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "remarks" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                ),
-                "insurance_value" => array(
-                    "input_wrapper_start" => '<div class="mb-3 col-md-6">',
-                    "input_wrapper_end" => "</div>"
-                )
             ),
             "optional" => true,
         );
-        $response = $TCSAPI->getFormFields($config);
+        $response = $SmartLaneAPI->getFormFields($config);
         return $response;
-    } catch (TechAndaz\TCS\TCSException $e) {
+    } catch (TechAndaz\SmartLane\SmartLaneException $e) {
         echo "Error: " . $e->getMessage() . "\n";
     }
 }
-// echo json_encode(addShipment($TCSAPI));
-// echo json_encode(getCityList($TCSAPI));
-echo json_encode(trackShipment($TCSAPI));
-// echo json_encode(printShippingLabel($TCSAPI));
-// echo (getFormFields($TCSAPI));
+// echo json_encode(addShipment($SmartLaneAPI));
+// echo json_encode(trackShipment($SmartLaneAPI));
+// echo json_encode(cancelShipment($SmartLaneAPI));
+// echo (printShippingLabel($SmartLaneAPI));
+// echo json_encode(getCityList($SmartLaneAPI));
+// echo json_encode(getWarehouseList($SmartLaneAPI));
+echo (getFormFields($SmartLaneAPI));
 
 ?>
