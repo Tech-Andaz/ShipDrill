@@ -195,16 +195,20 @@ try {
                 "input_wrapper_start" => '<div class="mb-3 col-md-6">',
                 "input_wrapper_end" => "</div>"
             ),
+            "products_row" => array(
+                "input_wrapper_start" => '<div class="mb-3 col-md-12"><div class = "row">',
+                "input_wrapper_end" => "</div></div>"
+            ),
             "product_sku" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_start" => '<div class="mb-3 col-md-4">',
                 "input_wrapper_end" => "</div>"
             ),
             "product_name" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_start" => '<div class="mb-3 col-md-4">',
                 "input_wrapper_end" => "</div>"
             ),
             "quantity" => array(
-                "input_wrapper_start" => '<div class="mb-3 col-md-6">',
+                "input_wrapper_start" => '<div class="mb-3 col-md-4">',
                 "input_wrapper_end" => "</div>"
             ),
         ),
