@@ -134,7 +134,6 @@ class SmartLaneAPI
                 }
             }
         }
-        $cities = array_splice($cities, 0, 2);
         $payment_methods = array(
             array(
                 "label" => "Cash on Delivery",
