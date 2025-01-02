@@ -19,6 +19,7 @@ use TechAndaz\SmartLane\SmartLaneClient;
 use TechAndaz\SmartLane\SmartLaneAPI;
 
 $SmartLaneClient = new SmartLaneClient(array(
+    "environment" => "sandbox", //Optional - Defaults to production
     "api_token" => "kktelzTjknBvP3qDrxU28rrgd6Ywn32PraaM6re7", //Token determins sandbox or production
 ));
 $SmartLaneAPI = new SmartLaneAPI($SmartLaneClient);
