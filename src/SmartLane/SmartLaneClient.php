@@ -13,7 +13,12 @@ class SmartLaneClient
     public function __construct($config)
     {
         //LIVE/PRODUCTION = https://v2.smartlane.dev/api
-        $this->api_url = "https://gcp.smartlane.dev/api/";
+        $this->environment = (isset($config['environment']) && in_array($config['environment'], ['sandbox','production'])) ? $config['environment'] : "production";
+        if($this->environment == "sandbox"){
+            $this->api_url = "https://gcp.smartlane.dev/api/";
+        } else {
+            $this->api_url = "https://smartlane.pk/api/production/";
+        }
         $this->api_token = (isset($config['api_token']) && $config['api_token'] != "") ? $config['api_token'] : throw new SmartLaneException("API Token is missing");
     }
 
